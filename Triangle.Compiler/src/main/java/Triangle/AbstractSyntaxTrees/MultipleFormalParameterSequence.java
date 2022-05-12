@@ -25,11 +25,13 @@ public class MultipleFormalParameterSequence extends FormalParameterSequence {
     FPS = fpsAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitMultipleFormalParameterSequence(this, o);
   }
 
-  public boolean equals(Object fpsAST) {
+  @Override
+public boolean equals(Object fpsAST) {
     if (fpsAST instanceof MultipleFormalParameterSequence) {
       MultipleFormalParameterSequence mfpsAST = (MultipleFormalParameterSequence) fpsAST;
       return FP.equals(mfpsAST.FP) && FPS.equals(mfpsAST.FPS);

@@ -22,6 +22,7 @@ public abstract class TypeDenoter extends AST {
     super(thePosition);
   }
 
-  public abstract boolean equals(Object obj);
+  @Override
+public abstract boolean equals(Object obj);
 
 }

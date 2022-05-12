@@ -22,11 +22,13 @@ public class IntTypeDenoter extends TypeDenoter {
     super(thePosition);
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitIntTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (obj != null && obj instanceof ErrorTypeDenoter)
       return true;
     else

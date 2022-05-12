@@ -39,7 +39,8 @@ class DrawerFrame extends JFrame {
 
     addWindowListener(
         new WindowAdapter() {
-          public void windowClosing(WindowEvent e) {
+          @Override
+		public void windowClosing(WindowEvent e) {
             System.exit(0);
           }
         });

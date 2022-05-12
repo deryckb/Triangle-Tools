@@ -23,11 +23,13 @@ public class SimpleTypeDenoter extends TypeDenoter {
     I = iAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSimpleTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     return false; // should not happen
   }
 

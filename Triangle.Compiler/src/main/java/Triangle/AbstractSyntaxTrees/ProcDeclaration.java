@@ -26,7 +26,8 @@ public class ProcDeclaration extends Declaration {
     C = cAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitProcDeclaration(this, o);
   }
 

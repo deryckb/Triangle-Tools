@@ -23,7 +23,8 @@ public class SimpleVname extends Vname {
     I = iAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSimpleVname(this, o);
   }
 

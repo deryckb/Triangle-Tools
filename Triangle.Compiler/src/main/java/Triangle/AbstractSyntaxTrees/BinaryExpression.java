@@ -26,7 +26,8 @@ public class BinaryExpression extends Expression {
     E2 = e2AST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitBinaryExpression(this, o);
   }
 

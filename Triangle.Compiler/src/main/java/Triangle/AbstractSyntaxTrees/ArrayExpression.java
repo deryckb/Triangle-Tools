@@ -24,7 +24,8 @@ public class ArrayExpression extends Expression {
     AA = aaAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitArrayExpression(this, o);
   }
 

@@ -26,7 +26,8 @@ public class MultipleRecordAggregate extends RecordAggregate {
     RA = raAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitMultipleRecordAggregate(this, o);
   }
 

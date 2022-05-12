@@ -25,14 +25,16 @@ public class ProcFormalParameter extends FormalParameter {
     FPS = fpsAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitProcFormalParameter(this, o);
   }
 
   public Identifier I;
   public FormalParameterSequence FPS;
 
-  public boolean equals(Object fpAST) {
+  @Override
+public boolean equals(Object fpAST) {
     if (fpAST instanceof ProcFormalParameter) {
       ProcFormalParameter pfpAST = (ProcFormalParameter) fpAST;
       return FPS.equals(pfpAST.FPS);

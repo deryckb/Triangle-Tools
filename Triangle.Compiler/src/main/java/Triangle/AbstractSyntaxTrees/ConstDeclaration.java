@@ -25,7 +25,8 @@ public class ConstDeclaration extends Declaration {
     E = eAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitConstDeclaration(this, o);
   }
 

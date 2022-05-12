@@ -22,7 +22,8 @@ public class EmptyCommand extends Command {
     super(thePosition);
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitEmptyCommand(this, o);
   }
 }

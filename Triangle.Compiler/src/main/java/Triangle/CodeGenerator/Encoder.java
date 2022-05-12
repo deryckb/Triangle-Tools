@@ -93,7 +93,8 @@ import Triangle.AbstractSyntaxTrees.WhileCommand;
 public final class Encoder implements Visitor {
 
   // Commands
-  public Object visitAssignCommand(AssignCommand ast, Object o) {
+  @Override
+public Object visitAssignCommand(AssignCommand ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.E.visit(this, frame);
     encodeStore(ast.V, new Frame(frame, valSize.intValue()),
@@ -101,18 +102,21 @@ public final class Encoder implements Visitor {
     return null;
   }
 
-  public Object visitCallCommand(CallCommand ast, Object o) {
+  @Override
+public Object visitCallCommand(CallCommand ast, Object o) {
     Frame frame = (Frame) o;
     Integer argsSize = (Integer) ast.APS.visit(this, frame);
     ast.I.visit(this, new Frame(frame.level, argsSize));
     return null;
   }
 
-  public Object visitEmptyCommand(EmptyCommand ast, Object o) {
+  @Override
+public Object visitEmptyCommand(EmptyCommand ast, Object o) {
     return null;
   }
 
-  public Object visitIfCommand(IfCommand ast, Object o) {
+  @Override
+public Object visitIfCommand(IfCommand ast, Object o) {
     Frame frame = (Frame) o;
     int jumpifAddr, jumpAddr;
 
@@ -128,7 +132,8 @@ public final class Encoder implements Visitor {
     return null;
   }
 
-  public Object visitLetCommand(LetCommand ast, Object o) {
+  @Override
+public Object visitLetCommand(LetCommand ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize = ((Integer) ast.D.visit(this, frame)).intValue();
     ast.C.visit(this, new Frame(frame, extraSize));
@@ -137,13 +142,15 @@ public final class Encoder implements Visitor {
     return null;
   }
 
-  public Object visitSequentialCommand(SequentialCommand ast, Object o) {
+  @Override
+public Object visitSequentialCommand(SequentialCommand ast, Object o) {
     ast.C1.visit(this, o);
     ast.C2.visit(this, o);
     return null;
   }
 
-  public Object visitWhileCommand(WhileCommand ast, Object o) {
+  @Override
+public Object visitWhileCommand(WhileCommand ast, Object o) {
     Frame frame = (Frame) o;
     int jumpAddr, loopAddr;
 
@@ -158,12 +165,14 @@ public final class Encoder implements Visitor {
   }
 
   // Expressions
-  public Object visitArrayExpression(ArrayExpression ast, Object o) {
+  @Override
+public Object visitArrayExpression(ArrayExpression ast, Object o) {
     ast.type.visit(this, null);
     return ast.AA.visit(this, o);
   }
 
-  public Object visitBinaryExpression(BinaryExpression ast, Object o) {
+  @Override
+public Object visitBinaryExpression(BinaryExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     int valSize1 = ((Integer) ast.E1.visit(this, frame)).intValue();
@@ -174,7 +183,8 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitCallExpression(CallExpression ast, Object o) {
+  @Override
+public Object visitCallExpression(CallExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     Integer argsSize = (Integer) ast.APS.visit(this, frame);
@@ -182,7 +192,8 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitCharacterExpression(CharacterExpression ast,
+  @Override
+public Object visitCharacterExpression(CharacterExpression ast,
       Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
@@ -190,11 +201,13 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitEmptyExpression(EmptyExpression ast, Object o) {
+  @Override
+public Object visitEmptyExpression(EmptyExpression ast, Object o) {
     return new Integer(0);
   }
 
-  public Object visitIfExpression(IfExpression ast, Object o) {
+  @Override
+public Object visitIfExpression(IfExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize;
     int jumpifAddr, jumpAddr;
@@ -212,14 +225,16 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitIntegerExpression(IntegerExpression ast, Object o) {
+  @Override
+public Object visitIntegerExpression(IntegerExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     emit(Machine.LOADLop, 0, 0, Integer.parseInt(ast.IL.spelling));
     return valSize;
   }
 
-  public Object visitLetExpression(LetExpression ast, Object o) {
+  @Override
+public Object visitLetExpression(LetExpression ast, Object o) {
     Frame frame = (Frame) o;
     ast.type.visit(this, null);
     int extraSize = ((Integer) ast.D.visit(this, frame)).intValue();
@@ -230,12 +245,14 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitRecordExpression(RecordExpression ast, Object o) {
+  @Override
+public Object visitRecordExpression(RecordExpression ast, Object o) {
     ast.type.visit(this, null);
     return ast.RA.visit(this, o);
   }
 
-  public Object visitUnaryExpression(UnaryExpression ast, Object o) {
+  @Override
+public Object visitUnaryExpression(UnaryExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     ast.E.visit(this, frame);
@@ -243,7 +260,8 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitVnameExpression(VnameExpression ast, Object o) {
+  @Override
+public Object visitVnameExpression(VnameExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     encodeFetch(ast.V, frame, valSize.intValue());
@@ -251,12 +269,14 @@ public final class Encoder implements Visitor {
   }
 
   // Declarations
-  public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast,
+  @Override
+public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast,
       Object o) {
     return new Integer(0);
   }
 
-  public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
+  @Override
+public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize = 0;
 
@@ -277,7 +297,8 @@ public final class Encoder implements Visitor {
     return new Integer(extraSize);
   }
 
-  public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
+  @Override
+public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int jumpAddr = nextInstrAddr;
     int argsSize = 0, valSize = 0;
@@ -298,7 +319,8 @@ public final class Encoder implements Visitor {
     return new Integer(0);
   }
 
-  public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
+  @Override
+public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int jumpAddr = nextInstrAddr;
     int argsSize = 0;
@@ -320,7 +342,8 @@ public final class Encoder implements Visitor {
     return new Integer(0);
   }
 
-  public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
+  @Override
+public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize1, extraSize2;
 
@@ -330,18 +353,21 @@ public final class Encoder implements Visitor {
     return new Integer(extraSize1 + extraSize2);
   }
 
-  public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
+  @Override
+public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
     // just to ensure the type's representation is decided
     ast.T.visit(this, null);
     return new Integer(0);
   }
 
-  public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast,
+  @Override
+public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast,
       Object o) {
     return new Integer(0);
   }
 
-  public Object visitVarDeclaration(VarDeclaration ast, Object o) {
+  @Override
+public Object visitVarDeclaration(VarDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize;
 
@@ -353,7 +379,8 @@ public final class Encoder implements Visitor {
   }
 
   // Array Aggregates
-  public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast,
+  @Override
+public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast,
       Object o) {
     Frame frame = (Frame) o;
     int elemSize = ((Integer) ast.E.visit(this, frame)).intValue();
@@ -362,12 +389,14 @@ public final class Encoder implements Visitor {
     return new Integer(elemSize + arraySize);
   }
 
-  public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o) {
+  @Override
+public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o) {
     return ast.E.visit(this, o);
   }
 
   // Record Aggregates
-  public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast,
+  @Override
+public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast,
       Object o) {
     Frame frame = (Frame) o;
     int fieldSize = ((Integer) ast.E.visit(this, frame)).intValue();
@@ -376,13 +405,15 @@ public final class Encoder implements Visitor {
     return new Integer(fieldSize + recordSize);
   }
 
-  public Object visitSingleRecordAggregate(SingleRecordAggregate ast,
+  @Override
+public Object visitSingleRecordAggregate(SingleRecordAggregate ast,
       Object o) {
     return ast.E.visit(this, o);
   }
 
   // Formal Parameters
-  public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
+  @Override
+public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
     Frame frame = (Frame) o;
     int valSize = ((Integer) ast.T.visit(this, null)).intValue();
     ast.entity = new UnknownValue(valSize, frame.level, -frame.size - valSize);
@@ -390,7 +421,8 @@ public final class Encoder implements Visitor {
     return new Integer(valSize);
   }
 
-  public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
+  @Override
+public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
     Frame frame = (Frame) o;
     int argsSize = Machine.closureSize;
     ast.entity = new UnknownRoutine(Machine.closureSize, frame.level,
@@ -399,7 +431,8 @@ public final class Encoder implements Visitor {
     return new Integer(argsSize);
   }
 
-  public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
+  @Override
+public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
     Frame frame = (Frame) o;
     int argsSize = Machine.closureSize;
     ast.entity = new UnknownRoutine(Machine.closureSize, frame.level,
@@ -408,7 +441,8 @@ public final class Encoder implements Visitor {
     return new Integer(argsSize);
   }
 
-  public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
+  @Override
+public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
     Frame frame = (Frame) o;
     ast.T.visit(this, null);
     ast.entity = new UnknownAddress(Machine.addressSize, frame.level,
@@ -417,12 +451,14 @@ public final class Encoder implements Visitor {
     return new Integer(Machine.addressSize);
   }
 
-  public Object visitEmptyFormalParameterSequence(
+  @Override
+public Object visitEmptyFormalParameterSequence(
       EmptyFormalParameterSequence ast, Object o) {
     return new Integer(0);
   }
 
-  public Object visitMultipleFormalParameterSequence(
+  @Override
+public Object visitMultipleFormalParameterSequence(
       MultipleFormalParameterSequence ast, Object o) {
     Frame frame = (Frame) o;
     int argsSize1 = ((Integer) ast.FPS.visit(this, frame)).intValue();
@@ -431,17 +467,20 @@ public final class Encoder implements Visitor {
     return new Integer(argsSize1 + argsSize2);
   }
 
-  public Object visitSingleFormalParameterSequence(
+  @Override
+public Object visitSingleFormalParameterSequence(
       SingleFormalParameterSequence ast, Object o) {
     return ast.FP.visit(this, o);
   }
 
   // Actual Parameters
-  public Object visitConstActualParameter(ConstActualParameter ast, Object o) {
+  @Override
+public Object visitConstActualParameter(ConstActualParameter ast, Object o) {
     return ast.E.visit(this, o);
   }
 
-  public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
+  @Override
+public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
     Frame frame = (Frame) o;
     if (ast.I.decl.entity instanceof KnownRoutine) {
       ObjectAddress address = ((KnownRoutine) ast.I.decl.entity).address;
@@ -461,7 +500,8 @@ public final class Encoder implements Visitor {
     return new Integer(Machine.closureSize);
   }
 
-  public Object visitProcActualParameter(ProcActualParameter ast, Object o) {
+  @Override
+public Object visitProcActualParameter(ProcActualParameter ast, Object o) {
     Frame frame = (Frame) o;
     if (ast.I.decl.entity instanceof KnownRoutine) {
       ObjectAddress address = ((KnownRoutine) ast.I.decl.entity).address;
@@ -481,17 +521,20 @@ public final class Encoder implements Visitor {
     return new Integer(Machine.closureSize);
   }
 
-  public Object visitVarActualParameter(VarActualParameter ast, Object o) {
+  @Override
+public Object visitVarActualParameter(VarActualParameter ast, Object o) {
     encodeFetchAddress(ast.V, (Frame) o);
     return new Integer(Machine.addressSize);
   }
 
-  public Object visitEmptyActualParameterSequence(
+  @Override
+public Object visitEmptyActualParameterSequence(
       EmptyActualParameterSequence ast, Object o) {
     return new Integer(0);
   }
 
-  public Object visitMultipleActualParameterSequence(
+  @Override
+public Object visitMultipleActualParameterSequence(
       MultipleActualParameterSequence ast, Object o) {
     Frame frame = (Frame) o;
     int argsSize1 = ((Integer) ast.AP.visit(this, frame)).intValue();
@@ -500,17 +543,20 @@ public final class Encoder implements Visitor {
     return new Integer(argsSize1 + argsSize2);
   }
 
-  public Object visitSingleActualParameterSequence(
+  @Override
+public Object visitSingleActualParameterSequence(
       SingleActualParameterSequence ast, Object o) {
     return ast.AP.visit(this, o);
   }
 
   // Type Denoters
-  public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {
+  @Override
+public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {
     return new Integer(0);
   }
 
-  public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) {
+  @Override
+public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) {
     int typeSize;
     if (ast.entity == null) {
       int elemSize = ((Integer) ast.T.visit(this, null)).intValue();
@@ -522,7 +568,8 @@ public final class Encoder implements Visitor {
     return new Integer(typeSize);
   }
 
-  public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {
+  @Override
+public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {
     if (ast.entity == null) {
       ast.entity = new TypeRepresentation(Machine.booleanSize);
       writeTableDetails(ast);
@@ -530,7 +577,8 @@ public final class Encoder implements Visitor {
     return new Integer(Machine.booleanSize);
   }
 
-  public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) {
+  @Override
+public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) {
     if (ast.entity == null) {
       ast.entity = new TypeRepresentation(Machine.characterSize);
       writeTableDetails(ast);
@@ -538,16 +586,19 @@ public final class Encoder implements Visitor {
     return new Integer(Machine.characterSize);
   }
 
-  public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) {
+  @Override
+public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) {
     return new Integer(0);
   }
 
-  public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast,
+  @Override
+public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast,
       Object o) {
     return new Integer(0);
   }
 
-  public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) {
+  @Override
+public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) {
     if (ast.entity == null) {
       ast.entity = new TypeRepresentation(Machine.integerSize);
       writeTableDetails(ast);
@@ -555,7 +606,8 @@ public final class Encoder implements Visitor {
     return new Integer(Machine.integerSize);
   }
 
-  public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {
+  @Override
+public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {
     int typeSize;
     if (ast.entity == null) {
       typeSize = ((Integer) ast.FT.visit(this, new Integer(0))).intValue();
@@ -566,7 +618,8 @@ public final class Encoder implements Visitor {
     return new Integer(typeSize);
   }
 
-  public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast,
+  @Override
+public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast,
       Object o) {
     int offset = ((Integer) o).intValue();
     int fieldSize;
@@ -583,7 +636,8 @@ public final class Encoder implements Visitor {
     return new Integer(fieldSize + recSize);
   }
 
-  public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast,
+  @Override
+public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast,
       Object o) {
     int offset = ((Integer) o).intValue();
     int fieldSize;
@@ -599,11 +653,13 @@ public final class Encoder implements Visitor {
   }
 
   // Literals, Identifiers and Operators
-  public Object visitCharacterLiteral(CharacterLiteral ast, Object o) {
+  @Override
+public Object visitCharacterLiteral(CharacterLiteral ast, Object o) {
     return null;
   }
 
-  public Object visitIdentifier(Identifier ast, Object o) {
+  @Override
+public Object visitIdentifier(Identifier ast, Object o) {
     Frame frame = (Frame) o;
     if (ast.decl.entity instanceof KnownRoutine) {
       ObjectAddress address = ((KnownRoutine) ast.decl.entity).address;
@@ -626,11 +682,13 @@ public final class Encoder implements Visitor {
     return null;
   }
 
-  public Object visitIntegerLiteral(IntegerLiteral ast, Object o) {
+  @Override
+public Object visitIntegerLiteral(IntegerLiteral ast, Object o) {
     return null;
   }
 
-  public Object visitOperator(Operator ast, Object o) {
+  @Override
+public Object visitOperator(Operator ast, Object o) {
     Frame frame = (Frame) o;
     if (ast.decl.entity instanceof KnownRoutine) {
       ObjectAddress address = ((KnownRoutine) ast.decl.entity).address;
@@ -654,7 +712,8 @@ public final class Encoder implements Visitor {
   }
 
   // Value-or-variable names
-  public Object visitDotVname(DotVname ast, Object o) {
+  @Override
+public Object visitDotVname(DotVname ast, Object o) {
     Frame frame = (Frame) o;
     RuntimeEntity baseObject = (RuntimeEntity) ast.V.visit(this, frame);
     ast.offset = ast.V.offset + ((Field) ast.I.decl.entity).fieldOffset;
@@ -663,13 +722,15 @@ public final class Encoder implements Visitor {
     return baseObject;
   }
 
-  public Object visitSimpleVname(SimpleVname ast, Object o) {
+  @Override
+public Object visitSimpleVname(SimpleVname ast, Object o) {
     ast.offset = 0;
     ast.indexed = false;
     return ast.I.decl.entity;
   }
 
-  public Object visitSubscriptVname(SubscriptVname ast, Object o) {
+  @Override
+public Object visitSubscriptVname(SubscriptVname ast, Object o) {
     Frame frame = (Frame) o;
     RuntimeEntity baseObject;
     int elemSize, indexSize;
@@ -700,7 +761,8 @@ public final class Encoder implements Visitor {
   }
 
   // Programs
-  public Object visitProgram(Program ast, Object o) {
+  @Override
+public Object visitProgram(Program ast, Object o) {
     return ast.C.visit(this, o);
   }
 

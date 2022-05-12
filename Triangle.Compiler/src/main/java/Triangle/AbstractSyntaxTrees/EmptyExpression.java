@@ -22,7 +22,8 @@ public class EmptyExpression extends Expression {
     super(thePosition);
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitEmptyExpression(this, o);
   }
 }

@@ -57,8 +57,8 @@ public class DrawingTree {
         pos.y + (height + FIXED_FONT_HEIGHT) / 2);
 
     if (children != null) {
-      for (int i = 0; i < children.length; i++) {
-        children[i].paint(graphics);
+      for (DrawingTree child : children) {
+        child.paint(graphics);
       }
     }
 
@@ -77,9 +77,9 @@ public class DrawingTree {
     Point temp = new Point(this.pos.x, this.pos.y);
 
     if (children != null) {
-      for (int i = 0; i < children.length; i++) {
-        children[i].position(temp);
-        temp.x += children[i].offset.x;
+      for (DrawingTree child : children) {
+        child.position(temp);
+        temp.x += child.offset.x;
         temp.y = this.pos.y + children[0].offset.y;
       }
     }

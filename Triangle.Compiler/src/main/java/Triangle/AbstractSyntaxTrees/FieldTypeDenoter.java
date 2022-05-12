@@ -22,5 +22,6 @@ public abstract class FieldTypeDenoter extends TypeDenoter {
     super(thePosition);
   }
 
-  public abstract boolean equals(Object obj);
+  @Override
+public abstract boolean equals(Object obj);
 }

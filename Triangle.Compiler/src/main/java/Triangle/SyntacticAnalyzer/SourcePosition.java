@@ -28,7 +28,8 @@ public class SourcePosition {
     finish = f;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "(" + start + ", " + finish + ")";
   }
 }

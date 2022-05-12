@@ -24,11 +24,13 @@ public class SingleFormalParameterSequence extends FormalParameterSequence {
     FP = fpAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSingleFormalParameterSequence(this, o);
   }
 
-  public boolean equals(Object fpsAST) {
+  @Override
+public boolean equals(Object fpsAST) {
     if (fpsAST instanceof SingleFormalParameterSequence) {
       SingleFormalParameterSequence sfpsAST = (SingleFormalParameterSequence) fpsAST;
       return FP.equals(sfpsAST.FP);

@@ -24,7 +24,8 @@ public class SubscriptVname extends Vname {
     E = eAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSubscriptVname(this, o);
   }
 

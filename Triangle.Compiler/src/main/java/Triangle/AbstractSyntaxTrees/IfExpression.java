@@ -26,7 +26,8 @@ public class IfExpression extends Expression {
     E3 = e3AST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitIfExpression(this, o);
   }
 

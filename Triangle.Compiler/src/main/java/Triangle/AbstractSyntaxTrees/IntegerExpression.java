@@ -23,7 +23,8 @@ public class IntegerExpression extends Expression {
     IL = ilAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitIntegerExpression(this, o);
   }
 

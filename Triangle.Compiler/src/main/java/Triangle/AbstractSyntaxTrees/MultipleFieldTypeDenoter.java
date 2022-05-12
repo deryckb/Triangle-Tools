@@ -26,11 +26,13 @@ public class MultipleFieldTypeDenoter extends FieldTypeDenoter {
     FT = ftAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitMultipleFieldTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (obj != null && obj instanceof MultipleFieldTypeDenoter) {
       MultipleFieldTypeDenoter ft = (MultipleFieldTypeDenoter) obj;
       return (this.I.spelling.compareTo(ft.I.spelling) == 0) &&

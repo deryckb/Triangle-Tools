@@ -27,7 +27,8 @@ class DrawerPanel extends JPanel {
     this.drawer = drawer;
   }
 
-  public void paintComponent(Graphics g) {
+  @Override
+public void paintComponent(Graphics g) {
     super.paintComponent(g);
     drawer.paintAST(g);
   }

@@ -26,11 +26,13 @@ public class FuncFormalParameter extends FormalParameter {
     T = tAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitFuncFormalParameter(this, o);
   }
 
-  public boolean equals(Object fpAST) {
+  @Override
+public boolean equals(Object fpAST) {
     if (fpAST instanceof FuncFormalParameter) {
       FuncFormalParameter ffpAST = (FuncFormalParameter) fpAST;
       return FPS.equals(ffpAST.FPS) && T.equals(ffpAST.T);

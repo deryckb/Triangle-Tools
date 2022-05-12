@@ -25,7 +25,8 @@ public class MultipleArrayAggregate extends ArrayAggregate {
     AA = aaAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitMultipleArrayAggregate(this, o);
   }
 

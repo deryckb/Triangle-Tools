@@ -22,5 +22,6 @@ public abstract class FormalParameterSequence extends AST {
     super(thePosition);
   }
 
-  public abstract boolean equals(Object fpsAST);
+  @Override
+public abstract boolean equals(Object fpsAST);
 }

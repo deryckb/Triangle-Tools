@@ -25,14 +25,16 @@ public class VarFormalParameter extends FormalParameter {
     T = tAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitVarFormalParameter(this, o);
   }
 
   public Identifier I;
   public TypeDenoter T;
 
-  public boolean equals(Object fpAST) {
+  @Override
+public boolean equals(Object fpAST) {
     if (fpAST instanceof VarFormalParameter) {
       VarFormalParameter vfpAST = (VarFormalParameter) fpAST;
       return T.equals(vfpAST.T);

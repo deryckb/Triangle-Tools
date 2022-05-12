@@ -25,7 +25,8 @@ public class MultipleActualParameterSequence extends ActualParameterSequence {
     APS = apsAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitMultipleActualParameterSequence(this, o);
   }
 

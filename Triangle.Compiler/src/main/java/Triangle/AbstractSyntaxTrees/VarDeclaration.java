@@ -25,7 +25,8 @@ public class VarDeclaration extends Declaration {
     T = tAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitVarDeclaration(this, o);
   }
 

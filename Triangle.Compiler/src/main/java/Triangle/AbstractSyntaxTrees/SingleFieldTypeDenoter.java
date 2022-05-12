@@ -25,11 +25,13 @@ public class SingleFieldTypeDenoter extends FieldTypeDenoter {
     T = tAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSingleFieldTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (obj != null && obj instanceof SingleFieldTypeDenoter) {
       SingleFieldTypeDenoter ft = (SingleFieldTypeDenoter) obj;
       return (this.I.spelling.compareTo(ft.I.spelling) == 0) &&

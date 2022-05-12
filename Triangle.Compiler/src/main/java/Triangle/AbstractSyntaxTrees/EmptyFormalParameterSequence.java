@@ -22,11 +22,13 @@ public class EmptyFormalParameterSequence extends FormalParameterSequence {
     super(thePosition);
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitEmptyFormalParameterSequence(this, o);
   }
 
-  public boolean equals(Object fpsAST) {
+  @Override
+public boolean equals(Object fpsAST) {
     return (fpsAST instanceof EmptyFormalParameterSequence);
   }
 }

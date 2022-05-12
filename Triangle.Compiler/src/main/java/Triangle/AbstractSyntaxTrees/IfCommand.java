@@ -26,7 +26,8 @@ public class IfCommand extends Command {
     C2 = c2AST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitIfCommand(this, o);
   }
 

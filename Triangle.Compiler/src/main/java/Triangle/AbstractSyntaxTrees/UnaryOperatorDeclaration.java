@@ -26,7 +26,8 @@ public class UnaryOperatorDeclaration extends Declaration {
     RES = resultAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitUnaryOperatorDeclaration(this, o);
   }
 

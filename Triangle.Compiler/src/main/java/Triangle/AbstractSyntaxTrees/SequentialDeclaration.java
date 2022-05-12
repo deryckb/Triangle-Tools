@@ -25,7 +25,8 @@ public class SequentialDeclaration extends Declaration {
     D2 = d2AST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSequentialDeclaration(this, o);
   }
 

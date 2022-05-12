@@ -25,11 +25,13 @@ public class ArrayTypeDenoter extends TypeDenoter {
     T = tAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitArrayTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (obj != null && obj instanceof ErrorTypeDenoter)
       return true;
     else if (obj != null && obj instanceof ArrayTypeDenoter)

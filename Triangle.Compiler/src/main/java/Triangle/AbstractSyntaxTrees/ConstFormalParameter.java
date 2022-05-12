@@ -25,14 +25,16 @@ public class ConstFormalParameter extends FormalParameter {
     T = tAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitConstFormalParameter(this, o);
   }
 
   public Identifier I;
   public TypeDenoter T;
 
-  public boolean equals(Object fpAST) {
+  @Override
+public boolean equals(Object fpAST) {
     if (fpAST instanceof ConstFormalParameter) {
       ConstFormalParameter cfpAST = (ConstFormalParameter) fpAST;
       return T.equals(cfpAST.T);

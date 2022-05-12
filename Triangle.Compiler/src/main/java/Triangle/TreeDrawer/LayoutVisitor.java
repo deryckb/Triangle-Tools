@@ -93,262 +93,324 @@ public class LayoutVisitor implements Visitor {
   }
 
   // Commands
-  public Object visitAssignCommand(AssignCommand ast, Object obj) {
+  @Override
+public Object visitAssignCommand(AssignCommand ast, Object obj) {
     return layoutBinary("AssignCom.", ast.V, ast.E);
   }
 
-  public Object visitCallCommand(CallCommand ast, Object obj) {
+  @Override
+public Object visitCallCommand(CallCommand ast, Object obj) {
     return layoutBinary("CallCom.", ast.I, ast.APS);
   }
 
-  public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
+  @Override
+public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
     return layoutNullary("EmptyCom.");
   }
 
-  public Object visitIfCommand(IfCommand ast, Object obj) {
+  @Override
+public Object visitIfCommand(IfCommand ast, Object obj) {
     return layoutTernary("IfCom.", ast.E, ast.C1, ast.C2);
   }
 
-  public Object visitLetCommand(LetCommand ast, Object obj) {
+  @Override
+public Object visitLetCommand(LetCommand ast, Object obj) {
     return layoutBinary("LetCom.", ast.D, ast.C);
   }
 
-  public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
+  @Override
+public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
     return layoutBinary("Seq.Com.", ast.C1, ast.C2);
   }
 
-  public Object visitWhileCommand(WhileCommand ast, Object obj) {
+  @Override
+public Object visitWhileCommand(WhileCommand ast, Object obj) {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
 
   // Expressions
-  public Object visitArrayExpression(ArrayExpression ast, Object obj) {
+  @Override
+public Object visitArrayExpression(ArrayExpression ast, Object obj) {
     return layoutUnary("ArrayExpr.", ast.AA);
   }
 
-  public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
+  @Override
+public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
     return layoutTernary("Bin.Expr.", ast.E1, ast.O, ast.E2);
   }
 
-  public Object visitCallExpression(CallExpression ast, Object obj) {
+  @Override
+public Object visitCallExpression(CallExpression ast, Object obj) {
     return layoutBinary("CallExpr.", ast.I, ast.APS);
   }
 
-  public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
+  @Override
+public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
     return layoutUnary("Char.Expr.", ast.CL);
   }
 
-  public Object visitEmptyExpression(EmptyExpression ast, Object obj) {
+  @Override
+public Object visitEmptyExpression(EmptyExpression ast, Object obj) {
     return layoutNullary("EmptyExpr.");
   }
 
-  public Object visitIfExpression(IfExpression ast, Object obj) {
+  @Override
+public Object visitIfExpression(IfExpression ast, Object obj) {
     return layoutTernary("IfExpr.", ast.E1, ast.E2, ast.E3);
   }
 
-  public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
+  @Override
+public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
     return layoutUnary("Int.Expr.", ast.IL);
   }
 
-  public Object visitLetExpression(LetExpression ast, Object obj) {
+  @Override
+public Object visitLetExpression(LetExpression ast, Object obj) {
     return layoutBinary("LetExpr.", ast.D, ast.E);
   }
 
-  public Object visitRecordExpression(RecordExpression ast, Object obj) {
+  @Override
+public Object visitRecordExpression(RecordExpression ast, Object obj) {
     return layoutUnary("Rec.Expr.", ast.RA);
   }
 
-  public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
+  @Override
+public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
     return layoutBinary("UnaryExpr.", ast.O, ast.E);
   }
 
-  public Object visitVnameExpression(VnameExpression ast, Object obj) {
+  @Override
+public Object visitVnameExpression(VnameExpression ast, Object obj) {
     return layoutUnary("VnameExpr.", ast.V);
   }
 
   // Declarations
-  public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
+  @Override
+public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
     return layoutQuaternary("Bin.Op.Decl.", ast.O, ast.ARG1, ast.ARG2, ast.RES);
   }
 
-  public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
+  @Override
+public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
     return layoutBinary("ConstDecl.", ast.I, ast.E);
   }
 
-  public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
+  @Override
+public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
     return layoutQuaternary("FuncDecl.", ast.I, ast.FPS, ast.T, ast.E);
   }
 
-  public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
+  @Override
+public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
     return layoutTernary("ProcDecl.", ast.I, ast.FPS, ast.C);
   }
 
-  public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
+  @Override
+public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
     return layoutBinary("Seq.Decl.", ast.D1, ast.D2);
   }
 
-  public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
+  @Override
+public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
     return layoutBinary("TypeDecl.", ast.I, ast.T);
   }
 
-  public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
+  @Override
+public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
     return layoutTernary("UnaryOp.Decl.", ast.O, ast.ARG, ast.RES);
   }
 
-  public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
+  @Override
+public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
 
   // Array Aggregates
-  public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
+  @Override
+public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
     return layoutBinary("Mult.ArrayAgg.", ast.E, ast.AA);
   }
 
-  public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object obj) {
+  @Override
+public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object obj) {
     return layoutUnary("Sing.ArrayAgg.", ast.E);
   }
 
   // Record Aggregates
-  public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
+  @Override
+public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
     return layoutTernary("Mult.Rec.Agg.", ast.I, ast.E, ast.RA);
   }
 
-  public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
+  @Override
+public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
     return layoutBinary("Sing.Rec.Agg.", ast.I, ast.E);
   }
 
   // Formal Parameters
-  public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
+  @Override
+public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
     return layoutBinary("ConstF.P.", ast.I, ast.T);
   }
 
-  public Object visitFuncFormalParameter(FuncFormalParameter ast, Object obj) {
+  @Override
+public Object visitFuncFormalParameter(FuncFormalParameter ast, Object obj) {
     return layoutTernary("FuncF.P.", ast.I, ast.FPS, ast.T);
   }
 
-  public Object visitProcFormalParameter(ProcFormalParameter ast, Object obj) {
+  @Override
+public Object visitProcFormalParameter(ProcFormalParameter ast, Object obj) {
     return layoutBinary("ProcF.P.", ast.I, ast.FPS);
   }
 
-  public Object visitVarFormalParameter(VarFormalParameter ast, Object obj) {
+  @Override
+public Object visitVarFormalParameter(VarFormalParameter ast, Object obj) {
     return layoutBinary("VarF.P.", ast.I, ast.T);
   }
 
-  public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
+  @Override
+public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
     return layoutNullary("EmptyF.P.S.");
   }
 
-  public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object obj) {
+  @Override
+public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object obj) {
     return layoutBinary("Mult.F.P.S.", ast.FP, ast.FPS);
   }
 
-  public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
+  @Override
+public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
     return layoutUnary("Sing.F.P.S.", ast.FP);
   }
 
   // Actual Parameters
-  public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
+  @Override
+public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
     return layoutUnary("ConstA.P.", ast.E);
   }
 
-  public Object visitFuncActualParameter(FuncActualParameter ast, Object obj) {
+  @Override
+public Object visitFuncActualParameter(FuncActualParameter ast, Object obj) {
     return layoutUnary("FuncA.P.", ast.I);
   }
 
-  public Object visitProcActualParameter(ProcActualParameter ast, Object obj) {
+  @Override
+public Object visitProcActualParameter(ProcActualParameter ast, Object obj) {
     return layoutUnary("ProcA.P.", ast.I);
   }
 
-  public Object visitVarActualParameter(VarActualParameter ast, Object obj) {
+  @Override
+public Object visitVarActualParameter(VarActualParameter ast, Object obj) {
     return layoutUnary("VarA.P.", ast.V);
   }
 
-  public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
+  @Override
+public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
     return layoutNullary("EmptyA.P.S.");
   }
 
-  public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object obj) {
+  @Override
+public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object obj) {
     return layoutBinary("Mult.A.P.S.", ast.AP, ast.APS);
   }
 
-  public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
+  @Override
+public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
     return layoutUnary("Sing.A.P.S.", ast.AP);
   }
 
   // Type Denoters
-  public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
+  @Override
+public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
     return layoutNullary("any");
   }
 
-  public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
+  @Override
+public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
     return layoutBinary("ArrayTypeD.", ast.IL, ast.T);
   }
 
-  public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
+  @Override
+public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
     return layoutNullary("bool");
   }
 
-  public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
+  @Override
+public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
     return layoutNullary("char");
   }
 
-  public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
+  @Override
+public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
     return layoutNullary("error");
   }
 
-  public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
+  @Override
+public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
     return layoutUnary("Sim.TypeD.", ast.I);
   }
 
-  public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
+  @Override
+public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
     return layoutNullary("int");
   }
 
-  public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
+  @Override
+public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
     return layoutUnary("Rec.TypeD.", ast.FT);
   }
 
-  public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
+  @Override
+public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
     return layoutTernary("Mult.F.TypeD.", ast.I, ast.T, ast.FT);
   }
 
-  public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
+  @Override
+public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
     return layoutBinary("Sing.F.TypeD.", ast.I, ast.T);
   }
 
   // Literals, Identifiers and Operators
-  public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
+  @Override
+public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
 
-  public Object visitIdentifier(Identifier ast, Object obj) {
+  @Override
+public Object visitIdentifier(Identifier ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
 
-  public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
+  @Override
+public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
 
-  public Object visitOperator(Operator ast, Object obj) {
+  @Override
+public Object visitOperator(Operator ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
 
   // Value-or-variable names
-  public Object visitDotVname(DotVname ast, Object obj) {
+  @Override
+public Object visitDotVname(DotVname ast, Object obj) {
     return layoutBinary("DotVname", ast.I, ast.V);
   }
 
-  public Object visitSimpleVname(SimpleVname ast, Object obj) {
+  @Override
+public Object visitSimpleVname(SimpleVname ast, Object obj) {
     return layoutUnary("Sim.Vname", ast.I);
   }
 
-  public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
+  @Override
+public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
     return layoutBinary("Sub.Vname",
         ast.V, ast.E);
   }
 
   // Programs
-  public Object visitProgram(Program ast, Object obj) {
+  @Override
+public Object visitProgram(Program ast, Object obj) {
     return layoutUnary("Program", ast.C);
   }
 

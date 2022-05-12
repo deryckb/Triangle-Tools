@@ -23,7 +23,8 @@ public class Program extends AST {
     C = cAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitProgram(this, o);
   }
 

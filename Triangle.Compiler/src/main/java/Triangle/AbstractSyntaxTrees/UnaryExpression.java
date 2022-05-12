@@ -25,7 +25,8 @@ public class UnaryExpression extends Expression {
     E = eAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitUnaryExpression(this, o);
   }
 

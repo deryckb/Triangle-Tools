@@ -23,11 +23,13 @@ public class RecordTypeDenoter extends TypeDenoter {
     FT = ftAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitRecordTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (obj != null && obj instanceof ErrorTypeDenoter)
       return true;
     else if (obj != null && obj instanceof RecordTypeDenoter)

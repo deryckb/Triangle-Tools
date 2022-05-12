@@ -24,7 +24,8 @@ public class SingleActualParameterSequence extends ActualParameterSequence {
     AP = apAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSingleActualParameterSequence(this, o);
   }
 

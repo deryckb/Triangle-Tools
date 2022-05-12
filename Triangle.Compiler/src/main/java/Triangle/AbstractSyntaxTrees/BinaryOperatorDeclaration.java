@@ -28,7 +28,8 @@ public class BinaryOperatorDeclaration extends Declaration {
     RES = resultAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitBinaryOperatorDeclaration(this, o);
   }
 

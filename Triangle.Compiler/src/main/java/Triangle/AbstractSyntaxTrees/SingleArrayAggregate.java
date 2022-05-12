@@ -24,7 +24,8 @@ public class SingleArrayAggregate extends ArrayAggregate {
     E = eAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitSingleArrayAggregate(this, o);
   }
 

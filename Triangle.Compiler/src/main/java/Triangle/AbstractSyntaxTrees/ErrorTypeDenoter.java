@@ -22,11 +22,13 @@ public class ErrorTypeDenoter extends TypeDenoter {
     super(thePosition);
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitErrorTypeDenoter(this, o);
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     return true;
   }
 }

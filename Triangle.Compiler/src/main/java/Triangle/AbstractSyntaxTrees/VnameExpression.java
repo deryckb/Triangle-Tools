@@ -23,7 +23,8 @@ public class VnameExpression extends Expression {
     V = vAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitVnameExpression(this, o);
   }
 

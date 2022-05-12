@@ -23,7 +23,8 @@ public class RecordExpression extends Expression {
     RA = raAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitRecordExpression(this, o);
   }
 

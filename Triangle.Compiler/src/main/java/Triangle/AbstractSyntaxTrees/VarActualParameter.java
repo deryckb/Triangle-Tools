@@ -23,7 +23,8 @@ public class VarActualParameter extends ActualParameter {
     V = vAST;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitVarActualParameter(this, o);
   }
 

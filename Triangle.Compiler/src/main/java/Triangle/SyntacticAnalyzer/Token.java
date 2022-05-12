@@ -50,7 +50,8 @@ final class Token extends Object {
     return tokenTable[kind];
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "Kind=" + kind + ", spelling=" + spelling +
         ", position=" + position;
   }

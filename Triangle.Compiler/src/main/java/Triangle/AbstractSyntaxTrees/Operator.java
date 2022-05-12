@@ -23,7 +23,8 @@ public class Operator extends Terminal {
     decl = null;
   }
 
-  public Object visit(Visitor v, Object o) {
+  @Override
+public Object visit(Visitor v, Object o) {
     return v.visitOperator(this, o);
   }
 

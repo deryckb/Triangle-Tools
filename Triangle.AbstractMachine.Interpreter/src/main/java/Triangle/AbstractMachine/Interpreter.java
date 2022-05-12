@@ -377,7 +377,7 @@ public class Interpreter {
         } catch (java.io.IOException s) {
           status = failedIOError;
         }
-        data[addr] = (int) currentChar;
+        data[addr] = currentChar;
         break;
       case Machine.putDisplacement:
         ST = ST - 1;
