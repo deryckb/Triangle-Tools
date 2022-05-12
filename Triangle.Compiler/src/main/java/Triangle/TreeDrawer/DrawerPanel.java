@@ -20,7 +20,11 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 class DrawerPanel extends JPanel {
-  private Drawer drawer;
+  /**
+	 *
+	 */
+	private static final long serialVersionUID = 565914745506889669L;
+private Drawer drawer;
 
   public DrawerPanel(Drawer drawer) {
     setPreferredSize(new Dimension(4096, 4096));

@@ -25,7 +25,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 class DrawerFrame extends JFrame {
-  public DrawerFrame(JPanel panel) {
+  /**
+	 *
+	 */
+	private static final long serialVersionUID = -3650404598416929282L;
+
+public DrawerFrame(JPanel panel) {
     setSize(300, 200);
     Toolkit tk = Toolkit.getDefaultToolkit();
     Dimension d = tk.getScreenSize();
