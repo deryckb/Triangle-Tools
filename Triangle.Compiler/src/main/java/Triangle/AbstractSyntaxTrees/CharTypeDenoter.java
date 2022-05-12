@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CharTypeDenoter extends TypeDenoter {
 
-	public CharTypeDenoter(SourcePosition thePosition) {
-		super(thePosition);
+	public CharTypeDenoter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

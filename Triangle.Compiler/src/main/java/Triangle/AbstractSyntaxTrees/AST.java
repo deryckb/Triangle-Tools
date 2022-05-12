@@ -19,8 +19,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class AST {
 
-	public AST(SourcePosition thePosition) {
-		position = thePosition;
+	public AST(SourcePosition position) {
+		this.position = position;
 		entity = null;
 	}
 
@@ -30,6 +30,11 @@ public abstract class AST {
 
 	public abstract Object visit(Visitor v, Object o);
 
-	public SourcePosition position;
+	public final Object visit(Visitor v) {
+		return visit(v, null);
+	}
+	
+	public final SourcePosition position;
+	
 	public RuntimeEntity entity;
 }

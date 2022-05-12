@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CallCommand extends Command {
 
-	public CallCommand(Identifier iAST, ActualParameterSequence apsAST, SourcePosition thePosition) {
-		super(thePosition);
+	public CallCommand(Identifier iAST, ActualParameterSequence apsAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 		APS = apsAST;
 	}

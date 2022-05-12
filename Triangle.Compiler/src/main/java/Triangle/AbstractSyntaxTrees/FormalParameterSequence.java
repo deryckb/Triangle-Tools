@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class FormalParameterSequence extends AST {
 
-	public FormalParameterSequence(SourcePosition thePosition) {
-		super(thePosition);
+	public FormalParameterSequence(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

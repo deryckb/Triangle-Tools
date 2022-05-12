@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CharacterExpression extends Expression {
 
-	public CharacterExpression(CharacterLiteral clAST, SourcePosition thePosition) {
-		super(thePosition);
+	public CharacterExpression(CharacterLiteral clAST, SourcePosition position) {
+		super(position);
 		CL = clAST;
 	}
 

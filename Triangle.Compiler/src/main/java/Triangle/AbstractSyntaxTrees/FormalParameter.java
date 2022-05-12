@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class FormalParameter extends Declaration {
 
-	public FormalParameter(SourcePosition thePosition) {
-		super(thePosition);
+	public FormalParameter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

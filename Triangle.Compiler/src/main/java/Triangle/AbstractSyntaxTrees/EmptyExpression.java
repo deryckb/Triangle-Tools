@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class EmptyExpression extends Expression {
 
-	public EmptyExpression(SourcePosition thePosition) {
-		super(thePosition);
+	public EmptyExpression(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

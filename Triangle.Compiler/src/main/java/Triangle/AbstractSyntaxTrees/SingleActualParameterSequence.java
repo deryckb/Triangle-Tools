@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SingleActualParameterSequence extends ActualParameterSequence {
 
-	public SingleActualParameterSequence(ActualParameter apAST, SourcePosition thePosition) {
-		super(thePosition);
+	public SingleActualParameterSequence(ActualParameter apAST, SourcePosition position) {
+		super(position);
 		AP = apAST;
 	}
 

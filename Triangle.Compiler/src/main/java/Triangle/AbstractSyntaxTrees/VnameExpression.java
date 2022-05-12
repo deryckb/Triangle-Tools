@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class VnameExpression extends Expression {
 
-	public VnameExpression(Vname vAST, SourcePosition thePosition) {
-		super(thePosition);
+	public VnameExpression(Vname vAST, SourcePosition position) {
+		super(position);
 		V = vAST;
 	}
 

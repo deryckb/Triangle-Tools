@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class BinaryExpression extends Expression {
 
-	public BinaryExpression(Expression e1AST, Operator oAST, Expression e2AST, SourcePosition thePosition) {
-		super(thePosition);
+	public BinaryExpression(Expression e1AST, Operator oAST, Expression e2AST, SourcePosition position) {
+		super(position);
 		O = oAST;
 		E1 = e1AST;
 		E2 = e2AST;

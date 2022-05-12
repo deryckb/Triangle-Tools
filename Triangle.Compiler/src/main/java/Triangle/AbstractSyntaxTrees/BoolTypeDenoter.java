@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class BoolTypeDenoter extends TypeDenoter {
 
-	public BoolTypeDenoter(SourcePosition thePosition) {
-		super(thePosition);
+	public BoolTypeDenoter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

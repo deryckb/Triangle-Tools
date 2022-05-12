@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CharacterLiteral extends Terminal {
 
-	public CharacterLiteral(String theSpelling, SourcePosition thePosition) {
-		super(theSpelling, thePosition);
+	public CharacterLiteral(String spelling, SourcePosition position) {
+		super(spelling, position);
 	}
 
 	@Override

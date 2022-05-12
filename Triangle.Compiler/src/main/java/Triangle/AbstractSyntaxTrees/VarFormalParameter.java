@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class VarFormalParameter extends FormalParameter {
 
-	public VarFormalParameter(Identifier iAST, TypeDenoter tAST, SourcePosition thePosition) {
-		super(thePosition);
+	public VarFormalParameter(Identifier iAST, TypeDenoter tAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 		T = tAST;
 	}

@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class EmptyCommand extends Command {
 
-	public EmptyCommand(SourcePosition thePosition) {
-		super(thePosition);
+	public EmptyCommand(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

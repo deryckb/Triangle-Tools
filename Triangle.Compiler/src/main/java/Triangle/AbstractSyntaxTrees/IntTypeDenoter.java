@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IntTypeDenoter extends TypeDenoter {
 
-	public IntTypeDenoter(SourcePosition thePosition) {
-		super(thePosition);
+	public IntTypeDenoter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

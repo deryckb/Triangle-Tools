@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class RecordExpression extends Expression {
 
-	public RecordExpression(RecordAggregate raAST, SourcePosition thePosition) {
-		super(thePosition);
+	public RecordExpression(RecordAggregate raAST, SourcePosition position) {
+		super(position);
 		RA = raAST;
 	}
 

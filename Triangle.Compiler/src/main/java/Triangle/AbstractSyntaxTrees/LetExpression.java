@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class LetExpression extends Expression {
 
-	public LetExpression(Declaration dAST, Expression eAST, SourcePosition thePosition) {
-		super(thePosition);
+	public LetExpression(Declaration dAST, Expression eAST, SourcePosition position) {
+		super(position);
 		D = dAST;
 		E = eAST;
 	}

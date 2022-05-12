@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ProcFormalParameter extends FormalParameter {
 
-	public ProcFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, SourcePosition thePosition) {
-		super(thePosition);
+	public ProcFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 		FPS = fpsAST;
 	}

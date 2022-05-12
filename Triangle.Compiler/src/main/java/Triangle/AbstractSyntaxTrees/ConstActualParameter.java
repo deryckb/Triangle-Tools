@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ConstActualParameter extends ActualParameter {
 
-	public ConstActualParameter(Expression eAST, SourcePosition thePosition) {
-		super(thePosition);
+	public ConstActualParameter(Expression eAST, SourcePosition position) {
+		super(position);
 		E = eAST;
 	}
 

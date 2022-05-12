@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class EmptyActualParameterSequence extends ActualParameterSequence {
 
-	public EmptyActualParameterSequence(SourcePosition thePosition) {
-		super(thePosition);
+	public EmptyActualParameterSequence(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

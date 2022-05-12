@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class Identifier extends Terminal {
 
-	public Identifier(String theSpelling, SourcePosition thePosition) {
-		super(theSpelling, thePosition);
+	public Identifier(String spelling, SourcePosition position) {
+		super(spelling, position);
 		type = null;
 		decl = null;
 	}

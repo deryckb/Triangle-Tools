@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class MultipleArrayAggregate extends ArrayAggregate {
 
-	public MultipleArrayAggregate(Expression eAST, ArrayAggregate aaAST, SourcePosition thePosition) {
-		super(thePosition);
+	public MultipleArrayAggregate(Expression eAST, ArrayAggregate aaAST, SourcePosition position) {
+		super(position);
 		E = eAST;
 		AA = aaAST;
 	}

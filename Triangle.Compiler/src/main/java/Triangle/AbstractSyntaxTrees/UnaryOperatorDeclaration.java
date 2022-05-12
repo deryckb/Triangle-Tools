@@ -19,8 +19,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 public class UnaryOperatorDeclaration extends Declaration {
 
 	public UnaryOperatorDeclaration(Operator oAST, TypeDenoter argAST, TypeDenoter resultAST,
-			SourcePosition thePosition) {
-		super(thePosition);
+			SourcePosition position) {
+		super(position);
 		O = oAST;
 		ARG = argAST;
 		RES = resultAST;

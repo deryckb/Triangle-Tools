@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class EmptyFormalParameterSequence extends FormalParameterSequence {
 
-	public EmptyFormalParameterSequence(SourcePosition thePosition) {
-		super(thePosition);
+	public EmptyFormalParameterSequence(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

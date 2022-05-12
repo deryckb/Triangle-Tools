@@ -19,8 +19,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 public class FuncFormalParameter extends FormalParameter {
 
 	public FuncFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST,
-			SourcePosition thePosition) {
-		super(thePosition);
+			SourcePosition position) {
+		super(position);
 		I = iAST;
 		FPS = fpsAST;
 		T = tAST;

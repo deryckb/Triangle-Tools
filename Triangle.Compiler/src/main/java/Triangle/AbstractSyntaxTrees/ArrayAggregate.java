@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class ArrayAggregate extends AST {
 
-	public ArrayAggregate(SourcePosition thePosition) {
-		super(thePosition);
+	public ArrayAggregate(SourcePosition position) {
+		super(position);
 		elemCount = 0;
 	}
 

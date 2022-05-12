@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class RecordAggregate extends AST {
 
-	public RecordAggregate(SourcePosition thePosition) {
-		super(thePosition);
+	public RecordAggregate(SourcePosition position) {
+		super(position);
 		type = null;
 	}
 

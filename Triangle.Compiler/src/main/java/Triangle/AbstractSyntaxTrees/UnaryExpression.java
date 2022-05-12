@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class UnaryExpression extends Expression {
 
-	public UnaryExpression(Operator oAST, Expression eAST, SourcePosition thePosition) {
-		super(thePosition);
+	public UnaryExpression(Operator oAST, Expression eAST, SourcePosition position) {
+		super(position);
 		O = oAST;
 		E = eAST;
 	}

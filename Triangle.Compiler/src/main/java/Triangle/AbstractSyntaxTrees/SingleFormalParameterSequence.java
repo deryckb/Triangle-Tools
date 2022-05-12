@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SingleFormalParameterSequence extends FormalParameterSequence {
 
-	public SingleFormalParameterSequence(FormalParameter fpAST, SourcePosition thePosition) {
-		super(thePosition);
+	public SingleFormalParameterSequence(FormalParameter fpAST, SourcePosition position) {
+		super(position);
 		FP = fpAST;
 	}
 

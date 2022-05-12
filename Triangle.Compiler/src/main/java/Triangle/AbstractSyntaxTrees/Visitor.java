@@ -17,138 +17,138 @@ package Triangle.AbstractSyntaxTrees;
 public interface Visitor {
 
 	// Commands
-	public abstract Object visitAssignCommand(AssignCommand ast, Object o);
+	Object visitAssignCommand(AssignCommand ast, Object o);
 
-	public abstract Object visitCallCommand(CallCommand ast, Object o);
+	Object visitCallCommand(CallCommand ast, Object o);
 
-	public abstract Object visitEmptyCommand(EmptyCommand ast, Object o);
+	Object visitEmptyCommand(EmptyCommand ast, Object o);
 
-	public abstract Object visitIfCommand(IfCommand ast, Object o);
+	Object visitIfCommand(IfCommand ast, Object o);
 
-	public abstract Object visitLetCommand(LetCommand ast, Object o);
+	Object visitLetCommand(LetCommand ast, Object o);
 
-	public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
+	Object visitSequentialCommand(SequentialCommand ast, Object o);
 
-	public abstract Object visitWhileCommand(WhileCommand ast, Object o);
+	Object visitWhileCommand(WhileCommand ast, Object o);
 
 	// Expressions
-	public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
+	Object visitArrayExpression(ArrayExpression ast, Object o);
 
-	public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);
+	Object visitBinaryExpression(BinaryExpression ast, Object o);
 
-	public abstract Object visitCallExpression(CallExpression ast, Object o);
+	Object visitCallExpression(CallExpression ast, Object o);
 
-	public abstract Object visitCharacterExpression(CharacterExpression ast, Object o);
+	Object visitCharacterExpression(CharacterExpression ast, Object o);
 
-	public abstract Object visitEmptyExpression(EmptyExpression ast, Object o);
+	Object visitEmptyExpression(EmptyExpression ast, Object o);
 
-	public abstract Object visitIfExpression(IfExpression ast, Object o);
+	Object visitIfExpression(IfExpression ast, Object o);
 
-	public abstract Object visitIntegerExpression(IntegerExpression ast, Object o);
+	Object visitIntegerExpression(IntegerExpression ast, Object o);
 
-	public abstract Object visitLetExpression(LetExpression ast, Object o);
+	Object visitLetExpression(LetExpression ast, Object o);
 
-	public abstract Object visitRecordExpression(RecordExpression ast, Object o);
+	Object visitRecordExpression(RecordExpression ast, Object o);
 
-	public abstract Object visitUnaryExpression(UnaryExpression ast, Object o);
+	Object visitUnaryExpression(UnaryExpression ast, Object o);
 
-	public abstract Object visitVnameExpression(VnameExpression ast, Object o);
+	Object visitVnameExpression(VnameExpression ast, Object o);
 
 	// Declarations
-	public abstract Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);
+	Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);
 
-	public abstract Object visitConstDeclaration(ConstDeclaration ast, Object o);
+	Object visitConstDeclaration(ConstDeclaration ast, Object o);
 
-	public abstract Object visitFuncDeclaration(FuncDeclaration ast, Object o);
+	Object visitFuncDeclaration(FuncDeclaration ast, Object o);
 
-	public abstract Object visitProcDeclaration(ProcDeclaration ast, Object o);
+	Object visitProcDeclaration(ProcDeclaration ast, Object o);
 
-	public abstract Object visitSequentialDeclaration(SequentialDeclaration ast, Object o);
+	Object visitSequentialDeclaration(SequentialDeclaration ast, Object o);
 
-	public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
+	Object visitTypeDeclaration(TypeDeclaration ast, Object o);
 
-	public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
+	Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
 
-	public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
+	Object visitVarDeclaration(VarDeclaration ast, Object o);
 
 	// Array Aggregates
-	public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);
+	Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);
 
-	public abstract Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o);
+	Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o);
 
 	// Record Aggregates
-	public abstract Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object o);
+	Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object o);
 
-	public abstract Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object o);
+	Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object o);
 
 	// Formal Parameters
-	public abstract Object visitConstFormalParameter(ConstFormalParameter ast, Object o);
+	Object visitConstFormalParameter(ConstFormalParameter ast, Object o);
 
-	public abstract Object visitFuncFormalParameter(FuncFormalParameter ast, Object o);
+	Object visitFuncFormalParameter(FuncFormalParameter ast, Object o);
 
-	public abstract Object visitProcFormalParameter(ProcFormalParameter ast, Object o);
+	Object visitProcFormalParameter(ProcFormalParameter ast, Object o);
 
-	public abstract Object visitVarFormalParameter(VarFormalParameter ast, Object o);
+	Object visitVarFormalParameter(VarFormalParameter ast, Object o);
 
-	public abstract Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object o);
+	Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object o);
 
-	public abstract Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object o);
+	Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object o);
 
-	public abstract Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object o);
+	Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object o);
 
 	// Actual Parameters
-	public abstract Object visitConstActualParameter(ConstActualParameter ast, Object o);
+	Object visitConstActualParameter(ConstActualParameter ast, Object o);
 
-	public abstract Object visitFuncActualParameter(FuncActualParameter ast, Object o);
+	Object visitFuncActualParameter(FuncActualParameter ast, Object o);
 
-	public abstract Object visitProcActualParameter(ProcActualParameter ast, Object o);
+	Object visitProcActualParameter(ProcActualParameter ast, Object o);
 
-	public abstract Object visitVarActualParameter(VarActualParameter ast, Object o);
+	Object visitVarActualParameter(VarActualParameter ast, Object o);
 
-	public abstract Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object o);
+	Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object o);
 
-	public abstract Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object o);
+	Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object o);
 
-	public abstract Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object o);
+	Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object o);
 
 	// Type Denoters
-	public abstract Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o);
+	Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o);
 
-	public abstract Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o);
+	Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o);
 
-	public abstract Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o);
+	Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o);
 
-	public abstract Object visitCharTypeDenoter(CharTypeDenoter ast, Object o);
+	Object visitCharTypeDenoter(CharTypeDenoter ast, Object o);
 
-	public abstract Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o);
+	Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o);
 
-	public abstract Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object o);
+	Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object o);
 
-	public abstract Object visitIntTypeDenoter(IntTypeDenoter ast, Object o);
+	Object visitIntTypeDenoter(IntTypeDenoter ast, Object o);
 
-	public abstract Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o);
+	Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o);
 
-	public abstract Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object o);
+	Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object o);
 
-	public abstract Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object o);
+	Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object o);
 
 	// Literals, Identifiers and Operators
-	public abstract Object visitCharacterLiteral(CharacterLiteral ast, Object o);
+	Object visitCharacterLiteral(CharacterLiteral ast, Object o);
 
-	public abstract Object visitIdentifier(Identifier ast, Object o);
+	Object visitIdentifier(Identifier ast, Object o);
 
-	public abstract Object visitIntegerLiteral(IntegerLiteral ast, Object o);
+	Object visitIntegerLiteral(IntegerLiteral ast, Object o);
 
-	public abstract Object visitOperator(Operator ast, Object o);
+	Object visitOperator(Operator ast, Object o);
 
 	// Value-or-variable names
-	public abstract Object visitDotVname(DotVname ast, Object o);
+	Object visitDotVname(DotVname ast, Object o);
 
-	public abstract Object visitSimpleVname(SimpleVname ast, Object o);
+	Object visitSimpleVname(SimpleVname ast, Object o);
 
-	public abstract Object visitSubscriptVname(SubscriptVname ast, Object o);
+	Object visitSubscriptVname(SubscriptVname ast, Object o);
 
 	// Programs
-	public abstract Object visitProgram(Program ast, Object o);
+	Object visitProgram(Program ast, Object o);
 
 }

@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SubscriptVname extends Vname {
 
-	public SubscriptVname(Vname vAST, Expression eAST, SourcePosition thePosition) {
-		super(thePosition);
+	public SubscriptVname(Vname vAST, Expression eAST, SourcePosition position) {
+		super(position);
 		V = vAST;
 		E = eAST;
 	}

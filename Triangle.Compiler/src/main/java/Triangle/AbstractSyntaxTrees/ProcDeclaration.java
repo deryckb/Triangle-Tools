@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ProcDeclaration extends Declaration {
 
-	public ProcDeclaration(Identifier iAST, FormalParameterSequence fpsAST, Command cAST, SourcePosition thePosition) {
-		super(thePosition);
+	public ProcDeclaration(Identifier iAST, FormalParameterSequence fpsAST, Command cAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 		FPS = fpsAST;
 		C = cAST;

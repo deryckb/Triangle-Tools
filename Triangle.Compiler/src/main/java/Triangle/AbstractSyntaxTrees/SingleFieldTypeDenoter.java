@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SingleFieldTypeDenoter extends FieldTypeDenoter {
 
-	public SingleFieldTypeDenoter(Identifier iAST, TypeDenoter tAST, SourcePosition thePosition) {
-		super(thePosition);
+	public SingleFieldTypeDenoter(Identifier iAST, TypeDenoter tAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 		T = tAST;
 	}

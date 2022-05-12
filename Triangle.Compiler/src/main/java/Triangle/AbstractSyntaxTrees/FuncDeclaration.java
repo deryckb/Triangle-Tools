@@ -19,8 +19,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 public class FuncDeclaration extends Declaration {
 
 	public FuncDeclaration(Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST, Expression eAST,
-			SourcePosition thePosition) {
-		super(thePosition);
+			SourcePosition position) {
+		super(position);
 		I = iAST;
 		FPS = fpsAST;
 		T = tAST;

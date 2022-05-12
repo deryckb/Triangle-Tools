@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class WhileCommand extends Command {
 
-	public WhileCommand(Expression eAST, Command cAST, SourcePosition thePosition) {
-		super(thePosition);
+	public WhileCommand(Expression eAST, Command cAST, SourcePosition position) {
+		super(position);
 		E = eAST;
 		C = cAST;
 	}

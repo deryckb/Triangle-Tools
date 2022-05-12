@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class DotVname extends Vname {
 
-	public DotVname(Vname vAST, Identifier iAST, SourcePosition thePosition) {
-		super(thePosition);
+	public DotVname(Vname vAST, Identifier iAST, SourcePosition position) {
+		super(position);
 		V = vAST;
 		I = iAST;
 	}

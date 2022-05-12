@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class RecordTypeDenoter extends TypeDenoter {
 
-	public RecordTypeDenoter(FieldTypeDenoter ftAST, SourcePosition thePosition) {
-		super(thePosition);
+	public RecordTypeDenoter(FieldTypeDenoter ftAST, SourcePosition position) {
+		super(position);
 		FT = ftAST;
 	}
 

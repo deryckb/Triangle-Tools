@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IfExpression extends Expression {
 
-	public IfExpression(Expression e1AST, Expression e2AST, Expression e3AST, SourcePosition thePosition) {
-		super(thePosition);
+	public IfExpression(Expression e1AST, Expression e2AST, Expression e3AST, SourcePosition position) {
+		super(position);
 		E1 = e1AST;
 		E2 = e2AST;
 		E3 = e3AST;

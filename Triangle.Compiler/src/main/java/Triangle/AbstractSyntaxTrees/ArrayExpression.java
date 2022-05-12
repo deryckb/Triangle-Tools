@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ArrayExpression extends Expression {
 
-	public ArrayExpression(ArrayAggregate aaAST, SourcePosition thePosition) {
-		super(thePosition);
+	public ArrayExpression(ArrayAggregate aaAST, SourcePosition position) {
+		super(position);
 		AA = aaAST;
 	}
 

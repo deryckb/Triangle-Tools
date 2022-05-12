@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class Program extends AST {
 
-	public Program(Command cAST, SourcePosition thePosition) {
-		super(thePosition);
+	public Program(Command cAST, SourcePosition position) {
+		super(position);
 		C = cAST;
 	}
 

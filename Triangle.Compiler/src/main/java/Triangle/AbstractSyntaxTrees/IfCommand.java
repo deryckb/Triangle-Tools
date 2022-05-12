@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IfCommand extends Command {
 
-	public IfCommand(Expression eAST, Command c1AST, Command c2AST, SourcePosition thePosition) {
-		super(thePosition);
+	public IfCommand(Expression eAST, Command c1AST, Command c2AST, SourcePosition position) {
+		super(position);
 		E = eAST;
 		C1 = c1AST;
 		C2 = c2AST;

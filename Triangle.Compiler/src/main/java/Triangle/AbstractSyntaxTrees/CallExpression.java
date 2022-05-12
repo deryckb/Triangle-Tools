@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CallExpression extends Expression {
 
-	public CallExpression(Identifier iAST, ActualParameterSequence apsAST, SourcePosition thePosition) {
-		super(thePosition);
+	public CallExpression(Identifier iAST, ActualParameterSequence apsAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 		APS = apsAST;
 	}

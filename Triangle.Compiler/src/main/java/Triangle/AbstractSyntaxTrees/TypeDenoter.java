@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class TypeDenoter extends AST {
 
-	public TypeDenoter(SourcePosition thePosition) {
-		super(thePosition);
+	public TypeDenoter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

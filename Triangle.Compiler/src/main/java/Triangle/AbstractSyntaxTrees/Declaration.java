@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class Declaration extends AST {
 
-	public Declaration(SourcePosition thePosition) {
-		super(thePosition);
+	public Declaration(SourcePosition position) {
+		super(position);
 		duplicated = false;
 	}
 

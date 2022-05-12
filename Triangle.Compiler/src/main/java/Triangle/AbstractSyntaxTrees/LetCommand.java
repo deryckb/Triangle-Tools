@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class LetCommand extends Command {
 
-	public LetCommand(Declaration dAST, Command cAST, SourcePosition thePosition) {
-		super(thePosition);
+	public LetCommand(Declaration dAST, Command cAST, SourcePosition position) {
+		super(position);
 		D = dAST;
 		C = cAST;
 	}

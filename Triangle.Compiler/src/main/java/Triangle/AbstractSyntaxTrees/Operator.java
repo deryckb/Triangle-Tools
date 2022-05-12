@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class Operator extends Terminal {
 
-	public Operator(String theSpelling, SourcePosition thePosition) {
-		super(theSpelling, thePosition);
+	public Operator(String spelling, SourcePosition position) {
+		super(spelling, position);
 		decl = null;
 	}
 

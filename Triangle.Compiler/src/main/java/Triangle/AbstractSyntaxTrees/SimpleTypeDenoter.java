@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SimpleTypeDenoter extends TypeDenoter {
 
-	public SimpleTypeDenoter(Identifier iAST, SourcePosition thePosition) {
-		super(thePosition);
+	public SimpleTypeDenoter(Identifier iAST, SourcePosition position) {
+		super(position);
 		I = iAST;
 	}
 

@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IntegerExpression extends Expression {
 
-	public IntegerExpression(IntegerLiteral ilAST, SourcePosition thePosition) {
-		super(thePosition);
+	public IntegerExpression(IntegerLiteral ilAST, SourcePosition position) {
+		super(position);
 		IL = ilAST;
 	}
 

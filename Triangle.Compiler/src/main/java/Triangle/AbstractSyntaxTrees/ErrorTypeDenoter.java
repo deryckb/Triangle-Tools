@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ErrorTypeDenoter extends TypeDenoter {
 
-	public ErrorTypeDenoter(SourcePosition thePosition) {
-		super(thePosition);
+	public ErrorTypeDenoter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

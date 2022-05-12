@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class Vname extends AST {
 
-	public Vname(SourcePosition thePosition) {
-		super(thePosition);
+	public Vname(SourcePosition position) {
+		super(position);
 		variable = false;
 		type = null;
 	}

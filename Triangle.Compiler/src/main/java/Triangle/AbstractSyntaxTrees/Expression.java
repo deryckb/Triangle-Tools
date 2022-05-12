@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class Expression extends AST {
 
-	public Expression(SourcePosition thePosition) {
-		super(thePosition);
+	public Expression(SourcePosition position) {
+		super(position);
 		type = null;
 	}
 

@@ -18,8 +18,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class FieldTypeDenoter extends TypeDenoter {
 
-	public FieldTypeDenoter(SourcePosition thePosition) {
-		super(thePosition);
+	public FieldTypeDenoter(SourcePosition position) {
+		super(position);
 	}
 
 	@Override

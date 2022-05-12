@@ -19,8 +19,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 public class MultipleFormalParameterSequence extends FormalParameterSequence {
 
 	public MultipleFormalParameterSequence(FormalParameter fpAST, FormalParameterSequence fpsAST,
-			SourcePosition thePosition) {
-		super(thePosition);
+			SourcePosition position) {
+		super(position);
 		FP = fpAST;
 		FPS = fpsAST;
 	}
