@@ -168,7 +168,7 @@ public Object visitWhileCommand(WhileCommand ast, Object o) {
   @Override
 public Object visitArrayExpression(ArrayExpression ast, Object o) {
     TypeDenoter elemType = (TypeDenoter) ast.AA.visit(this, null);
-    IntegerLiteral il = new IntegerLiteral(new Integer(ast.AA.elemCount).toString(),
+    IntegerLiteral il = new IntegerLiteral(Integer.valueOf(ast.AA.elemCount).toString(),
         ast.position);
     ast.type = new ArrayTypeDenoter(il, elemType, ast.position);
     return ast.type;

@@ -203,7 +203,7 @@ public Object visitCharacterExpression(CharacterExpression ast,
 
   @Override
 public Object visitEmptyExpression(EmptyExpression ast, Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -272,7 +272,7 @@ public Object visitVnameExpression(VnameExpression ast, Object o) {
   @Override
 public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast,
       Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -294,7 +294,7 @@ public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
       extraSize = valSize;
     }
     writeTableDetails(ast);
-    return new Integer(extraSize);
+    return Integer.valueOf(extraSize);
   }
 
   @Override
@@ -316,7 +316,7 @@ public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     }
     emit(Machine.RETURNop, valSize, 0, argsSize);
     patch(jumpAddr, nextInstrAddr);
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -339,7 +339,7 @@ public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
     }
     emit(Machine.RETURNop, 0, 0, argsSize);
     patch(jumpAddr, nextInstrAddr);
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -350,20 +350,20 @@ public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
     extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
     Frame frame1 = new Frame(frame, extraSize1);
     extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
-    return new Integer(extraSize1 + extraSize2);
+    return Integer.valueOf(extraSize1 + extraSize2);
   }
 
   @Override
 public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
     // just to ensure the type's representation is decided
     ast.T.visit(this, null);
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
 public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast,
       Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -375,7 +375,7 @@ public Object visitVarDeclaration(VarDeclaration ast, Object o) {
     emit(Machine.PUSHop, 0, 0, extraSize);
     ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
-    return new Integer(extraSize);
+    return Integer.valueOf(extraSize);
   }
 
   // Array Aggregates
@@ -386,7 +386,7 @@ public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast,
     int elemSize = ((Integer) ast.E.visit(this, frame)).intValue();
     Frame frame1 = new Frame(frame, elemSize);
     int arraySize = ((Integer) ast.AA.visit(this, frame1)).intValue();
-    return new Integer(elemSize + arraySize);
+    return Integer.valueOf(elemSize + arraySize);
   }
 
   @Override
@@ -402,7 +402,7 @@ public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast,
     int fieldSize = ((Integer) ast.E.visit(this, frame)).intValue();
     Frame frame1 = new Frame(frame, fieldSize);
     int recordSize = ((Integer) ast.RA.visit(this, frame1)).intValue();
-    return new Integer(fieldSize + recordSize);
+    return Integer.valueOf(fieldSize + recordSize);
   }
 
   @Override
@@ -418,7 +418,7 @@ public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
     int valSize = ((Integer) ast.T.visit(this, null)).intValue();
     ast.entity = new UnknownValue(valSize, frame.level, -frame.size - valSize);
     writeTableDetails(ast);
-    return new Integer(valSize);
+    return Integer.valueOf(valSize);
   }
 
   @Override
@@ -428,7 +428,7 @@ public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
     ast.entity = new UnknownRoutine(Machine.closureSize, frame.level,
         -frame.size - argsSize);
     writeTableDetails(ast);
-    return new Integer(argsSize);
+    return Integer.valueOf(argsSize);
   }
 
   @Override
@@ -438,7 +438,7 @@ public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
     ast.entity = new UnknownRoutine(Machine.closureSize, frame.level,
         -frame.size - argsSize);
     writeTableDetails(ast);
-    return new Integer(argsSize);
+    return Integer.valueOf(argsSize);
   }
 
   @Override
@@ -448,13 +448,13 @@ public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
     ast.entity = new UnknownAddress(Machine.addressSize, frame.level,
         -frame.size - Machine.addressSize);
     writeTableDetails(ast);
-    return new Integer(Machine.addressSize);
+    return Integer.valueOf(Machine.addressSize);
   }
 
   @Override
 public Object visitEmptyFormalParameterSequence(
       EmptyFormalParameterSequence ast, Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -464,7 +464,7 @@ public Object visitMultipleFormalParameterSequence(
     int argsSize1 = ((Integer) ast.FPS.visit(this, frame)).intValue();
     Frame frame1 = new Frame(frame, argsSize1);
     int argsSize2 = ((Integer) ast.FP.visit(this, frame1)).intValue();
-    return new Integer(argsSize1 + argsSize2);
+    return Integer.valueOf(argsSize1 + argsSize2);
   }
 
   @Override
@@ -497,7 +497,7 @@ public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
       emit(Machine.LOADAop, 0, Machine.SBr, 0);
       emit(Machine.LOADAop, 0, Machine.PBr, displacement);
     }
-    return new Integer(Machine.closureSize);
+    return Integer.valueOf(Machine.closureSize);
   }
 
   @Override
@@ -518,19 +518,19 @@ public Object visitProcActualParameter(ProcActualParameter ast, Object o) {
       emit(Machine.LOADAop, 0, Machine.SBr, 0);
       emit(Machine.LOADAop, 0, Machine.PBr, displacement);
     }
-    return new Integer(Machine.closureSize);
+    return Integer.valueOf(Machine.closureSize);
   }
 
   @Override
 public Object visitVarActualParameter(VarActualParameter ast, Object o) {
     encodeFetchAddress(ast.V, (Frame) o);
-    return new Integer(Machine.addressSize);
+    return Integer.valueOf(Machine.addressSize);
   }
 
   @Override
 public Object visitEmptyActualParameterSequence(
       EmptyActualParameterSequence ast, Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -540,7 +540,7 @@ public Object visitMultipleActualParameterSequence(
     int argsSize1 = ((Integer) ast.AP.visit(this, frame)).intValue();
     Frame frame1 = new Frame(frame, argsSize1);
     int argsSize2 = ((Integer) ast.APS.visit(this, frame1)).intValue();
-    return new Integer(argsSize1 + argsSize2);
+    return Integer.valueOf(argsSize1 + argsSize2);
   }
 
   @Override
@@ -552,7 +552,7 @@ public Object visitSingleActualParameterSequence(
   // Type Denoters
   @Override
 public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -565,7 +565,7 @@ public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) {
       writeTableDetails(ast);
     } else
       typeSize = ast.entity.size;
-    return new Integer(typeSize);
+    return Integer.valueOf(typeSize);
   }
 
   @Override
@@ -574,7 +574,7 @@ public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {
       ast.entity = new TypeRepresentation(Machine.booleanSize);
       writeTableDetails(ast);
     }
-    return new Integer(Machine.booleanSize);
+    return Integer.valueOf(Machine.booleanSize);
   }
 
   @Override
@@ -583,18 +583,18 @@ public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) {
       ast.entity = new TypeRepresentation(Machine.characterSize);
       writeTableDetails(ast);
     }
-    return new Integer(Machine.characterSize);
+    return Integer.valueOf(Machine.characterSize);
   }
 
   @Override
 public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
 public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast,
       Object o) {
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   @Override
@@ -603,19 +603,19 @@ public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) {
       ast.entity = new TypeRepresentation(Machine.integerSize);
       writeTableDetails(ast);
     }
-    return new Integer(Machine.integerSize);
+    return Integer.valueOf(Machine.integerSize);
   }
 
   @Override
 public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {
     int typeSize;
     if (ast.entity == null) {
-      typeSize = ((Integer) ast.FT.visit(this, new Integer(0))).intValue();
+      typeSize = ((Integer) ast.FT.visit(this, Integer.valueOf(0))).intValue();
       ast.entity = new TypeRepresentation(typeSize);
       writeTableDetails(ast);
     } else
       typeSize = ast.entity.size;
-    return new Integer(typeSize);
+    return Integer.valueOf(typeSize);
   }
 
   @Override
@@ -631,9 +631,9 @@ public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast,
     } else
       fieldSize = ast.entity.size;
 
-    Integer offset1 = new Integer(offset + fieldSize);
+    Integer offset1 = Integer.valueOf(offset + fieldSize);
     int recSize = ((Integer) ast.FT.visit(this, offset1)).intValue();
-    return new Integer(fieldSize + recSize);
+    return Integer.valueOf(fieldSize + recSize);
   }
 
   @Override
@@ -649,7 +649,7 @@ public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast,
     } else
       fieldSize = ast.entity.size;
 
-    return new Integer(fieldSize);
+    return Integer.valueOf(fieldSize);
   }
 
   // Literals, Identifiers and Operators
