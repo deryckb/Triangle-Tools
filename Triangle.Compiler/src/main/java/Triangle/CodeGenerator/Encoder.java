@@ -166,14 +166,14 @@ public final class Encoder implements Visitor {
 	// Expressions
 	@Override
 	public Object visitArrayExpression(ArrayExpression ast, Object o) {
-		ast.type.visit(this, null);
+		ast.type.visit(this);
 		return ast.AA.visit(this, o);
 	}
 
 	@Override
 	public Object visitBinaryExpression(BinaryExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this, null);
+		Integer valSize = (Integer) ast.type.visit(this);
 		int valSize1 = ((Integer) ast.E1.visit(this, frame)).intValue();
 		Frame frame1 = new Frame(frame, valSize1);
 		int valSize2 = ((Integer) ast.E2.visit(this, frame1)).intValue();
@@ -185,7 +185,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitCallExpression(CallExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this, null);
+		Integer valSize = (Integer) ast.type.visit(this);
 		Integer argsSize = (Integer) ast.APS.visit(this, frame);
 		ast.I.visit(this, new Frame(frame.level, argsSize));
 		return valSize;
@@ -194,7 +194,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitCharacterExpression(CharacterExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this, null);
+		Integer valSize = (Integer) ast.type.visit(this);
 		emit(Machine.LOADLop, 0, 0, ast.CL.spelling.charAt(1));
 		return valSize;
 	}
@@ -210,7 +210,7 @@ public final class Encoder implements Visitor {
 		Integer valSize;
 		int jumpifAddr, jumpAddr;
 
-		ast.type.visit(this, null);
+		ast.type.visit(this);
 		ast.E1.visit(this, frame);
 		jumpifAddr = nextInstrAddr;
 		emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
@@ -226,7 +226,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitIntegerExpression(IntegerExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this, null);
+		Integer valSize = (Integer) ast.type.visit(this);
 		emit(Machine.LOADLop, 0, 0, Integer.parseInt(ast.IL.spelling));
 		return valSize;
 	}
@@ -234,7 +234,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitLetExpression(LetExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		ast.type.visit(this, null);
+		ast.type.visit(this);
 		int extraSize = ((Integer) ast.D.visit(this, frame)).intValue();
 		Frame frame1 = new Frame(frame, extraSize);
 		Integer valSize = (Integer) ast.E.visit(this, frame1);
@@ -245,14 +245,14 @@ public final class Encoder implements Visitor {
 
 	@Override
 	public Object visitRecordExpression(RecordExpression ast, Object o) {
-		ast.type.visit(this, null);
+		ast.type.visit(this);
 		return ast.RA.visit(this, o);
 	}
 
 	@Override
 	public Object visitUnaryExpression(UnaryExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this, null);
+		Integer valSize = (Integer) ast.type.visit(this);
 		ast.E.visit(this, frame);
 		ast.O.visit(this, new Frame(frame.level, valSize.intValue()));
 		return valSize;
@@ -261,7 +261,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitVnameExpression(VnameExpression ast, Object o) {
 		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this, null);
+		Integer valSize = (Integer) ast.type.visit(this);
 		encodeFetch(ast.V, frame, valSize.intValue());
 		return valSize;
 	}
@@ -350,7 +350,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
 		// just to ensure the type's representation is decided
-		ast.T.visit(this, null);
+		ast.T.visit(this);
 		return Integer.valueOf(0);
 	}
 
@@ -364,7 +364,7 @@ public final class Encoder implements Visitor {
 		Frame frame = (Frame) o;
 		int extraSize;
 
-		extraSize = ((Integer) ast.T.visit(this, null)).intValue();
+		extraSize = ((Integer) ast.T.visit(this)).intValue();
 		emit(Machine.PUSHop, 0, 0, extraSize);
 		ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
 		writeTableDetails(ast);
@@ -405,7 +405,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
 		Frame frame = (Frame) o;
-		int valSize = ((Integer) ast.T.visit(this, null)).intValue();
+		int valSize = ((Integer) ast.T.visit(this)).intValue();
 		ast.entity = new UnknownValue(valSize, frame.level, -frame.size - valSize);
 		writeTableDetails(ast);
 		return Integer.valueOf(valSize);
@@ -432,7 +432,7 @@ public final class Encoder implements Visitor {
 	@Override
 	public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
 		Frame frame = (Frame) o;
-		ast.T.visit(this, null);
+		ast.T.visit(this);
 		ast.entity = new UnknownAddress(Machine.addressSize, frame.level, -frame.size - Machine.addressSize);
 		writeTableDetails(ast);
 		return Integer.valueOf(Machine.addressSize);
@@ -540,7 +540,7 @@ public final class Encoder implements Visitor {
 	public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) {
 		int typeSize;
 		if (ast.entity == null) {
-			int elemSize = ((Integer) ast.T.visit(this, null)).intValue();
+			int elemSize = ((Integer) ast.T.visit(this)).intValue();
 			typeSize = Integer.parseInt(ast.IL.spelling) * elemSize;
 			ast.entity = new TypeRepresentation(typeSize);
 			writeTableDetails(ast);
@@ -604,7 +604,7 @@ public final class Encoder implements Visitor {
 		int fieldSize;
 
 		if (ast.entity == null) {
-			fieldSize = ((Integer) ast.T.visit(this, null)).intValue();
+			fieldSize = ((Integer) ast.T.visit(this)).intValue();
 			ast.entity = new Field(fieldSize, offset);
 			writeTableDetails(ast);
 		} else
@@ -621,7 +621,7 @@ public final class Encoder implements Visitor {
 		int fieldSize;
 
 		if (ast.entity == null) {
-			fieldSize = ((Integer) ast.T.visit(this, null)).intValue();
+			fieldSize = ((Integer) ast.T.visit(this)).intValue();
 			ast.entity = new Field(fieldSize, offset);
 			writeTableDetails(ast);
 		} else
@@ -714,7 +714,7 @@ public final class Encoder implements Visitor {
 		baseObject = (RuntimeEntity) ast.V.visit(this, frame);
 		ast.offset = ast.V.offset;
 		ast.indexed = ast.V.indexed;
-		elemSize = ((Integer) ast.type.visit(this, null)).intValue();
+		elemSize = ((Integer) ast.type.visit(this)).intValue();
 		if (ast.E instanceof IntegerExpression) {
 			IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
 			ast.offset = ast.offset + Integer.parseInt(IL.spelling) * elemSize;
@@ -764,7 +764,7 @@ public final class Encoder implements Visitor {
 
 		if (constDeclaration instanceof ConstDeclaration) {
 			ConstDeclaration decl = (ConstDeclaration) constDeclaration;
-			int typeSize = ((Integer) decl.E.type.visit(this, null)).intValue();
+			int typeSize = ((Integer) decl.E.type.visit(this)).intValue();
 			decl.entity = new KnownValue(typeSize, value);
 			writeTableDetails(constDeclaration);
 		}
