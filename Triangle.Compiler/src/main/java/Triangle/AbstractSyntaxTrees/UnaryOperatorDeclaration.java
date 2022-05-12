@@ -18,19 +18,19 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class UnaryOperatorDeclaration extends Declaration {
 
-  public UnaryOperatorDeclaration(Operator oAST, TypeDenoter argAST,
-      TypeDenoter resultAST, SourcePosition thePosition) {
-    super(thePosition);
-    O = oAST;
-    ARG = argAST;
-    RES = resultAST;
-  }
+	public UnaryOperatorDeclaration(Operator oAST, TypeDenoter argAST, TypeDenoter resultAST,
+			SourcePosition thePosition) {
+		super(thePosition);
+		O = oAST;
+		ARG = argAST;
+		RES = resultAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitUnaryOperatorDeclaration(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitUnaryOperatorDeclaration(this, o);
+	}
 
-  public Operator O;
-  public TypeDenoter ARG, RES;
+	public Operator O;
+	public TypeDenoter ARG, RES;
 }

@@ -18,31 +18,29 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class MultipleFieldTypeDenoter extends FieldTypeDenoter {
 
-  public MultipleFieldTypeDenoter(Identifier iAST, TypeDenoter tAST, FieldTypeDenoter ftAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-    T = tAST;
-    FT = ftAST;
-  }
+	public MultipleFieldTypeDenoter(Identifier iAST, TypeDenoter tAST, FieldTypeDenoter ftAST,
+			SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+		T = tAST;
+		FT = ftAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitMultipleFieldTypeDenoter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitMultipleFieldTypeDenoter(this, o);
+	}
 
-  @Override
-public boolean equals(Object obj) {
-    if (obj != null && obj instanceof MultipleFieldTypeDenoter) {
-      MultipleFieldTypeDenoter ft = (MultipleFieldTypeDenoter) obj;
-      return (this.I.spelling.compareTo(ft.I.spelling) == 0) &&
-          this.T.equals(ft.T) &&
-          this.FT.equals(ft.FT);
-    } else
-      return false;
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof MultipleFieldTypeDenoter) {
+			MultipleFieldTypeDenoter ft = (MultipleFieldTypeDenoter) obj;
+			return (this.I.spelling.compareTo(ft.I.spelling) == 0) && this.T.equals(ft.T) && this.FT.equals(ft.FT);
+		} else
+			return false;
+	}
 
-  public Identifier I;
-  public TypeDenoter T;
-  public FieldTypeDenoter FT;
+	public Identifier I;
+	public TypeDenoter T;
+	public FieldTypeDenoter FT;
 }

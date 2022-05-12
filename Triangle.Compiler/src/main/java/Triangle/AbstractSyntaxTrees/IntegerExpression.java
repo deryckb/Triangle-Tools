@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IntegerExpression extends Expression {
 
-  public IntegerExpression(IntegerLiteral ilAST, SourcePosition thePosition) {
-    super(thePosition);
-    IL = ilAST;
-  }
+	public IntegerExpression(IntegerLiteral ilAST, SourcePosition thePosition) {
+		super(thePosition);
+		IL = ilAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitIntegerExpression(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitIntegerExpression(this, o);
+	}
 
-  public IntegerLiteral IL;
+	public IntegerLiteral IL;
 }

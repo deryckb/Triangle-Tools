@@ -18,27 +18,26 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ProcFormalParameter extends FormalParameter {
 
-  public ProcFormalParameter(Identifier iAST, FormalParameterSequence fpsAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-    FPS = fpsAST;
-  }
+	public ProcFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+		FPS = fpsAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitProcFormalParameter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitProcFormalParameter(this, o);
+	}
 
-  public Identifier I;
-  public FormalParameterSequence FPS;
+	public Identifier I;
+	public FormalParameterSequence FPS;
 
-  @Override
-public boolean equals(Object fpAST) {
-    if (fpAST instanceof ProcFormalParameter) {
-      ProcFormalParameter pfpAST = (ProcFormalParameter) fpAST;
-      return FPS.equals(pfpAST.FPS);
-    } else
-      return false;
-  }
+	@Override
+	public boolean equals(Object fpAST) {
+		if (fpAST instanceof ProcFormalParameter) {
+			ProcFormalParameter pfpAST = (ProcFormalParameter) fpAST;
+			return FPS.equals(pfpAST.FPS);
+		} else
+			return false;
+	}
 }

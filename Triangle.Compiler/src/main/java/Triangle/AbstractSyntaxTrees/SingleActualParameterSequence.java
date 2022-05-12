@@ -18,16 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SingleActualParameterSequence extends ActualParameterSequence {
 
-  public SingleActualParameterSequence(ActualParameter apAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    AP = apAST;
-  }
+	public SingleActualParameterSequence(ActualParameter apAST, SourcePosition thePosition) {
+		super(thePosition);
+		AP = apAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitSingleActualParameterSequence(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitSingleActualParameterSequence(this, o);
+	}
 
-  public ActualParameter AP;
+	public ActualParameter AP;
 }

@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SimpleVname extends Vname {
 
-  public SimpleVname(Identifier iAST, SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-  }
+	public SimpleVname(Identifier iAST, SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitSimpleVname(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitSimpleVname(this, o);
+	}
 
-  public Identifier I;
+	public Identifier I;
 }

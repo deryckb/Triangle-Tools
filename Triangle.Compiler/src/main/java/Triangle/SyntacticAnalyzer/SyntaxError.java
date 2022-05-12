@@ -16,14 +16,14 @@ package Triangle.SyntacticAnalyzer;
 
 class SyntaxError extends Exception {
 
-  private static final long serialVersionUID = -5280306336102766860L;
+	private static final long serialVersionUID = -5280306336102766860L;
 
-SyntaxError() {
-    super();
-  }
+	SyntaxError() {
+		super();
+	}
 
-  SyntaxError(String s) {
-    super(s);
-  }
+	SyntaxError(String s) {
+		super(s);
+	}
 
 }

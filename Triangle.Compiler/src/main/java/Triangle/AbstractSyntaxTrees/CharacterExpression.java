@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CharacterExpression extends Expression {
 
-  public CharacterExpression(CharacterLiteral clAST, SourcePosition thePosition) {
-    super(thePosition);
-    CL = clAST;
-  }
+	public CharacterExpression(CharacterLiteral clAST, SourcePosition thePosition) {
+		super(thePosition);
+		CL = clAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitCharacterExpression(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitCharacterExpression(this, o);
+	}
 
-  public CharacterLiteral CL;
+	public CharacterLiteral CL;
 }

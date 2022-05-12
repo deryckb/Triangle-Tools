@@ -18,16 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ArrayExpression extends Expression {
 
-  public ArrayExpression(ArrayAggregate aaAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    AA = aaAST;
-  }
+	public ArrayExpression(ArrayAggregate aaAST, SourcePosition thePosition) {
+		super(thePosition);
+		AA = aaAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitArrayExpression(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitArrayExpression(this, o);
+	}
 
-  public ArrayAggregate AA;
+	public ArrayAggregate AA;
 }

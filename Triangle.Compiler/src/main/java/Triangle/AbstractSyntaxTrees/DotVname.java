@@ -18,17 +18,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class DotVname extends Vname {
 
-  public DotVname(Vname vAST, Identifier iAST, SourcePosition thePosition) {
-    super(thePosition);
-    V = vAST;
-    I = iAST;
-  }
+	public DotVname(Vname vAST, Identifier iAST, SourcePosition thePosition) {
+		super(thePosition);
+		V = vAST;
+		I = iAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitDotVname(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitDotVname(this, o);
+	}
 
-  public Identifier I;
-  public Vname V;
+	public Identifier I;
+	public Vname V;
 }

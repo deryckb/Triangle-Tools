@@ -20,20 +20,20 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 class DrawerPanel extends JPanel {
-  /**
+	/**
 	 *
 	 */
 	private static final long serialVersionUID = 565914745506889669L;
-private Drawer drawer;
+	private Drawer drawer;
 
-  public DrawerPanel(Drawer drawer) {
-    setPreferredSize(new Dimension(4096, 4096));
-    this.drawer = drawer;
-  }
+	public DrawerPanel(Drawer drawer) {
+		setPreferredSize(new Dimension(4096, 4096));
+		this.drawer = drawer;
+	}
 
-  @Override
-public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    drawer.paintAST(g);
-  }
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		drawer.paintAST(g);
+	}
 }

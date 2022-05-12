@@ -18,17 +18,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class AssignCommand extends Command {
 
-  public AssignCommand(Vname vAST, Expression eAST, SourcePosition thePosition) {
-    super(thePosition);
-    V = vAST;
-    E = eAST;
-  }
+	public AssignCommand(Vname vAST, Expression eAST, SourcePosition thePosition) {
+		super(thePosition);
+		V = vAST;
+		E = eAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitAssignCommand(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitAssignCommand(this, o);
+	}
 
-  public Vname V;
-  public Expression E;
+	public Vname V;
+	public Expression E;
 }

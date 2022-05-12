@@ -18,29 +18,29 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class FuncFormalParameter extends FormalParameter {
 
-  public FuncFormalParameter(Identifier iAST, FormalParameterSequence fpsAST,
-      TypeDenoter tAST, SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-    FPS = fpsAST;
-    T = tAST;
-  }
+	public FuncFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST,
+			SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+		FPS = fpsAST;
+		T = tAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitFuncFormalParameter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitFuncFormalParameter(this, o);
+	}
 
-  @Override
-public boolean equals(Object fpAST) {
-    if (fpAST instanceof FuncFormalParameter) {
-      FuncFormalParameter ffpAST = (FuncFormalParameter) fpAST;
-      return FPS.equals(ffpAST.FPS) && T.equals(ffpAST.T);
-    } else
-      return false;
-  }
+	@Override
+	public boolean equals(Object fpAST) {
+		if (fpAST instanceof FuncFormalParameter) {
+			FuncFormalParameter ffpAST = (FuncFormalParameter) fpAST;
+			return FPS.equals(ffpAST.FPS) && T.equals(ffpAST.T);
+		} else
+			return false;
+	}
 
-  public Identifier I;
-  public FormalParameterSequence FPS;
-  public TypeDenoter T;
+	public Identifier I;
+	public FormalParameterSequence FPS;
+	public TypeDenoter T;
 }

@@ -18,12 +18,12 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class EmptyExpression extends Expression {
 
-  public EmptyExpression(SourcePosition thePosition) {
-    super(thePosition);
-  }
+	public EmptyExpression(SourcePosition thePosition) {
+		super(thePosition);
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitEmptyExpression(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitEmptyExpression(this, o);
+	}
 }

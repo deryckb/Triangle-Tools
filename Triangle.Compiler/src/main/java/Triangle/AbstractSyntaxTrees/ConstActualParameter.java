@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ConstActualParameter extends ActualParameter {
 
-  public ConstActualParameter(Expression eAST, SourcePosition thePosition) {
-    super(thePosition);
-    E = eAST;
-  }
+	public ConstActualParameter(Expression eAST, SourcePosition thePosition) {
+		super(thePosition);
+		E = eAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitConstActualParameter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitConstActualParameter(this, o);
+	}
 
-  public Expression E;
+	public Expression E;
 }

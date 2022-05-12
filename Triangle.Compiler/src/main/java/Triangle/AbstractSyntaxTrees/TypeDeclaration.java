@@ -18,18 +18,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class TypeDeclaration extends Declaration {
 
-  public TypeDeclaration(Identifier iAST, TypeDenoter tAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-    T = tAST;
-  }
+	public TypeDeclaration(Identifier iAST, TypeDenoter tAST, SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+		T = tAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitTypeDeclaration(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitTypeDeclaration(this, o);
+	}
 
-  public Identifier I;
-  public TypeDenoter T;
+	public Identifier I;
+	public TypeDenoter T;
 }

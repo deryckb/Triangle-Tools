@@ -18,17 +18,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SubscriptVname extends Vname {
 
-  public SubscriptVname(Vname vAST, Expression eAST, SourcePosition thePosition) {
-    super(thePosition);
-    V = vAST;
-    E = eAST;
-  }
+	public SubscriptVname(Vname vAST, Expression eAST, SourcePosition thePosition) {
+		super(thePosition);
+		V = vAST;
+		E = eAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitSubscriptVname(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitSubscriptVname(this, o);
+	}
 
-  public Expression E;
-  public Vname V;
+	public Expression E;
+	public Vname V;
 }

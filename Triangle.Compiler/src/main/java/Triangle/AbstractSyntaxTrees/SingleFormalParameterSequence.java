@@ -18,25 +18,24 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class SingleFormalParameterSequence extends FormalParameterSequence {
 
-  public SingleFormalParameterSequence(FormalParameter fpAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    FP = fpAST;
-  }
+	public SingleFormalParameterSequence(FormalParameter fpAST, SourcePosition thePosition) {
+		super(thePosition);
+		FP = fpAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitSingleFormalParameterSequence(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitSingleFormalParameterSequence(this, o);
+	}
 
-  @Override
-public boolean equals(Object fpsAST) {
-    if (fpsAST instanceof SingleFormalParameterSequence) {
-      SingleFormalParameterSequence sfpsAST = (SingleFormalParameterSequence) fpsAST;
-      return FP.equals(sfpsAST.FP);
-    } else
-      return false;
-  }
+	@Override
+	public boolean equals(Object fpsAST) {
+		if (fpsAST instanceof SingleFormalParameterSequence) {
+			SingleFormalParameterSequence sfpsAST = (SingleFormalParameterSequence) fpsAST;
+			return FP.equals(sfpsAST.FP);
+		} else
+			return false;
+	}
 
-  public FormalParameter FP;
+	public FormalParameter FP;
 }

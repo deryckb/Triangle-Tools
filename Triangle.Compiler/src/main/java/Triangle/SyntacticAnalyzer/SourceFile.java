@@ -16,41 +16,43 @@ package Triangle.SyntacticAnalyzer;
 
 public class SourceFile {
 
-  public static final char EOL = '\n';
-  public static final char EOT = '\u0000';
+	public static final char EOL = '\n';
+	public static final char EOT = '\u0000';
 
-  java.io.File sourceFile;
-  java.io.FileInputStream source;
-  int currentLine;
+	java.io.File sourceFile;
+	java.io.FileInputStream source;
+	int currentLine;
 
-  public SourceFile(String filename) {
-    try {
-      sourceFile = new java.io.File(filename);
-      source = new java.io.FileInputStream(sourceFile);
-      currentLine = 1;
-    } catch (java.io.IOException s) {
-      sourceFile = null;
-      source = null;
-      currentLine = 0;
-    }
-  }
+	public static SourceFile ofPath(String pathname) {
+		try {
+			return new SourceFile(pathname);
+		} catch (java.io.IOException s) {
+			return null;
+		}
+	}
 
-  char getSource() {
-    try {
-      int c = source.read();
+	private SourceFile(String pathname) throws java.io.FileNotFoundException {
+		sourceFile = new java.io.File(pathname);
+		source = new java.io.FileInputStream(sourceFile);
+		currentLine = 1;
+	}
 
-      if (c == -1) {
-        c = EOT;
-      } else if (c == EOL) {
-        currentLine++;
-      }
-      return (char) c;
-    } catch (java.io.IOException s) {
-      return EOT;
-    }
-  }
+	char getSource() {
+		try {
+			int c = source.read();
 
-  int getCurrentLine() {
-    return currentLine;
-  }
+			if (c == -1) {
+				c = EOT;
+			} else if (c == EOL) {
+				currentLine++;
+			}
+			return (char) c;
+		} catch (java.io.IOException s) {
+			return EOT;
+		}
+	}
+
+	int getCurrentLine() {
+		return currentLine;
+	}
 }

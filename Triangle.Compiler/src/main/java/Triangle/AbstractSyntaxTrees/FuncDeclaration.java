@@ -18,23 +18,22 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class FuncDeclaration extends Declaration {
 
-  public FuncDeclaration(Identifier iAST, FormalParameterSequence fpsAST,
-      TypeDenoter tAST, Expression eAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-    FPS = fpsAST;
-    T = tAST;
-    E = eAST;
-  }
+	public FuncDeclaration(Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST, Expression eAST,
+			SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+		FPS = fpsAST;
+		T = tAST;
+		E = eAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitFuncDeclaration(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitFuncDeclaration(this, o);
+	}
 
-  public Identifier I;
-  public FormalParameterSequence FPS;
-  public TypeDenoter T;
-  public Expression E;
+	public Identifier I;
+	public FormalParameterSequence FPS;
+	public TypeDenoter T;
+	public Expression E;
 }

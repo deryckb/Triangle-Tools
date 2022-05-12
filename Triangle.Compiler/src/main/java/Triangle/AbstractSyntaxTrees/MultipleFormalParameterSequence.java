@@ -18,27 +18,27 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class MultipleFormalParameterSequence extends FormalParameterSequence {
 
-  public MultipleFormalParameterSequence(FormalParameter fpAST, FormalParameterSequence fpsAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    FP = fpAST;
-    FPS = fpsAST;
-  }
+	public MultipleFormalParameterSequence(FormalParameter fpAST, FormalParameterSequence fpsAST,
+			SourcePosition thePosition) {
+		super(thePosition);
+		FP = fpAST;
+		FPS = fpsAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitMultipleFormalParameterSequence(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitMultipleFormalParameterSequence(this, o);
+	}
 
-  @Override
-public boolean equals(Object fpsAST) {
-    if (fpsAST instanceof MultipleFormalParameterSequence) {
-      MultipleFormalParameterSequence mfpsAST = (MultipleFormalParameterSequence) fpsAST;
-      return FP.equals(mfpsAST.FP) && FPS.equals(mfpsAST.FPS);
-    } else
-      return false;
-  }
+	@Override
+	public boolean equals(Object fpsAST) {
+		if (fpsAST instanceof MultipleFormalParameterSequence) {
+			MultipleFormalParameterSequence mfpsAST = (MultipleFormalParameterSequence) fpsAST;
+			return FP.equals(mfpsAST.FP) && FPS.equals(mfpsAST.FPS);
+		} else
+			return false;
+	}
 
-  public FormalParameter FP;
-  public FormalParameterSequence FPS;
+	public FormalParameter FP;
+	public FormalParameterSequence FPS;
 }

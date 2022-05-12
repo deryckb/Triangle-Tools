@@ -18,17 +18,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class AnyTypeDenoter extends TypeDenoter {
 
-  public AnyTypeDenoter(SourcePosition thePosition) {
-    super(thePosition);
-  }
+	public AnyTypeDenoter(SourcePosition thePosition) {
+		super(thePosition);
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitAnyTypeDenoter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitAnyTypeDenoter(this, o);
+	}
 
-  @Override
-public boolean equals(Object obj) {
-    return false;
-  }
+	@Override
+	public boolean equals(Object obj) {
+		return false;
+	}
 }

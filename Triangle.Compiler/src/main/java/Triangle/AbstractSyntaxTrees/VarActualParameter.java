@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class VarActualParameter extends ActualParameter {
 
-  public VarActualParameter(Vname vAST, SourcePosition thePosition) {
-    super(thePosition);
-    V = vAST;
-  }
+	public VarActualParameter(Vname vAST, SourcePosition thePosition) {
+		super(thePosition);
+		V = vAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitVarActualParameter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitVarActualParameter(this, o);
+	}
 
-  public Vname V;
+	public Vname V;
 }

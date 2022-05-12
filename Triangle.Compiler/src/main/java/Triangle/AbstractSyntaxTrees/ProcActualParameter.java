@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ProcActualParameter extends ActualParameter {
 
-  public ProcActualParameter(Identifier iAST, SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-  }
+	public ProcActualParameter(Identifier iAST, SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitProcActualParameter(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitProcActualParameter(this, o);
+	}
 
-  public Identifier I;
+	public Identifier I;
 }

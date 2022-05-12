@@ -25,31 +25,30 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 class DrawerFrame extends JFrame {
-  /**
+	/**
 	 *
 	 */
 	private static final long serialVersionUID = -3650404598416929282L;
 
-public DrawerFrame(JPanel panel) {
-    setSize(300, 200);
-    Toolkit tk = Toolkit.getDefaultToolkit();
-    Dimension d = tk.getScreenSize();
-    int screenHeight = d.height;
-    int screenWidth = d.width;
-    setTitle("Triangle Compiler Abstract Syntax Tree");
-    setSize(screenWidth / 2, screenHeight / 2);
-    setLocation(screenWidth / 4, screenHeight / 4);
-    // Image img = tk.getImage("icon.gif");
-    // setIconImage(img);
+	public DrawerFrame(JPanel panel) {
+		setSize(300, 200);
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension d = tk.getScreenSize();
+		int screenHeight = d.height;
+		int screenWidth = d.width;
+		setTitle("Triangle Compiler Abstract Syntax Tree");
+		setSize(screenWidth / 2, screenHeight / 2);
+		setLocation(screenWidth / 4, screenHeight / 4);
+		// Image img = tk.getImage("icon.gif");
+		// setIconImage(img);
 
-    addWindowListener(
-        new WindowAdapter() {
-          @Override
-		public void windowClosing(WindowEvent e) {
-            System.exit(0);
-          }
-        });
-    Container contentPane = getContentPane();
-    contentPane.add(new JScrollPane(panel));
-  }
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		Container contentPane = getContentPane();
+		contentPane.add(new JScrollPane(panel));
+	}
 }

@@ -18,20 +18,20 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class MultipleRecordAggregate extends RecordAggregate {
 
-  public MultipleRecordAggregate(Identifier iAST, Expression eAST, RecordAggregate raAST,
-      SourcePosition thePosition) {
-    super(thePosition);
-    I = iAST;
-    E = eAST;
-    RA = raAST;
-  }
+	public MultipleRecordAggregate(Identifier iAST, Expression eAST, RecordAggregate raAST,
+			SourcePosition thePosition) {
+		super(thePosition);
+		I = iAST;
+		E = eAST;
+		RA = raAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitMultipleRecordAggregate(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitMultipleRecordAggregate(this, o);
+	}
 
-  public Identifier I;
-  public Expression E;
-  public RecordAggregate RA;
+	public Identifier I;
+	public Expression E;
+	public RecordAggregate RA;
 }

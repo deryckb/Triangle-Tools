@@ -18,15 +18,15 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class VnameExpression extends Expression {
 
-  public VnameExpression(Vname vAST, SourcePosition thePosition) {
-    super(thePosition);
-    V = vAST;
-  }
+	public VnameExpression(Vname vAST, SourcePosition thePosition) {
+		super(thePosition);
+		V = vAST;
+	}
 
-  @Override
-public Object visit(Visitor v, Object o) {
-    return v.visitVnameExpression(this, o);
-  }
+	@Override
+	public Object visit(Visitor v, Object o) {
+		return v.visitVnameExpression(this, o);
+	}
 
-  public Vname V;
+	public Vname V;
 }
