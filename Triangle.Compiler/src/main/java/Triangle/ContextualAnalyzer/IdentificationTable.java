@@ -14,7 +14,7 @@
 
 package Triangle.ContextualAnalyzer;
 
-import Triangle.AbstractSyntaxTrees.Declaration;
+import Triangle.AbstractSyntaxTrees.Declarations.Declaration;
 
 public final class IdentificationTable {
 
@@ -30,7 +30,6 @@ public final class IdentificationTable {
 	// current topmost level.
 
 	public void openScope() {
-
 		level++;
 	}
 
@@ -38,15 +37,12 @@ public final class IdentificationTable {
 	// all entries belonging to that level.
 
 	public void closeScope() {
-
-		IdEntry entry, local;
-
 		// Presumably, idTable.level > 0.
-		entry = this.latest;
+		var entry = this.latest;
 		while (entry.level == this.level) {
-			local = entry;
-			entry = local.previous;
+			entry = entry.previous;
 		}
+
 		this.level--;
 		this.latest = entry;
 	}
@@ -57,25 +53,8 @@ public final class IdentificationTable {
 	// same identifier at the current level.
 
 	public void enter(String id, Declaration attr) {
-
-		IdEntry entry = this.latest;
-		boolean present = false, searching = true;
-
-		// Check for duplicate entry ...
-		while (searching) {
-			if (entry == null || entry.level < this.level)
-				searching = false;
-			else if (entry.id.equals(id)) {
-				present = true;
-				searching = false;
-			} else
-				entry = entry.previous;
-		}
-
-		attr.duplicated = present;
-		// Add new entry ...
-		entry = new IdEntry(id, attr, this.level, this.latest);
-		this.latest = entry;
+		attr.duplicated = retrieve(id) != null;
+		this.latest = new IdEntry(id, attr, this.level, this.latest);
 	}
 
 	// Finds an entry for the given identifier in the identification table,
@@ -85,24 +64,18 @@ public final class IdentificationTable {
 	// otherwise returns the attribute field of the entry found.
 
 	public Declaration retrieve(String id) {
-
-		IdEntry entry;
-		Declaration attr = null;
-		boolean present = false, searching = true;
-
-		entry = this.latest;
-		while (searching) {
-			if (entry == null)
-				searching = false;
-			else if (entry.id.equals(id)) {
-				present = true;
-				searching = false;
-				attr = entry.attr;
-			} else
+		var entry = this.latest;
+		while (true) {
+			if (entry == null) {
+				break;
+			} else if (entry.id.equals(id)) {
+				return entry.attr;
+			} else {
 				entry = entry.previous;
+			}
 		}
 
-		return attr;
+		return null;
 	}
 
 }

@@ -14,770 +14,755 @@
 
 package Triangle.CodeGenerator;
 
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
-import Triangle.AbstractMachine.Instruction;
 import Triangle.AbstractMachine.Machine;
-import Triangle.AbstractSyntaxTrees.AST;
-import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
-import Triangle.AbstractSyntaxTrees.ArrayExpression;
-import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
-import Triangle.AbstractSyntaxTrees.AssignCommand;
-import Triangle.AbstractSyntaxTrees.BinaryExpression;
-import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
-import Triangle.AbstractSyntaxTrees.CallCommand;
-import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
-import Triangle.AbstractSyntaxTrees.CharacterExpression;
-import Triangle.AbstractSyntaxTrees.CharacterLiteral;
-import Triangle.AbstractSyntaxTrees.ConstActualParameter;
-import Triangle.AbstractSyntaxTrees.ConstDeclaration;
-import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
-import Triangle.AbstractSyntaxTrees.Declaration;
-import Triangle.AbstractSyntaxTrees.DotVname;
-import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
-import Triangle.AbstractSyntaxTrees.EmptyExpression;
-import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
-import Triangle.AbstractSyntaxTrees.FuncActualParameter;
-import Triangle.AbstractSyntaxTrees.FuncDeclaration;
-import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
-import Triangle.AbstractSyntaxTrees.Identifier;
-import Triangle.AbstractSyntaxTrees.IfCommand;
-import Triangle.AbstractSyntaxTrees.IfExpression;
-import Triangle.AbstractSyntaxTrees.IntTypeDenoter;
-import Triangle.AbstractSyntaxTrees.IntegerExpression;
-import Triangle.AbstractSyntaxTrees.IntegerLiteral;
-import Triangle.AbstractSyntaxTrees.LetCommand;
-import Triangle.AbstractSyntaxTrees.LetExpression;
-import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.Operator;
-import Triangle.AbstractSyntaxTrees.ProcActualParameter;
-import Triangle.AbstractSyntaxTrees.ProcDeclaration;
-import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
+import Triangle.AbstractMachine.OpCode;
+import Triangle.AbstractMachine.Primitive;
+import Triangle.AbstractMachine.Register;
+import Triangle.AbstractSyntaxTrees.AbstractSyntaxTree;
 import Triangle.AbstractSyntaxTrees.Program;
-import Triangle.AbstractSyntaxTrees.RecordExpression;
-import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SequentialCommand;
-import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
-import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SimpleVname;
-import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.SingleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SingleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.SubscriptVname;
-import Triangle.AbstractSyntaxTrees.TypeDeclaration;
-import Triangle.AbstractSyntaxTrees.UnaryExpression;
-import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.VarActualParameter;
-import Triangle.AbstractSyntaxTrees.VarDeclaration;
-import Triangle.AbstractSyntaxTrees.VarFormalParameter;
-import Triangle.AbstractSyntaxTrees.Visitor;
-import Triangle.AbstractSyntaxTrees.Vname;
-import Triangle.AbstractSyntaxTrees.VnameExpression;
-import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.Actuals.ConstActualParameter;
+import Triangle.AbstractSyntaxTrees.Actuals.EmptyActualParameterSequence;
+import Triangle.AbstractSyntaxTrees.Actuals.FuncActualParameter;
+import Triangle.AbstractSyntaxTrees.Actuals.MultipleActualParameterSequence;
+import Triangle.AbstractSyntaxTrees.Actuals.ProcActualParameter;
+import Triangle.AbstractSyntaxTrees.Actuals.SingleActualParameterSequence;
+import Triangle.AbstractSyntaxTrees.Actuals.VarActualParameter;
+import Triangle.AbstractSyntaxTrees.Aggregates.MultipleArrayAggregate;
+import Triangle.AbstractSyntaxTrees.Aggregates.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.Aggregates.SingleArrayAggregate;
+import Triangle.AbstractSyntaxTrees.Aggregates.SingleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.Commands.AssignCommand;
+import Triangle.AbstractSyntaxTrees.Commands.CallCommand;
+import Triangle.AbstractSyntaxTrees.Commands.EmptyCommand;
+import Triangle.AbstractSyntaxTrees.Commands.IfCommand;
+import Triangle.AbstractSyntaxTrees.Commands.LetCommand;
+import Triangle.AbstractSyntaxTrees.Commands.SequentialCommand;
+import Triangle.AbstractSyntaxTrees.Commands.WhileCommand;
+import Triangle.AbstractSyntaxTrees.Declarations.BinaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.ConstDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.Declaration;
+import Triangle.AbstractSyntaxTrees.Declarations.FuncDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.ProcDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.SequentialDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.UnaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.VarDeclaration;
+import Triangle.AbstractSyntaxTrees.Expressions.ArrayExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.BinaryExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.CallExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.CharacterExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.EmptyExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.IfExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.IntegerExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.LetExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.RecordExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.UnaryExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.VnameExpression;
+import Triangle.AbstractSyntaxTrees.Formals.ConstFormalParameter;
+import Triangle.AbstractSyntaxTrees.Formals.EmptyFormalParameterSequence;
+import Triangle.AbstractSyntaxTrees.Formals.FuncFormalParameter;
+import Triangle.AbstractSyntaxTrees.Formals.MultipleFormalParameterSequence;
+import Triangle.AbstractSyntaxTrees.Formals.ProcFormalParameter;
+import Triangle.AbstractSyntaxTrees.Formals.SingleFormalParameterSequence;
+import Triangle.AbstractSyntaxTrees.Formals.VarFormalParameter;
+import Triangle.AbstractSyntaxTrees.Terminals.CharacterLiteral;
+import Triangle.AbstractSyntaxTrees.Terminals.Identifier;
+import Triangle.AbstractSyntaxTrees.Terminals.IntegerLiteral;
+import Triangle.AbstractSyntaxTrees.Terminals.Operator;
+import Triangle.AbstractSyntaxTrees.Types.AnyTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.BoolTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.CharTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.ErrorTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.IntTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.MultipleFieldTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.SimpleTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.SingleFieldTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.TypeDeclaration;
+import Triangle.AbstractSyntaxTrees.Visitors.ActualParameterSequenceVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ActualParameterVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ArrayAggregateVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.CommandVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.DeclarationVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ExpressionVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.FormalParameterSequenceVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.FormalParameterVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.IdentifierVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.LiteralVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.OperatorVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ProgramVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.RecordAggregateVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.TypeDenoterVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.VnameVisitor;
+import Triangle.AbstractSyntaxTrees.Vnames.DotVname;
+import Triangle.AbstractSyntaxTrees.Vnames.SimpleVname;
+import Triangle.AbstractSyntaxTrees.Vnames.SubscriptVname;
+import Triangle.AbstractSyntaxTrees.Vnames.Vname;
+import Triangle.CodeGenerator.Entities.AddressableEntity;
+import Triangle.CodeGenerator.Entities.EqualityRoutine;
+import Triangle.CodeGenerator.Entities.FetchableEntity;
+import Triangle.CodeGenerator.Entities.Field;
+import Triangle.CodeGenerator.Entities.KnownAddress;
+import Triangle.CodeGenerator.Entities.KnownRoutine;
+import Triangle.CodeGenerator.Entities.KnownValue;
+import Triangle.CodeGenerator.Entities.PrimitiveRoutine;
+import Triangle.CodeGenerator.Entities.RuntimeEntity;
+import Triangle.CodeGenerator.Entities.TypeRepresentation;
+import Triangle.CodeGenerator.Entities.UnknownAddress;
+import Triangle.CodeGenerator.Entities.UnknownRoutine;
+import Triangle.CodeGenerator.Entities.UnknownValue;
 
-public final class Encoder implements Visitor {
+public final class Encoder
+		implements ActualParameterVisitor<Frame, Integer>, ActualParameterSequenceVisitor<Frame, Integer>,
+		ArrayAggregateVisitor<Frame, Integer>, CommandVisitor<Frame, Void>, DeclarationVisitor<Frame, Integer>,
+		ExpressionVisitor<Frame, Integer>, FormalParameterVisitor<Frame, Integer>,
+		FormalParameterSequenceVisitor<Frame, Integer>, IdentifierVisitor<Frame, Void>, LiteralVisitor<Void, Void>,
+		OperatorVisitor<Frame, Void>, ProgramVisitor<Frame, Void>, RecordAggregateVisitor<Frame, Integer>,
+		TypeDenoterVisitor<Frame, Integer>, VnameVisitor<Frame, RuntimeEntity> {
 
 	// Commands
 	@Override
-	public Object visitAssignCommand(AssignCommand ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.E.visit(this, frame);
-		encodeStore(ast.V, new Frame(frame, valSize.intValue()), valSize.intValue());
+	public Void visitAssignCommand(AssignCommand ast, Frame frame) {
+		var valSize = ast.E.visit(this, frame);
+		encodeStore(ast.V, frame.expand(valSize), valSize);
 		return null;
 	}
 
 	@Override
-	public Object visitCallCommand(CallCommand ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer argsSize = (Integer) ast.APS.visit(this, frame);
-		ast.I.visit(this, new Frame(frame.level, argsSize));
+	public Void visitCallCommand(CallCommand ast, Frame frame) {
+		var argsSize = ast.APS.visit(this, frame);
+		ast.I.visit(this, frame.replace(argsSize));
 		return null;
 	}
 
 	@Override
-	public Object visitEmptyCommand(EmptyCommand ast, Object o) {
+	public Void visitEmptyCommand(EmptyCommand ast, Frame frame) {
 		return null;
 	}
 
 	@Override
-	public Object visitIfCommand(IfCommand ast, Object o) {
-		Frame frame = (Frame) o;
-		int jumpifAddr, jumpAddr;
-
-		Integer valSize = (Integer) ast.E.visit(this, frame);
-		jumpifAddr = nextInstrAddr;
-		emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
-		ast.C1.visit(this, frame);
-		jumpAddr = nextInstrAddr;
-		emit(Machine.JUMPop, 0, Machine.CBr, 0);
-		patch(jumpifAddr, nextInstrAddr);
-		ast.C2.visit(this, frame);
-		patch(jumpAddr, nextInstrAddr);
-		return null;
-	}
-
-	@Override
-	public Object visitLetCommand(LetCommand ast, Object o) {
-		Frame frame = (Frame) o;
-		int extraSize = ((Integer) ast.D.visit(this, frame)).intValue();
-		ast.C.visit(this, new Frame(frame, extraSize));
-		if (extraSize > 0)
-			emit(Machine.POPop, 0, 0, extraSize);
-		return null;
-	}
-
-	@Override
-	public Object visitSequentialCommand(SequentialCommand ast, Object o) {
-		ast.C1.visit(this, o);
-		ast.C2.visit(this, o);
-		return null;
-	}
-
-	@Override
-	public Object visitWhileCommand(WhileCommand ast, Object o) {
-		Frame frame = (Frame) o;
-		int jumpAddr, loopAddr;
-
-		jumpAddr = nextInstrAddr;
-		emit(Machine.JUMPop, 0, Machine.CBr, 0);
-		loopAddr = nextInstrAddr;
-		ast.C.visit(this, frame);
-		patch(jumpAddr, nextInstrAddr);
+	public Void visitIfCommand(IfCommand ast, Frame frame) {
 		ast.E.visit(this, frame);
-		emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+		var jumpifAddr = emitter.emit(OpCode.JUMPIF, Machine.falseRep, Register.CB, 0);
+		ast.C1.visit(this, frame);
+		var jumpAddr = emitter.emit(OpCode.JUMP, 0, Register.CB, 0);
+		emitter.patch(jumpifAddr);
+		ast.C2.visit(this, frame);
+		emitter.patch(jumpAddr);
+		return null;
+	}
+
+	@Override
+	public Void visitLetCommand(LetCommand ast, Frame frame) {
+		var extraSize = ast.D.visit(this, frame);
+		ast.C.visit(this, frame.expand(extraSize));
+		if (extraSize > 0) {
+			emitter.emit(OpCode.POP, extraSize);
+		}
+		return null;
+	}
+
+	@Override
+	public Void visitSequentialCommand(SequentialCommand ast, Frame frame) {
+		ast.C1.visit(this, frame);
+		ast.C2.visit(this, frame);
+		return null;
+	}
+
+	@Override
+	public Void visitWhileCommand(WhileCommand ast, Frame frame) {
+		var jumpAddr = emitter.emit(OpCode.JUMP, 0, Register.CB, 0);
+		var loopAddr = emitter.getNextInstrAddr();
+		ast.C.visit(this, frame);
+		emitter.patch(jumpAddr);
+		ast.E.visit(this, frame);
+		emitter.emit(OpCode.JUMPIF, Machine.trueRep, Register.CB, loopAddr);
 		return null;
 	}
 
 	// Expressions
 	@Override
-	public Object visitArrayExpression(ArrayExpression ast, Object o) {
-		ast.type.visit(this);
-		return ast.AA.visit(this, o);
+	public Integer visitArrayExpression(ArrayExpression ast, Frame frame) {
+		ast.type.visit(this, frame);
+		return ast.AA.visit(this, frame);
 	}
 
 	@Override
-	public Object visitBinaryExpression(BinaryExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this);
-		int valSize1 = ((Integer) ast.E1.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, valSize1);
-		int valSize2 = ((Integer) ast.E2.visit(this, frame1)).intValue();
-		Frame frame2 = new Frame(frame.level, valSize1 + valSize2);
+	public Integer visitBinaryExpression(BinaryExpression ast, Frame frame) {
+		var valSize = ast.type.visit(this);
+		var valSize1 = ast.E1.visit(this, frame);
+		var frame1 = frame.expand(valSize1);
+		var valSize2 = ast.E2.visit(this, frame1);
+		var frame2 = frame.replace(valSize1 + valSize2);
 		ast.O.visit(this, frame2);
 		return valSize;
 	}
 
 	@Override
-	public Object visitCallExpression(CallExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this);
-		Integer argsSize = (Integer) ast.APS.visit(this, frame);
-		ast.I.visit(this, new Frame(frame.level, argsSize));
+	public Integer visitCallExpression(CallExpression ast, Frame frame) {
+		var valSize = ast.type.visit(this);
+		var argsSize = ast.APS.visit(this, frame);
+		ast.I.visit(this, frame.replace(argsSize));
 		return valSize;
 	}
 
 	@Override
-	public Object visitCharacterExpression(CharacterExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this);
-		emit(Machine.LOADLop, 0, 0, ast.CL.spelling.charAt(1));
+	public Integer visitCharacterExpression(CharacterExpression ast, Frame frame) {
+		var valSize = ast.type.visit(this);
+		emitter.emit(OpCode.LOADL, ast.CL.spelling.charAt(1));
 		return valSize;
 	}
 
 	@Override
-	public Object visitEmptyExpression(EmptyExpression ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitEmptyExpression(EmptyExpression ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitIfExpression(IfExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize;
-		int jumpifAddr, jumpAddr;
-
+	public Integer visitIfExpression(IfExpression ast, Frame frame) {
 		ast.type.visit(this);
 		ast.E1.visit(this, frame);
-		jumpifAddr = nextInstrAddr;
-		emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
-		valSize = (Integer) ast.E2.visit(this, frame);
-		jumpAddr = nextInstrAddr;
-		emit(Machine.JUMPop, 0, Machine.CBr, 0);
-		patch(jumpifAddr, nextInstrAddr);
-		valSize = (Integer) ast.E3.visit(this, frame);
-		patch(jumpAddr, nextInstrAddr);
+		var jumpifAddr = emitter.emit(OpCode.JUMPIF, Machine.falseRep, Register.CB, 0);
+		var valSize = ast.E2.visit(this, frame);
+		var jumpAddr = emitter.emit(OpCode.JUMP, 0, Register.CB, 0);
+		emitter.patch(jumpifAddr);
+		valSize = ast.E3.visit(this, frame);
+		emitter.patch(jumpAddr);
 		return valSize;
 	}
 
 	@Override
-	public Object visitIntegerExpression(IntegerExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this);
-		emit(Machine.LOADLop, 0, 0, Integer.parseInt(ast.IL.spelling));
+	public Integer visitIntegerExpression(IntegerExpression ast, Frame frame) {
+		var valSize = ast.type.visit(this);
+		emitter.emit(OpCode.LOADL, Integer.parseInt(ast.IL.spelling));
 		return valSize;
 	}
 
 	@Override
-	public Object visitLetExpression(LetExpression ast, Object o) {
-		Frame frame = (Frame) o;
+	public Integer visitLetExpression(LetExpression ast, Frame frame) {
 		ast.type.visit(this);
-		int extraSize = ((Integer) ast.D.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, extraSize);
-		Integer valSize = (Integer) ast.E.visit(this, frame1);
-		if (extraSize > 0)
-			emit(Machine.POPop, valSize.intValue(), 0, extraSize);
+		var extraSize = ast.D.visit(this, frame);
+		var frame1 = frame.expand(extraSize);
+		var valSize = ast.E.visit(this, frame1);
+		if (extraSize > 0) {
+			emitter.emit(OpCode.POP, valSize, extraSize);
+		}
 		return valSize;
 	}
 
 	@Override
-	public Object visitRecordExpression(RecordExpression ast, Object o) {
+	public Integer visitRecordExpression(RecordExpression ast, Frame frame) {
 		ast.type.visit(this);
-		return ast.RA.visit(this, o);
+		return ast.RA.visit(this, frame);
 	}
 
 	@Override
-	public Object visitUnaryExpression(UnaryExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this);
+	public Integer visitUnaryExpression(UnaryExpression ast, Frame frame) {
+		var valSize = ast.type.visit(this);
 		ast.E.visit(this, frame);
-		ast.O.visit(this, new Frame(frame.level, valSize.intValue()));
+		ast.O.visit(this, frame.replace(valSize));
 		return valSize;
 	}
 
 	@Override
-	public Object visitVnameExpression(VnameExpression ast, Object o) {
-		Frame frame = (Frame) o;
-		Integer valSize = (Integer) ast.type.visit(this);
-		encodeFetch(ast.V, frame, valSize.intValue());
+	public Integer visitVnameExpression(VnameExpression ast, Frame frame) {
+		var valSize = ast.type.visit(this);
+		encodeFetch(ast.V, frame, valSize);
 		return valSize;
 	}
 
 	// Declarations
 	@Override
-	public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
-		Frame frame = (Frame) o;
-		int extraSize = 0;
-
+	public Integer visitConstDeclaration(ConstDeclaration ast, Frame frame) {
+		var extraSize = 0;
 		if (ast.E instanceof CharacterExpression) {
-			CharacterLiteral CL = ((CharacterExpression) ast.E).CL;
-			ast.entity = new KnownValue(Machine.characterSize, characterValuation(CL.spelling));
+			var CL = ((CharacterExpression) ast.E).CL;
+			ast.entity = new KnownValue(Machine.characterSize, CL.getValue());
 		} else if (ast.E instanceof IntegerExpression) {
-			IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
-			ast.entity = new KnownValue(Machine.integerSize, Integer.parseInt(IL.spelling));
+			var IL = ((IntegerExpression) ast.E).IL;
+			ast.entity = new KnownValue(Machine.integerSize, IL.getValue());
 		} else {
-			int valSize = ((Integer) ast.E.visit(this, frame)).intValue();
-			ast.entity = new UnknownValue(valSize, frame.level, frame.size);
+			var valSize = ast.E.visit(this, frame);
+			ast.entity = new UnknownValue(valSize, frame.getLevel(), frame.getSize());
 			extraSize = valSize;
 		}
 		writeTableDetails(ast);
-		return Integer.valueOf(extraSize);
+		return extraSize;
 	}
 
 	@Override
-	public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
-		Frame frame = (Frame) o;
-		int jumpAddr = nextInstrAddr;
-		int argsSize = 0, valSize = 0;
+	public Integer visitFuncDeclaration(FuncDeclaration ast, Frame frame) {
+		var argsSize = 0;
+		var valSize = 0;
 
-		emit(Machine.JUMPop, 0, Machine.CBr, 0);
-		ast.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+		var jumpAddr = emitter.emit(OpCode.JUMP, 0, Register.CB, 0);
+		ast.entity = new KnownRoutine(Machine.closureSize, frame.getLevel(), emitter.getNextInstrAddr());
 		writeTableDetails(ast);
-		if (frame.level == Machine.maxRoutineLevel)
+		if (frame.getLevel() == Machine.maxRoutineLevel) {
 			reporter.reportRestriction("can't nest routines more than 7 deep");
-		else {
-			Frame frame1 = new Frame(frame.level + 1, 0);
-			argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
-			Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
-			valSize = ((Integer) ast.E.visit(this, frame2)).intValue();
+		} else {
+			var frame1 = frame.push(0);
+			argsSize = ast.FPS.visit(this, frame1);
+			var frame2 = frame.push(Machine.linkDataSize);
+			valSize = ast.E.visit(this, frame2);
 		}
-		emit(Machine.RETURNop, valSize, 0, argsSize);
-		patch(jumpAddr, nextInstrAddr);
-		return Integer.valueOf(0);
+		emitter.emit(OpCode.RETURN, valSize, argsSize);
+		emitter.patch(jumpAddr);
+		return 0;
 	}
 
 	@Override
-	public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
-		Frame frame = (Frame) o;
-		int jumpAddr = nextInstrAddr;
-		int argsSize = 0;
-
-		emit(Machine.JUMPop, 0, Machine.CBr, 0);
-		ast.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+	public Integer visitProcDeclaration(ProcDeclaration ast, Frame frame) {
+		var argsSize = 0;
+		var jumpAddr = emitter.emit(OpCode.JUMP, 0, Register.CB, 0);
+		ast.entity = new KnownRoutine(Machine.closureSize, frame.getLevel(), emitter.getNextInstrAddr());
 		writeTableDetails(ast);
-		if (frame.level == Machine.maxRoutineLevel)
+		if (frame.getLevel() == Machine.maxRoutineLevel) {
 			reporter.reportRestriction("can't nest routines so deeply");
-		else {
-			Frame frame1 = new Frame(frame.level + 1, 0);
-			argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
-			Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
+		} else {
+			var frame1 = frame.push(0);
+			argsSize = ast.FPS.visit(this, frame1);
+			var frame2 = frame.push(Machine.linkDataSize);
 			ast.C.visit(this, frame2);
 		}
-		emit(Machine.RETURNop, 0, 0, argsSize);
-		patch(jumpAddr, nextInstrAddr);
-		return Integer.valueOf(0);
+		emitter.emit(OpCode.RETURN, argsSize);
+		emitter.patch(jumpAddr);
+		return 0;
 	}
 
 	@Override
-	public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
-		Frame frame = (Frame) o;
-		int extraSize1, extraSize2;
-
-		extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, extraSize1);
-		extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
-		return Integer.valueOf(extraSize1 + extraSize2);
+	public Integer visitSequentialDeclaration(SequentialDeclaration ast, Frame frame) {
+		var extraSize1 = ast.D1.visit(this, frame);
+		var frame1 = frame.expand(extraSize1);
+		var extraSize2 = ast.D2.visit(this, frame1);
+		return extraSize1 + extraSize2;
 	}
 
 	@Override
-	public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
+	public Integer visitTypeDeclaration(TypeDeclaration ast, Frame frame) {
 		// just to ensure the type's representation is decided
 		ast.T.visit(this);
-		return Integer.valueOf(0);
+		return 0;
 	}
 
 	@Override
-	public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitVarDeclaration(VarDeclaration ast, Object o) {
-		Frame frame = (Frame) o;
-		int extraSize;
-
-		extraSize = ((Integer) ast.T.visit(this)).intValue();
-		emit(Machine.PUSHop, 0, 0, extraSize);
-		ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
+	public Integer visitVarDeclaration(VarDeclaration ast, Frame frame) {
+		var extraSize = ast.T.visit(this);
+		emitter.emit(OpCode.PUSH, extraSize);
+		ast.entity = new KnownAddress(Machine.addressSize, frame.getLevel(), frame.getSize());
 		writeTableDetails(ast);
-		return Integer.valueOf(extraSize);
+		return extraSize;
 	}
 
 	// Array Aggregates
 	@Override
-	public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o) {
-		Frame frame = (Frame) o;
-		int elemSize = ((Integer) ast.E.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, elemSize);
-		int arraySize = ((Integer) ast.AA.visit(this, frame1)).intValue();
-		return Integer.valueOf(elemSize + arraySize);
+	public Integer visitMultipleArrayAggregate(MultipleArrayAggregate ast, Frame frame) {
+		var elemSize = ast.E.visit(this, frame);
+		var frame1 = frame.expand(elemSize);
+		var arraySize = ast.AA.visit(this, frame1);
+		return elemSize + arraySize;
 	}
 
 	@Override
-	public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o) {
-		return ast.E.visit(this, o);
+	public Integer visitSingleArrayAggregate(SingleArrayAggregate ast, Frame frame) {
+		return ast.E.visit(this, frame);
 	}
 
 	// Record Aggregates
 	@Override
-	public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object o) {
-		Frame frame = (Frame) o;
-		int fieldSize = ((Integer) ast.E.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, fieldSize);
-		int recordSize = ((Integer) ast.RA.visit(this, frame1)).intValue();
-		return Integer.valueOf(fieldSize + recordSize);
+	public Integer visitMultipleRecordAggregate(MultipleRecordAggregate ast, Frame frame) {
+		var fieldSize = ast.E.visit(this, frame);
+		var frame1 = frame.expand(fieldSize);
+		var recordSize = ast.RA.visit(this, frame1);
+		return fieldSize + recordSize;
 	}
 
 	@Override
-	public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object o) {
-		return ast.E.visit(this, o);
+	public Integer visitSingleRecordAggregate(SingleRecordAggregate ast, Frame frame) {
+		return ast.E.visit(this, frame);
 	}
 
 	// Formal Parameters
 	@Override
-	public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
-		Frame frame = (Frame) o;
-		int valSize = ((Integer) ast.T.visit(this)).intValue();
-		ast.entity = new UnknownValue(valSize, frame.level, -frame.size - valSize);
+	public Integer visitConstFormalParameter(ConstFormalParameter ast, Frame frame) {
+		var valSize = ast.T.visit(this);
+		ast.entity = new UnknownValue(valSize, frame.getLevel(), -frame.getSize() - valSize);
 		writeTableDetails(ast);
-		return Integer.valueOf(valSize);
+		return valSize;
 	}
 
 	@Override
-	public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
-		Frame frame = (Frame) o;
-		int argsSize = Machine.closureSize;
-		ast.entity = new UnknownRoutine(Machine.closureSize, frame.level, -frame.size - argsSize);
+	public Integer visitFuncFormalParameter(FuncFormalParameter ast, Frame frame) {
+		var argsSize = Machine.closureSize;
+		ast.entity = new UnknownRoutine(Machine.closureSize, frame.getLevel(), -frame.getSize() - argsSize);
 		writeTableDetails(ast);
-		return Integer.valueOf(argsSize);
+		return argsSize;
 	}
 
 	@Override
-	public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
-		Frame frame = (Frame) o;
-		int argsSize = Machine.closureSize;
-		ast.entity = new UnknownRoutine(Machine.closureSize, frame.level, -frame.size - argsSize);
+	public Integer visitProcFormalParameter(ProcFormalParameter ast, Frame frame) {
+		var argsSize = Machine.closureSize;
+		ast.entity = new UnknownRoutine(Machine.closureSize, frame.getLevel(), -frame.getSize() - argsSize);
 		writeTableDetails(ast);
-		return Integer.valueOf(argsSize);
+		return argsSize;
 	}
 
 	@Override
-	public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
-		Frame frame = (Frame) o;
+	public Integer visitVarFormalParameter(VarFormalParameter ast, Frame frame) {
 		ast.T.visit(this);
-		ast.entity = new UnknownAddress(Machine.addressSize, frame.level, -frame.size - Machine.addressSize);
+		ast.entity = new UnknownAddress(Machine.addressSize, frame.getLevel(), -frame.getSize() - Machine.addressSize);
 		writeTableDetails(ast);
-		return Integer.valueOf(Machine.addressSize);
+		return Machine.addressSize;
 	}
 
 	@Override
-	public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object o) {
-		Frame frame = (Frame) o;
-		int argsSize1 = ((Integer) ast.FPS.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, argsSize1);
-		int argsSize2 = ((Integer) ast.FP.visit(this, frame1)).intValue();
-		return Integer.valueOf(argsSize1 + argsSize2);
+	public Integer visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Frame frame) {
+		var argsSize1 = ast.FPS.visit(this, frame);
+		var frame1 = frame.expand(argsSize1);
+		var argsSize2 = ast.FP.visit(this, frame1);
+		return argsSize1 + argsSize2;
 	}
 
 	@Override
-	public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object o) {
-		return ast.FP.visit(this, o);
+	public Integer visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Frame frame) {
+		return ast.FP.visit(this, frame);
 	}
 
 	// Actual Parameters
 	@Override
-	public Object visitConstActualParameter(ConstActualParameter ast, Object o) {
-		return ast.E.visit(this, o);
+	public Integer visitConstActualParameter(ConstActualParameter ast, Frame frame) {
+		return ast.E.visit(this, frame);
 	}
 
 	@Override
-	public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
-		Frame frame = (Frame) o;
+	public Integer visitFuncActualParameter(FuncActualParameter ast, Frame frame) {
 		if (ast.I.decl.entity instanceof KnownRoutine) {
-			ObjectAddress address = ((KnownRoutine) ast.I.decl.entity).address;
+			var address = ((KnownRoutine) ast.I.decl.entity).getAddress();
 			// static link, code address
-			emit(Machine.LOADAop, 0, displayRegister(frame.level, address.level), 0);
-			emit(Machine.LOADAop, 0, Machine.CBr, address.displacement);
+			emitter.emit(OpCode.LOADA, 0, frame.getDisplayRegister(address), 0);
+			emitter.emit(OpCode.LOADA, 0, Register.CB, address.getDisplacement());
 		} else if (ast.I.decl.entity instanceof UnknownRoutine) {
-			ObjectAddress address = ((UnknownRoutine) ast.I.decl.entity).address;
-			emit(Machine.LOADop, Machine.closureSize, displayRegister(frame.level, address.level),
-					address.displacement);
+			var address = ((UnknownRoutine) ast.I.decl.entity).getAddress();
+			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
+					address.getDisplacement());
 		} else if (ast.I.decl.entity instanceof PrimitiveRoutine) {
-			int displacement = ((PrimitiveRoutine) ast.I.decl.entity).displacement;
+			var primitive = ((PrimitiveRoutine) ast.I.decl.entity).getPrimitive();
 			// static link, code address
-			emit(Machine.LOADAop, 0, Machine.SBr, 0);
-			emit(Machine.LOADAop, 0, Machine.PBr, displacement);
+			emitter.emit(OpCode.LOADA, 0, Register.SB, 0);
+			emitter.emit(OpCode.LOADA, Register.PB, primitive);
 		}
-		return Integer.valueOf(Machine.closureSize);
+		return Machine.closureSize;
 	}
 
 	@Override
-	public Object visitProcActualParameter(ProcActualParameter ast, Object o) {
-		Frame frame = (Frame) o;
+	public Integer visitProcActualParameter(ProcActualParameter ast, Frame frame) {
 		if (ast.I.decl.entity instanceof KnownRoutine) {
-			ObjectAddress address = ((KnownRoutine) ast.I.decl.entity).address;
+			var address = ((KnownRoutine) ast.I.decl.entity).getAddress();
 			// static link, code address
-			emit(Machine.LOADAop, 0, displayRegister(frame.level, address.level), 0);
-			emit(Machine.LOADAop, 0, Machine.CBr, address.displacement);
+			emitter.emit(OpCode.LOADA, 0, frame.getDisplayRegister(address), 0);
+			emitter.emit(OpCode.LOADA, 0, Register.CB, address.getDisplacement());
 		} else if (ast.I.decl.entity instanceof UnknownRoutine) {
-			ObjectAddress address = ((UnknownRoutine) ast.I.decl.entity).address;
-			emit(Machine.LOADop, Machine.closureSize, displayRegister(frame.level, address.level),
-					address.displacement);
+			var address = ((UnknownRoutine) ast.I.decl.entity).getAddress();
+			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
+					address.getDisplacement());
 		} else if (ast.I.decl.entity instanceof PrimitiveRoutine) {
-			int displacement = ((PrimitiveRoutine) ast.I.decl.entity).displacement;
+			var primitive = ((PrimitiveRoutine) ast.I.decl.entity).getPrimitive();
 			// static link, code address
-			emit(Machine.LOADAop, 0, Machine.SBr, 0);
-			emit(Machine.LOADAop, 0, Machine.PBr, displacement);
+			emitter.emit(OpCode.LOADA, 0, Register.SB, 0);
+			emitter.emit(OpCode.LOADA, Register.PB, primitive);
 		}
-		return Integer.valueOf(Machine.closureSize);
+		return Machine.closureSize;
 	}
 
 	@Override
-	public Object visitVarActualParameter(VarActualParameter ast, Object o) {
-		encodeFetchAddress(ast.V, (Frame) o);
-		return Integer.valueOf(Machine.addressSize);
+	public Integer visitVarActualParameter(VarActualParameter ast, Frame frame) {
+		encodeFetchAddress(ast.V, frame);
+		return Machine.addressSize;
 	}
 
 	@Override
-	public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object o) {
-		Frame frame = (Frame) o;
-		int argsSize1 = ((Integer) ast.AP.visit(this, frame)).intValue();
-		Frame frame1 = new Frame(frame, argsSize1);
-		int argsSize2 = ((Integer) ast.APS.visit(this, frame1)).intValue();
-		return Integer.valueOf(argsSize1 + argsSize2);
+	public Integer visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Frame frame) {
+		var argsSize1 = ast.AP.visit(this, frame);
+		var frame1 = frame.expand(argsSize1);
+		var argsSize2 = ast.APS.visit(this, frame1);
+		return argsSize1 + argsSize2;
 	}
 
 	@Override
-	public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object o) {
-		return ast.AP.visit(this, o);
+	public Integer visitSingleActualParameterSequence(SingleActualParameterSequence ast, Frame frame) {
+		return ast.AP.visit(this, frame);
 	}
 
 	// Type Denoters
 	@Override
-	public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitAnyTypeDenoter(AnyTypeDenoter ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) {
+	public Integer visitArrayTypeDenoter(ArrayTypeDenoter ast, Frame frame) {
 		int typeSize;
 		if (ast.entity == null) {
-			int elemSize = ((Integer) ast.T.visit(this)).intValue();
+			var elemSize = ast.T.visit(this);
 			typeSize = Integer.parseInt(ast.IL.spelling) * elemSize;
 			ast.entity = new TypeRepresentation(typeSize);
 			writeTableDetails(ast);
-		} else
-			typeSize = ast.entity.size;
-		return Integer.valueOf(typeSize);
+		} else {
+			typeSize = ast.entity.getSize();
+		}
+		return typeSize;
 	}
 
 	@Override
-	public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {
+	public Integer visitBoolTypeDenoter(BoolTypeDenoter ast, Frame frame) {
 		if (ast.entity == null) {
 			ast.entity = new TypeRepresentation(Machine.booleanSize);
 			writeTableDetails(ast);
 		}
-		return Integer.valueOf(Machine.booleanSize);
+		return Machine.booleanSize;
 	}
 
 	@Override
-	public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) {
+	public Integer visitCharTypeDenoter(CharTypeDenoter ast, Frame frame) {
 		if (ast.entity == null) {
 			ast.entity = new TypeRepresentation(Machine.characterSize);
 			writeTableDetails(ast);
 		}
-		return Integer.valueOf(Machine.characterSize);
+		return Machine.characterSize;
 	}
 
 	@Override
-	public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitErrorTypeDenoter(ErrorTypeDenoter ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object o) {
-		return Integer.valueOf(0);
+	public Integer visitSimpleTypeDenoter(SimpleTypeDenoter ast, Frame frame) {
+		return 0;
 	}
 
 	@Override
-	public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) {
+	public Integer visitIntTypeDenoter(IntTypeDenoter ast, Frame frame) {
 		if (ast.entity == null) {
 			ast.entity = new TypeRepresentation(Machine.integerSize);
 			writeTableDetails(ast);
 		}
-		return Integer.valueOf(Machine.integerSize);
+		return Machine.integerSize;
 	}
 
 	@Override
-	public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {
+	public Integer visitRecordTypeDenoter(RecordTypeDenoter ast, Frame frame) {
 		int typeSize;
 		if (ast.entity == null) {
-			typeSize = ((Integer) ast.FT.visit(this, Integer.valueOf(0))).intValue();
+			typeSize = ast.FT.visit(this, null);
 			ast.entity = new TypeRepresentation(typeSize);
 			writeTableDetails(ast);
-		} else
-			typeSize = ast.entity.size;
-		return Integer.valueOf(typeSize);
+		} else {
+			typeSize = ast.entity.getSize();
+		}
+		return typeSize;
 	}
 
 	@Override
-	public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object o) {
-		int offset = ((Integer) o).intValue();
+	public Integer visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Frame frame) {
+		var offset = frame.getSize();
 		int fieldSize;
-
 		if (ast.entity == null) {
-			fieldSize = ((Integer) ast.T.visit(this)).intValue();
+			fieldSize = ast.T.visit(this);
 			ast.entity = new Field(fieldSize, offset);
 			writeTableDetails(ast);
-		} else
-			fieldSize = ast.entity.size;
+		} else {
+			fieldSize = ast.entity.getSize();
+		}
 
-		Integer offset1 = Integer.valueOf(offset + fieldSize);
-		int recSize = ((Integer) ast.FT.visit(this, offset1)).intValue();
-		return Integer.valueOf(fieldSize + recSize);
+		var offset1 = frame.replace(offset + fieldSize);
+		var recSize = ast.FT.visit(this, offset1);
+		return fieldSize + recSize;
 	}
 
 	@Override
-	public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object o) {
-		int offset = ((Integer) o).intValue();
+	public Integer visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Frame frame) {
+		var offset = frame.getSize();
 		int fieldSize;
-
 		if (ast.entity == null) {
-			fieldSize = ((Integer) ast.T.visit(this)).intValue();
+			fieldSize = ast.T.visit(this);
 			ast.entity = new Field(fieldSize, offset);
 			writeTableDetails(ast);
-		} else
-			fieldSize = ast.entity.size;
+		} else {
+			fieldSize = ast.entity.getSize();
+		}
 
-		return Integer.valueOf(fieldSize);
+		return fieldSize;
 	}
 
 	// Literals, Identifiers and Operators
 	@Override
-	public Object visitCharacterLiteral(CharacterLiteral ast, Object o) {
+	public Void visitCharacterLiteral(CharacterLiteral ast, Void arg) {
 		return null;
 	}
 
 	@Override
-	public Object visitIdentifier(Identifier ast, Object o) {
-		Frame frame = (Frame) o;
+	public Void visitIdentifier(Identifier ast, Frame frame) {
 		if (ast.decl.entity instanceof KnownRoutine) {
-			ObjectAddress address = ((KnownRoutine) ast.decl.entity).address;
-			emit(Machine.CALLop, displayRegister(frame.level, address.level), Machine.CBr, address.displacement);
+			var address = ((KnownRoutine) ast.decl.entity).getAddress();
+			emitter.emit(OpCode.CALL, frame.getDisplayRegister(address), Register.CB, address.getDisplacement());
 		} else if (ast.decl.entity instanceof UnknownRoutine) {
-			ObjectAddress address = ((UnknownRoutine) ast.decl.entity).address;
-			emit(Machine.LOADop, Machine.closureSize, displayRegister(frame.level, address.level),
-					address.displacement);
-			emit(Machine.CALLIop, 0, 0, 0);
+			var address = ((UnknownRoutine) ast.decl.entity).getAddress();
+			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
+					address.getDisplacement());
+			emitter.emit(OpCode.CALLI, 0);
 		} else if (ast.decl.entity instanceof PrimitiveRoutine) {
-			int displacement = ((PrimitiveRoutine) ast.decl.entity).displacement;
-			if (displacement != Machine.idDisplacement)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
+			var primitive = ((PrimitiveRoutine) ast.decl.entity).getPrimitive();
+			if (primitive != Primitive.ID)
+				emitter.emit(OpCode.CALL, Register.PB, primitive);
 		} else if (ast.decl.entity instanceof EqualityRoutine) { // "=" or "\="
-			int displacement = ((EqualityRoutine) ast.decl.entity).displacement;
-			emit(Machine.LOADLop, 0, 0, frame.size / 2);
-			emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
+			var primitive = ((EqualityRoutine) ast.decl.entity).getPrimitive();
+			emitter.emit(OpCode.LOADL, 0, frame.getSize() / 2);
+			emitter.emit(OpCode.CALL, Register.PB, primitive);
 		}
 		return null;
 	}
 
 	@Override
-	public Object visitIntegerLiteral(IntegerLiteral ast, Object o) {
+	public Void visitIntegerLiteral(IntegerLiteral ast, Void arg) {
 		return null;
 	}
 
 	@Override
-	public Object visitOperator(Operator ast, Object o) {
-		Frame frame = (Frame) o;
+	public Void visitOperator(Operator ast, Frame frame) {
 		if (ast.decl.entity instanceof KnownRoutine) {
-			ObjectAddress address = ((KnownRoutine) ast.decl.entity).address;
-			emit(Machine.CALLop, displayRegister(frame.level, address.level), Machine.CBr, address.displacement);
+			var address = ((KnownRoutine) ast.decl.entity).getAddress();
+			emitter.emit(OpCode.CALL, frame.getDisplayRegister(address), Register.CB, address.getDisplacement());
 		} else if (ast.decl.entity instanceof UnknownRoutine) {
-			ObjectAddress address = ((UnknownRoutine) ast.decl.entity).address;
-			emit(Machine.LOADop, Machine.closureSize, displayRegister(frame.level, address.level),
-					address.displacement);
-			emit(Machine.CALLIop, 0, 0, 0);
+			var address = ((UnknownRoutine) ast.decl.entity).getAddress();
+			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
+					address.getDisplacement());
+			emitter.emit(OpCode.CALLI, 0);
 		} else if (ast.decl.entity instanceof PrimitiveRoutine) {
-			int displacement = ((PrimitiveRoutine) ast.decl.entity).displacement;
-			if (displacement != Machine.idDisplacement)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
+			var primitive = ((PrimitiveRoutine) ast.decl.entity).getPrimitive();
+			if (primitive != Primitive.ID)
+				emitter.emit(OpCode.CALL, Register.PB, primitive);
 		} else if (ast.decl.entity instanceof EqualityRoutine) { // "=" or "\="
-			int displacement = ((EqualityRoutine) ast.decl.entity).displacement;
-			emit(Machine.LOADLop, 0, 0, frame.size / 2);
-			emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
+			var primitive = ((EqualityRoutine) ast.decl.entity).getPrimitive();
+			emitter.emit(OpCode.LOADL, 0, frame.getSize() / 2);
+			emitter.emit(OpCode.CALL, Register.PB, primitive);
 		}
 		return null;
 	}
 
 	// Value-or-variable names
 	@Override
-	public Object visitDotVname(DotVname ast, Object o) {
-		Frame frame = (Frame) o;
-		RuntimeEntity baseObject = (RuntimeEntity) ast.V.visit(this, frame);
-		ast.offset = ast.V.offset + ((Field) ast.I.decl.entity).fieldOffset;
+	public RuntimeEntity visitDotVname(DotVname ast, Frame frame) {
+		var baseObject = ast.V.visit(this, frame);
+		ast.offset = ast.V.offset + ((Field) ast.I.decl.entity).getFieldOffset();
 		// I.decl points to the appropriate record field
 		ast.indexed = ast.V.indexed;
 		return baseObject;
 	}
 
 	@Override
-	public Object visitSimpleVname(SimpleVname ast, Object o) {
+	public RuntimeEntity visitSimpleVname(SimpleVname ast, Frame frame) {
 		ast.offset = 0;
 		ast.indexed = false;
 		return ast.I.decl.entity;
 	}
 
 	@Override
-	public Object visitSubscriptVname(SubscriptVname ast, Object o) {
-		Frame frame = (Frame) o;
-		RuntimeEntity baseObject;
-		int elemSize, indexSize;
-
-		baseObject = (RuntimeEntity) ast.V.visit(this, frame);
+	public RuntimeEntity visitSubscriptVname(SubscriptVname ast, Frame frame) {
+		var baseObject = ast.V.visit(this, frame);
 		ast.offset = ast.V.offset;
 		ast.indexed = ast.V.indexed;
-		elemSize = ((Integer) ast.type.visit(this)).intValue();
+		var elemSize = ast.type.visit(this);
 		if (ast.E instanceof IntegerExpression) {
-			IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
+			var IL = ((IntegerExpression) ast.E).IL;
 			ast.offset = ast.offset + Integer.parseInt(IL.spelling) * elemSize;
 		} else {
 			// v-name is indexed by a proper expression, not a literal
-			if (ast.indexed)
-				frame.size = frame.size + Machine.integerSize;
-			indexSize = ((Integer) ast.E.visit(this, frame)).intValue();
+			if (ast.indexed) {
+				frame = frame.expand(Machine.integerSize);
+			}
+			ast.E.visit(this, frame);
 			if (elemSize != 1) {
-				emit(Machine.LOADLop, 0, 0, elemSize);
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.multDisplacement);
+				emitter.emit(OpCode.LOADL, 0, elemSize);
+				emitter.emit(OpCode.CALL, Register.PB, Primitive.MULT);
 			}
 			if (ast.indexed)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			else
+				emitter.emit(OpCode.CALL, Register.PB, Primitive.ADD);
+			else {
 				ast.indexed = true;
+			}
 		}
 		return baseObject;
 	}
 
 	// Programs
 	@Override
-	public Object visitProgram(Program ast, Object o) {
-		return ast.C.visit(this, o);
+	public Void visitProgram(Program ast, Frame frame) {
+		return ast.C.visit(this, frame);
 	}
 
-	public Encoder(ErrorReporter reporter) {
+	public Encoder(Emitter emitter, ErrorReporter reporter) {
+		this.emitter = emitter;
 		this.reporter = reporter;
-		nextInstrAddr = Machine.CB;
+
 		elaborateStdEnvironment();
 	}
+
+	private Emitter emitter;
 
 	private ErrorReporter reporter;
 
 	// Generates code to run a program.
 	// showingTable is true iff entity description details
 	// are to be displayed.
-	public final void encodeRun(Program theAST, boolean showingTable) {
+	public final void encodeRun(Program program, boolean showingTable) {
 		tableDetailsReqd = showingTable;
 		// startCodeGeneration();
-		theAST.visit(this, new Frame(0, 0));
-		emit(Machine.HALTop, 0, 0, 0);
+		program.visit(this, Frame.Initial);
+		emitter.emit(OpCode.HALT);
 	}
 
 	// Decides run-time representation of a standard constant.
 	private final void elaborateStdConst(Declaration constDeclaration, int value) {
 
 		if (constDeclaration instanceof ConstDeclaration) {
-			ConstDeclaration decl = (ConstDeclaration) constDeclaration;
-			int typeSize = ((Integer) decl.E.type.visit(this)).intValue();
+			var decl = (ConstDeclaration) constDeclaration;
+			var typeSize = decl.E.type.visit(this);
 			decl.entity = new KnownValue(typeSize, value);
 			writeTableDetails(constDeclaration);
 		}
 	}
 
 	// Decides run-time representation of a standard routine.
-	private final void elaborateStdPrimRoutine(Declaration routineDeclaration, int routineOffset) {
-		routineDeclaration.entity = new PrimitiveRoutine(Machine.closureSize, routineOffset);
+	private final void elaborateStdPrimRoutine(Declaration routineDeclaration, Primitive primitive) {
+		routineDeclaration.entity = new PrimitiveRoutine(Machine.closureSize, primitive);
 		writeTableDetails(routineDeclaration);
 	}
 
-	private final void elaborateStdEqRoutine(Declaration routineDeclaration, int routineOffset) {
-		routineDeclaration.entity = new EqualityRoutine(Machine.closureSize, routineOffset);
+	private final void elaborateStdEqRoutine(Declaration routineDeclaration, Primitive primitive) {
+		routineDeclaration.entity = new EqualityRoutine(Machine.closureSize, primitive);
 		writeTableDetails(routineDeclaration);
 	}
 
@@ -790,114 +775,36 @@ public final class Encoder implements Visitor {
 		tableDetailsReqd = false;
 		elaborateStdConst(StdEnvironment.falseDecl, Machine.falseRep);
 		elaborateStdConst(StdEnvironment.trueDecl, Machine.trueRep);
-		elaborateStdPrimRoutine(StdEnvironment.notDecl, Machine.notDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.andDecl, Machine.andDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.orDecl, Machine.orDisplacement);
+		elaborateStdPrimRoutine(StdEnvironment.notDecl, Primitive.NOT);
+		elaborateStdPrimRoutine(StdEnvironment.andDecl, Primitive.AND);
+		elaborateStdPrimRoutine(StdEnvironment.orDecl, Primitive.OR);
 		elaborateStdConst(StdEnvironment.maxintDecl, Machine.maxintRep);
-		elaborateStdPrimRoutine(StdEnvironment.addDecl, Machine.addDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.subtractDecl, Machine.subDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.multiplyDecl, Machine.multDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.divideDecl, Machine.divDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.moduloDecl, Machine.modDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.lessDecl, Machine.ltDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.notgreaterDecl, Machine.leDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.greaterDecl, Machine.gtDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.notlessDecl, Machine.geDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.chrDecl, Machine.idDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.ordDecl, Machine.idDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.eolDecl, Machine.eolDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.eofDecl, Machine.eofDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.getDecl, Machine.getDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.putDecl, Machine.putDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.getintDecl, Machine.getintDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.putintDecl, Machine.putintDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.geteolDecl, Machine.geteolDisplacement);
-		elaborateStdPrimRoutine(StdEnvironment.puteolDecl, Machine.puteolDisplacement);
-		elaborateStdEqRoutine(StdEnvironment.equalDecl, Machine.eqDisplacement);
-		elaborateStdEqRoutine(StdEnvironment.unequalDecl, Machine.neDisplacement);
-	}
-
-	// Saves the object program in the named file.
-
-	public void saveObjectProgram(String objectName) {
-		FileOutputStream objectFile = null;
-		DataOutputStream objectStream = null;
-
-		int addr;
-
-		try {
-			objectFile = new FileOutputStream(objectName);
-			objectStream = new DataOutputStream(objectFile);
-
-			addr = Machine.CB;
-			for (addr = Machine.CB; addr < nextInstrAddr; addr++)
-				Machine.code[addr].write(objectStream);
-			objectFile.close();
-		} catch (FileNotFoundException s) {
-			System.err.println("Error opening object file: " + s);
-		} catch (IOException s) {
-			System.err.println("Error writing object file: " + s);
-		}
+		elaborateStdPrimRoutine(StdEnvironment.addDecl, Primitive.ADD);
+		elaborateStdPrimRoutine(StdEnvironment.subtractDecl, Primitive.SUB);
+		elaborateStdPrimRoutine(StdEnvironment.multiplyDecl, Primitive.MULT);
+		elaborateStdPrimRoutine(StdEnvironment.divideDecl, Primitive.DIV);
+		elaborateStdPrimRoutine(StdEnvironment.moduloDecl, Primitive.MOD);
+		elaborateStdPrimRoutine(StdEnvironment.lessDecl, Primitive.LT);
+		elaborateStdPrimRoutine(StdEnvironment.notgreaterDecl, Primitive.LE);
+		elaborateStdPrimRoutine(StdEnvironment.greaterDecl, Primitive.GT);
+		elaborateStdPrimRoutine(StdEnvironment.notlessDecl, Primitive.GE);
+		elaborateStdPrimRoutine(StdEnvironment.chrDecl, Primitive.ID);
+		elaborateStdPrimRoutine(StdEnvironment.ordDecl, Primitive.ID);
+		elaborateStdPrimRoutine(StdEnvironment.eolDecl, Primitive.EOL);
+		elaborateStdPrimRoutine(StdEnvironment.eofDecl, Primitive.EOF);
+		elaborateStdPrimRoutine(StdEnvironment.getDecl, Primitive.GET);
+		elaborateStdPrimRoutine(StdEnvironment.putDecl, Primitive.PUT);
+		elaborateStdPrimRoutine(StdEnvironment.getintDecl, Primitive.GETINT);
+		elaborateStdPrimRoutine(StdEnvironment.putintDecl, Primitive.PUTINT);
+		elaborateStdPrimRoutine(StdEnvironment.geteolDecl, Primitive.GETEOL);
+		elaborateStdPrimRoutine(StdEnvironment.puteolDecl, Primitive.PUTEOL);
+		elaborateStdEqRoutine(StdEnvironment.equalDecl, Primitive.EQ);
+		elaborateStdEqRoutine(StdEnvironment.unequalDecl, Primitive.NE);
 	}
 
 	boolean tableDetailsReqd;
 
-	public static void writeTableDetails(AST ast) {
-	}
-
-	// OBJECT CODE
-
-	// Implementation notes:
-	// Object code is generated directly into the TAM Code Store, starting at CB.
-	// The address of the next instruction is held in nextInstrAddr.
-
-	private int nextInstrAddr;
-
-	// Appends an instruction, with the given fields, to the object code.
-	private void emit(int op, int n, int r, int d) {
-		Instruction nextInstr = new Instruction();
-		if (n > 255) {
-			reporter.reportRestriction("length of operand can't exceed 255 words");
-			n = 255; // to allow code generation to continue
-		}
-		nextInstr.op = op;
-		nextInstr.n = n;
-		nextInstr.r = r;
-		nextInstr.d = d;
-		if (nextInstrAddr == Machine.PB)
-			reporter.reportRestriction("too many instructions for code segment");
-		else {
-			Machine.code[nextInstrAddr] = nextInstr;
-			nextInstrAddr = nextInstrAddr + 1;
-		}
-	}
-
-	// Patches the d-field of the instruction at address addr.
-	private void patch(int addr, int d) {
-		Machine.code[addr].d = d;
-	}
-
-	// DATA REPRESENTATION
-
-	public int characterValuation(String spelling) {
-		// Returns the machine representation of the given character literal.
-		return spelling.charAt(1);
-		// since the character literal is of the form 'x'}
-	}
-
-	// REGISTERS
-
-	// Returns the register number appropriate for object code at currentLevel
-	// to address a data object at objectLevel.
-	private int displayRegister(int currentLevel, int objectLevel) {
-		if (objectLevel == 0)
-			return Machine.SBr;
-		else if (currentLevel - objectLevel <= 6)
-			return Machine.LBr + currentLevel - objectLevel; // LBr|L1r|...|L6r
-		else {
-			reporter.reportRestriction("can't access data more than 6 levels out");
-			return Machine.L6r; // to allow code generation to continue
-		}
+	public static void writeTableDetails(AbstractSyntaxTree ast) {
 	}
 
 	// Generates code to fetch the value of a named constant or variable
@@ -909,34 +816,14 @@ public final class Encoder implements Visitor {
 
 	private void encodeStore(Vname V, Frame frame, int valSize) {
 
-		RuntimeEntity baseObject = (RuntimeEntity) V.visit(this, frame);
+		var baseObject = (AddressableEntity) V.visit(this, frame);
 		// If indexed = true, code will have been generated to load an index value.
 		if (valSize > 255) {
 			reporter.reportRestriction("can't store values larger than 255 words");
 			valSize = 255; // to allow code generation to continue
 		}
-		if (baseObject instanceof KnownAddress) {
-			ObjectAddress address = ((KnownAddress) baseObject).address;
-			if (V.indexed) {
-				emit(Machine.LOADAop, 0, displayRegister(frame.level, address.level), address.displacement + V.offset);
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-				emit(Machine.STOREIop, valSize, 0, 0);
-			} else {
-				emit(Machine.STOREop, valSize, displayRegister(frame.level, address.level),
-						address.displacement + V.offset);
-			}
-		} else if (baseObject instanceof UnknownAddress) {
-			ObjectAddress address = ((UnknownAddress) baseObject).address;
-			emit(Machine.LOADop, Machine.addressSize, displayRegister(frame.level, address.level),
-					address.displacement);
-			if (V.indexed)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			if (V.offset != 0) {
-				emit(Machine.LOADLop, 0, 0, V.offset);
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			}
-			emit(Machine.STOREIop, valSize, 0, 0);
-		}
+
+		baseObject.encodeStore(emitter, frame, valSize, V);
 	}
 
 	// Generates code to fetch the value of a named constant or variable
@@ -948,38 +835,14 @@ public final class Encoder implements Visitor {
 
 	private void encodeFetch(Vname V, Frame frame, int valSize) {
 
-		RuntimeEntity baseObject = (RuntimeEntity) V.visit(this, frame);
+		var baseObject = (FetchableEntity) V.visit(this, frame);
 		// If indexed = true, code will have been generated to load an index value.
 		if (valSize > 255) {
 			reporter.reportRestriction("can't load values larger than 255 words");
 			valSize = 255; // to allow code generation to continue
 		}
-		if (baseObject instanceof KnownValue) {
-			// presumably offset = 0 and indexed = false
-			int value = ((KnownValue) baseObject).value;
-			emit(Machine.LOADLop, 0, 0, value);
-		} else if ((baseObject instanceof UnknownValue) || (baseObject instanceof KnownAddress)) {
-			ObjectAddress address = (baseObject instanceof UnknownValue) ? ((UnknownValue) baseObject).address
-					: ((KnownAddress) baseObject).address;
-			if (V.indexed) {
-				emit(Machine.LOADAop, 0, displayRegister(frame.level, address.level), address.displacement + V.offset);
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-				emit(Machine.LOADIop, valSize, 0, 0);
-			} else
-				emit(Machine.LOADop, valSize, displayRegister(frame.level, address.level),
-						address.displacement + V.offset);
-		} else if (baseObject instanceof UnknownAddress) {
-			ObjectAddress address = ((UnknownAddress) baseObject).address;
-			emit(Machine.LOADop, Machine.addressSize, displayRegister(frame.level, address.level),
-					address.displacement);
-			if (V.indexed)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			if (V.offset != 0) {
-				emit(Machine.LOADLop, 0, 0, V.offset);
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			}
-			emit(Machine.LOADIop, valSize, 0, 0);
-		}
+
+		baseObject.encodeFetch(emitter, frame, valSize, V);
 	}
 
 	// Generates code to compute and push the address of a named variable.
@@ -990,23 +853,7 @@ public final class Encoder implements Visitor {
 
 	private void encodeFetchAddress(Vname V, Frame frame) {
 
-		RuntimeEntity baseObject = (RuntimeEntity) V.visit(this, frame);
-		// If indexed = true, code will have been generated to load an index value.
-		if (baseObject instanceof KnownAddress) {
-			ObjectAddress address = ((KnownAddress) baseObject).address;
-			emit(Machine.LOADAop, 0, displayRegister(frame.level, address.level), address.displacement + V.offset);
-			if (V.indexed)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-		} else if (baseObject instanceof UnknownAddress) {
-			ObjectAddress address = ((UnknownAddress) baseObject).address;
-			emit(Machine.LOADop, Machine.addressSize, displayRegister(frame.level, address.level),
-					address.displacement);
-			if (V.indexed)
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			if (V.offset != 0) {
-				emit(Machine.LOADLop, 0, 0, V.offset);
-				emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
-			}
-		}
+		var baseObject = (AddressableEntity) V.visit(this, frame);
+		baseObject.encodeFetchAddress(emitter, frame, V);
 	}
 }

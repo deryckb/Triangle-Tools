@@ -31,10 +31,6 @@ public final class Machine {
 
 	// INSTRUCTIONS
 
-	// Operation codes
-	public final static int LOADop = 0, LOADAop = 1, LOADIop = 2, LOADLop = 3, STOREop = 4, STOREIop = 5, CALLop = 6,
-			CALLIop = 7, RETURNop = 8, PUSHop = 10, POPop = 11, JUMPop = 12, JUMPIop = 13, JUMPIFop = 14, HALTop = 15;
-
 	// CODE STORE
 
 	public static Instruction[] code = new Instruction[1024];
@@ -46,9 +42,6 @@ public final class Machine {
 
 	// REGISTER NUMBERS
 
-	public final static int CBr = 0, CTr = 1, PBr = 2, PTr = 3, SBr = 4, STr = 5, HBr = 6, HTr = 7, LBr = 8,
-			L1r = LBr + 1, L2r = LBr + 2, L3r = LBr + 3, L4r = LBr + 4, L5r = LBr + 5, L6r = LBr + 6, CPr = 15;
-
 	// DATA REPRESENTATION
 
 	public final static int booleanSize = 1, characterSize = 1, integerSize = 1, addressSize = 1,
@@ -57,15 +50,5 @@ public final class Machine {
 			linkDataSize = 3 * addressSize,
 
 			falseRep = 0, trueRep = 1, maxintRep = 32767;
-
-	// ADDRESSES OF PRIMITIVE ROUTINES
-
-	public final static int idDisplacement = 1, notDisplacement = 2, andDisplacement = 3, orDisplacement = 4,
-			succDisplacement = 5, predDisplacement = 6, negDisplacement = 7, addDisplacement = 8, subDisplacement = 9,
-			multDisplacement = 10, divDisplacement = 11, modDisplacement = 12, ltDisplacement = 13, leDisplacement = 14,
-			geDisplacement = 15, gtDisplacement = 16, eqDisplacement = 17, neDisplacement = 18, eolDisplacement = 19,
-			eofDisplacement = 20, getDisplacement = 21, putDisplacement = 22, geteolDisplacement = 23,
-			puteolDisplacement = 24, getintDisplacement = 25, putintDisplacement = 26, newDisplacement = 27,
-			disposeDisplacement = 28;
 
 }

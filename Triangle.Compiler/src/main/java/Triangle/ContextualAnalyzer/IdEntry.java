@@ -14,7 +14,7 @@
 
 package Triangle.ContextualAnalyzer;
 
-import Triangle.AbstractSyntaxTrees.Declaration;
+import Triangle.AbstractSyntaxTrees.Declarations.Declaration;
 
 public class IdEntry {
 

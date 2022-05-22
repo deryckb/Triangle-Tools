@@ -14,19 +14,24 @@
 
 package Triangle.AbstractSyntaxTrees;
 
+import Triangle.AbstractSyntaxTrees.Commands.Command;
+import Triangle.AbstractSyntaxTrees.Visitors.ProgramVisitor;
 import Triangle.SyntacticAnalyzer.SourcePosition;
 
-public class Program extends AST {
+public class Program extends AbstractSyntaxTree {
 
 	public Program(Command cAST, SourcePosition position) {
 		super(position);
 		C = cAST;
 	}
 
-	@Override
-	public Object visit(Visitor v, Object o) {
-		return v.visitProgram(this, o);
+	public Command C;
+
+	public <TArg, TResult> TResult visit(ProgramVisitor<TArg, TResult> visitor, TArg arg) {
+		return visitor.visitProgram(this, arg);
 	}
 
-	public Command C;
+	public <TResult> TResult visit(ProgramVisitor<Void, TResult> visitor) {
+		return visit(visitor, null);
+	}
 }

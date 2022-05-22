@@ -16,72 +16,91 @@ package Triangle.TreeDrawer;
 
 import java.awt.FontMetrics;
 
-import Triangle.AbstractSyntaxTrees.AST;
-import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
-import Triangle.AbstractSyntaxTrees.ArrayExpression;
-import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
-import Triangle.AbstractSyntaxTrees.AssignCommand;
-import Triangle.AbstractSyntaxTrees.BinaryExpression;
-import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
-import Triangle.AbstractSyntaxTrees.CallCommand;
-import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
-import Triangle.AbstractSyntaxTrees.CharacterExpression;
-import Triangle.AbstractSyntaxTrees.CharacterLiteral;
-import Triangle.AbstractSyntaxTrees.ConstActualParameter;
-import Triangle.AbstractSyntaxTrees.ConstDeclaration;
-import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
-import Triangle.AbstractSyntaxTrees.DotVname;
-import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
-import Triangle.AbstractSyntaxTrees.EmptyExpression;
-import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
-import Triangle.AbstractSyntaxTrees.FuncActualParameter;
-import Triangle.AbstractSyntaxTrees.FuncDeclaration;
-import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
-import Triangle.AbstractSyntaxTrees.Identifier;
-import Triangle.AbstractSyntaxTrees.IfCommand;
-import Triangle.AbstractSyntaxTrees.IfExpression;
-import Triangle.AbstractSyntaxTrees.IntTypeDenoter;
-import Triangle.AbstractSyntaxTrees.IntegerExpression;
-import Triangle.AbstractSyntaxTrees.IntegerLiteral;
-import Triangle.AbstractSyntaxTrees.LetCommand;
-import Triangle.AbstractSyntaxTrees.LetExpression;
-import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.Operator;
-import Triangle.AbstractSyntaxTrees.ProcActualParameter;
-import Triangle.AbstractSyntaxTrees.ProcDeclaration;
-import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
-import Triangle.AbstractSyntaxTrees.RecordExpression;
-import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SequentialCommand;
-import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
-import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SimpleVname;
-import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleArrayAggregate;
-import Triangle.AbstractSyntaxTrees.SingleFieldTypeDenoter;
-import Triangle.AbstractSyntaxTrees.SingleFormalParameterSequence;
-import Triangle.AbstractSyntaxTrees.SingleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.SubscriptVname;
-import Triangle.AbstractSyntaxTrees.TypeDeclaration;
-import Triangle.AbstractSyntaxTrees.UnaryExpression;
-import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.VarActualParameter;
-import Triangle.AbstractSyntaxTrees.VarDeclaration;
-import Triangle.AbstractSyntaxTrees.VarFormalParameter;
-import Triangle.AbstractSyntaxTrees.Visitor;
-import Triangle.AbstractSyntaxTrees.VnameExpression;
-import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.Actuals.ConstActualParameter;
+import Triangle.AbstractSyntaxTrees.Actuals.EmptyActualParameterSequence;
+import Triangle.AbstractSyntaxTrees.Actuals.FuncActualParameter;
+import Triangle.AbstractSyntaxTrees.Actuals.MultipleActualParameterSequence;
+import Triangle.AbstractSyntaxTrees.Actuals.ProcActualParameter;
+import Triangle.AbstractSyntaxTrees.Actuals.SingleActualParameterSequence;
+import Triangle.AbstractSyntaxTrees.Actuals.VarActualParameter;
+import Triangle.AbstractSyntaxTrees.Aggregates.MultipleArrayAggregate;
+import Triangle.AbstractSyntaxTrees.Aggregates.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.Aggregates.SingleArrayAggregate;
+import Triangle.AbstractSyntaxTrees.Aggregates.SingleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.Commands.AssignCommand;
+import Triangle.AbstractSyntaxTrees.Commands.CallCommand;
+import Triangle.AbstractSyntaxTrees.Commands.EmptyCommand;
+import Triangle.AbstractSyntaxTrees.Commands.IfCommand;
+import Triangle.AbstractSyntaxTrees.Commands.LetCommand;
+import Triangle.AbstractSyntaxTrees.Commands.SequentialCommand;
+import Triangle.AbstractSyntaxTrees.Commands.WhileCommand;
+import Triangle.AbstractSyntaxTrees.Declarations.BinaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.ConstDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.FuncDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.ProcDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.SequentialDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.UnaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.VarDeclaration;
+import Triangle.AbstractSyntaxTrees.Expressions.ArrayExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.BinaryExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.CallExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.CharacterExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.EmptyExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.IfExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.IntegerExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.LetExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.RecordExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.UnaryExpression;
+import Triangle.AbstractSyntaxTrees.Expressions.VnameExpression;
+import Triangle.AbstractSyntaxTrees.Formals.ConstFormalParameter;
+import Triangle.AbstractSyntaxTrees.Formals.EmptyFormalParameterSequence;
+import Triangle.AbstractSyntaxTrees.Formals.FuncFormalParameter;
+import Triangle.AbstractSyntaxTrees.Formals.MultipleFormalParameterSequence;
+import Triangle.AbstractSyntaxTrees.Formals.ProcFormalParameter;
+import Triangle.AbstractSyntaxTrees.Formals.SingleFormalParameterSequence;
+import Triangle.AbstractSyntaxTrees.Formals.VarFormalParameter;
+import Triangle.AbstractSyntaxTrees.Terminals.CharacterLiteral;
+import Triangle.AbstractSyntaxTrees.Terminals.Identifier;
+import Triangle.AbstractSyntaxTrees.Terminals.IntegerLiteral;
+import Triangle.AbstractSyntaxTrees.Terminals.Operator;
+import Triangle.AbstractSyntaxTrees.Types.AnyTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.BoolTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.CharTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.ErrorTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.IntTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.MultipleFieldTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.SimpleTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.SingleFieldTypeDenoter;
+import Triangle.AbstractSyntaxTrees.Types.TypeDeclaration;
+import Triangle.AbstractSyntaxTrees.Visitors.ActualParameterSequenceVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ActualParameterVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ArrayAggregateVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.CommandVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.DeclarationVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ExpressionVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.FormalParameterSequenceVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.FormalParameterVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.IdentifierVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.LiteralVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.OperatorVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.ProgramVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.RecordAggregateVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.TypeDenoterVisitor;
+import Triangle.AbstractSyntaxTrees.Visitors.VnameVisitor;
+import Triangle.AbstractSyntaxTrees.Vnames.DotVname;
+import Triangle.AbstractSyntaxTrees.Vnames.SimpleVname;
+import Triangle.AbstractSyntaxTrees.Vnames.SubscriptVname;
 
-public class LayoutVisitor implements Visitor {
+public class LayoutVisitor implements ActualParameterVisitor<Void, DrawingTree>,
+		ActualParameterSequenceVisitor<Void, DrawingTree>, ArrayAggregateVisitor<Void, DrawingTree>,
+		CommandVisitor<Void, DrawingTree>, DeclarationVisitor<Void, DrawingTree>, ExpressionVisitor<Void, DrawingTree>,
+		FormalParameterVisitor<Void, DrawingTree>, FormalParameterSequenceVisitor<Void, DrawingTree>,
+		IdentifierVisitor<Void, DrawingTree>, LiteralVisitor<Void, DrawingTree>, OperatorVisitor<Void, DrawingTree>,
+		ProgramVisitor<Void, DrawingTree>, RecordAggregateVisitor<Void, DrawingTree>,
+		TypeDenoterVisitor<Void, DrawingTree>, VnameVisitor<Void, DrawingTree> {
 
 	private final int BORDER = 5;
 	private final int PARENT_SEP = 30;
@@ -94,333 +113,427 @@ public class LayoutVisitor implements Visitor {
 
 	// Commands
 	@Override
-	public Object visitAssignCommand(AssignCommand ast, Object obj) {
-		return layoutBinary("AssignCom.", ast.V, ast.E);
+	public DrawingTree visitAssignCommand(AssignCommand ast, Void obj) {
+		var d1 = ast.V.visit(this);
+		var d2 = ast.E.visit(this);
+		return layoutBinary("AssignCom.", d1, d2);
 	}
 
 	@Override
-	public Object visitCallCommand(CallCommand ast, Object obj) {
-		return layoutBinary("CallCom.", ast.I, ast.APS);
+	public DrawingTree visitCallCommand(CallCommand ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.APS.visit(this);
+		return layoutBinary("CallCom.", d1, d2);
 	}
 
 	@Override
-	public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
+	public DrawingTree visitEmptyCommand(EmptyCommand ast, Void obj) {
 		return layoutNullary("EmptyCom.");
 	}
 
 	@Override
-	public Object visitIfCommand(IfCommand ast, Object obj) {
-		return layoutTernary("IfCom.", ast.E, ast.C1, ast.C2);
+	public DrawingTree visitIfCommand(IfCommand ast, Void obj) {
+		var d1 = ast.E.visit(this);
+		var d2 = ast.C1.visit(this);
+		var d3 = ast.C2.visit(this);
+		return layoutTernary("IfCom.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitLetCommand(LetCommand ast, Object obj) {
-		return layoutBinary("LetCom.", ast.D, ast.C);
+	public DrawingTree visitLetCommand(LetCommand ast, Void obj) {
+		var d1 = ast.D.visit(this);
+		var d2 = ast.C.visit(this);
+		return layoutBinary("LetCom.", d1, d2);
 	}
 
 	@Override
-	public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
-		return layoutBinary("Seq.Com.", ast.C1, ast.C2);
+	public DrawingTree visitSequentialCommand(SequentialCommand ast, Void obj) {
+		var d1 = ast.C1.visit(this);
+		var d2 = ast.C2.visit(this);
+		return layoutBinary("Seq.Com.", d1, d2);
 	}
 
 	@Override
-	public Object visitWhileCommand(WhileCommand ast, Object obj) {
-		return layoutBinary("WhileCom.", ast.E, ast.C);
+	public DrawingTree visitWhileCommand(WhileCommand ast, Void obj) {
+		var d1 = ast.E.visit(this);
+		var d2 = ast.C.visit(this);
+		return layoutBinary("WhileCom.", d1, d2);
 	}
 
 	// Expressions
 	@Override
-	public Object visitArrayExpression(ArrayExpression ast, Object obj) {
-		return layoutUnary("ArrayExpr.", ast.AA);
+	public DrawingTree visitArrayExpression(ArrayExpression ast, Void obj) {
+		var d1 = ast.AA.visit(this);
+		return layoutUnary("ArrayExpr.", d1);
 	}
 
 	@Override
-	public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
-		return layoutTernary("Bin.Expr.", ast.E1, ast.O, ast.E2);
+	public DrawingTree visitBinaryExpression(BinaryExpression ast, Void obj) {
+		var d1 = ast.E1.visit(this);
+		var d2 = ast.O.visit(this);
+		var d3 = ast.E2.visit(this);
+		return layoutTernary("Bin.Expr.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitCallExpression(CallExpression ast, Object obj) {
-		return layoutBinary("CallExpr.", ast.I, ast.APS);
+	public DrawingTree visitCallExpression(CallExpression ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.APS.visit(this);
+		return layoutBinary("CallExpr.", d1, d2);
 	}
 
 	@Override
-	public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
-		return layoutUnary("Char.Expr.", ast.CL);
+	public DrawingTree visitCharacterExpression(CharacterExpression ast, Void obj) {
+		var d1 = ast.CL.visit(this);
+		return layoutUnary("Char.Expr.", d1);
 	}
 
 	@Override
-	public Object visitEmptyExpression(EmptyExpression ast, Object obj) {
+	public DrawingTree visitEmptyExpression(EmptyExpression ast, Void obj) {
 		return layoutNullary("EmptyExpr.");
 	}
 
 	@Override
-	public Object visitIfExpression(IfExpression ast, Object obj) {
-		return layoutTernary("IfExpr.", ast.E1, ast.E2, ast.E3);
+	public DrawingTree visitIfExpression(IfExpression ast, Void obj) {
+		var d1 = ast.E1.visit(this);
+		var d2 = ast.E2.visit(this);
+		var d3 = ast.E3.visit(this);
+		return layoutTernary("IfExpr.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
-		return layoutUnary("Int.Expr.", ast.IL);
+	public DrawingTree visitIntegerExpression(IntegerExpression ast, Void obj) {
+		var d1 = ast.IL.visit(this);
+		return layoutUnary("Int.Expr.", d1);
 	}
 
 	@Override
-	public Object visitLetExpression(LetExpression ast, Object obj) {
-		return layoutBinary("LetExpr.", ast.D, ast.E);
+	public DrawingTree visitLetExpression(LetExpression ast, Void obj) {
+		var d1 = ast.D.visit(this);
+		var d2 = ast.E.visit(this);
+		return layoutBinary("LetExpr.", d1, d2);
 	}
 
 	@Override
-	public Object visitRecordExpression(RecordExpression ast, Object obj) {
-		return layoutUnary("Rec.Expr.", ast.RA);
+	public DrawingTree visitRecordExpression(RecordExpression ast, Void obj) {
+		var d1 = ast.RA.visit(this);
+		return layoutUnary("Rec.Expr.", d1);
 	}
 
 	@Override
-	public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
-		return layoutBinary("UnaryExpr.", ast.O, ast.E);
+	public DrawingTree visitUnaryExpression(UnaryExpression ast, Void obj) {
+		var d1 = ast.O.visit(this);
+		var d2 = ast.E.visit(this);
+		return layoutBinary("UnaryExpr.", d1, d2);
 	}
 
 	@Override
-	public Object visitVnameExpression(VnameExpression ast, Object obj) {
-		return layoutUnary("VnameExpr.", ast.V);
+	public DrawingTree visitVnameExpression(VnameExpression ast, Void obj) {
+		var d1 = ast.V.visit(this);
+		return layoutUnary("VnameExpr.", d1);
 	}
 
 	// Declarations
 	@Override
-	public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
-		return layoutQuaternary("Bin.Op.Decl.", ast.O, ast.ARG1, ast.ARG2, ast.RES);
+	public DrawingTree visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Void obj) {
+		var d1 = ast.O.visit(this);
+		var d2 = ast.ARG1.visit(this);
+		var d3 = ast.ARG2.visit(this);
+		var d4 = ast.RES.visit(this);
+		return layoutQuaternary("Bin.Op.Decl.", d1, d2, d3, d4);
 	}
 
 	@Override
-	public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
-		return layoutBinary("ConstDecl.", ast.I, ast.E);
+	public DrawingTree visitConstDeclaration(ConstDeclaration ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.E.visit(this);
+		return layoutBinary("ConstDecl.", d1, d2);
 	}
 
 	@Override
-	public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
-		return layoutQuaternary("FuncDecl.", ast.I, ast.FPS, ast.T, ast.E);
+	public DrawingTree visitFuncDeclaration(FuncDeclaration ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.FPS.visit(this);
+		var d3 = ast.T.visit(this);
+		var d4 = ast.E.visit(this);
+		return layoutQuaternary("FuncDecl.", d1, d2, d3, d4);
 	}
 
 	@Override
-	public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
-		return layoutTernary("ProcDecl.", ast.I, ast.FPS, ast.C);
+	public DrawingTree visitProcDeclaration(ProcDeclaration ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.FPS.visit(this);
+		var d3 = ast.C.visit(this);
+		return layoutTernary("ProcDecl.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
-		return layoutBinary("Seq.Decl.", ast.D1, ast.D2);
+	public DrawingTree visitSequentialDeclaration(SequentialDeclaration ast, Void obj) {
+		var d1 = ast.D1.visit(this);
+		var d2 = ast.D2.visit(this);
+		return layoutBinary("Seq.Decl.", d1, d2);
 	}
 
 	@Override
-	public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
-		return layoutBinary("TypeDecl.", ast.I, ast.T);
+	public DrawingTree visitTypeDeclaration(TypeDeclaration ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.T.visit(this);
+		return layoutBinary("TypeDecl.", d1, d2);
 	}
 
 	@Override
-	public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
-		return layoutTernary("UnaryOp.Decl.", ast.O, ast.ARG, ast.RES);
+	public DrawingTree visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Void obj) {
+		var d1 = ast.O.visit(this);
+		var d2 = ast.ARG.visit(this);
+		var d3 = ast.RES.visit(this);
+		return layoutTernary("UnaryOp.Decl.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
-		return layoutBinary("VarDecl.", ast.I, ast.T);
+	public DrawingTree visitVarDeclaration(VarDeclaration ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.T.visit(this);
+		return layoutBinary("VarDecl.", d1, d2);
 	}
 
 	// Array Aggregates
 	@Override
-	public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
-		return layoutBinary("Mult.ArrayAgg.", ast.E, ast.AA);
+	public DrawingTree visitMultipleArrayAggregate(MultipleArrayAggregate ast, Void obj) {
+		var d1 = ast.E.visit(this);
+		var d2 = ast.AA.visit(this);
+		return layoutBinary("Mult.ArrayAgg.", d1, d2);
 	}
 
 	@Override
-	public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object obj) {
-		return layoutUnary("Sing.ArrayAgg.", ast.E);
+	public DrawingTree visitSingleArrayAggregate(SingleArrayAggregate ast, Void obj) {
+		var d1 = ast.E.visit(this);
+		return layoutUnary("Sing.ArrayAgg.", d1);
 	}
 
 	// Record Aggregates
 	@Override
-	public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
-		return layoutTernary("Mult.Rec.Agg.", ast.I, ast.E, ast.RA);
+	public DrawingTree visitMultipleRecordAggregate(MultipleRecordAggregate ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.E.visit(this);
+		var d3 = ast.RA.visit(this);
+		return layoutTernary("Mult.Rec.Agg.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
-		return layoutBinary("Sing.Rec.Agg.", ast.I, ast.E);
+	public DrawingTree visitSingleRecordAggregate(SingleRecordAggregate ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.E.visit(this);
+		return layoutBinary("Sing.Rec.Agg.", d1, d2);
 	}
 
 	// Formal Parameters
 	@Override
-	public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
-		return layoutBinary("ConstF.P.", ast.I, ast.T);
+	public DrawingTree visitConstFormalParameter(ConstFormalParameter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.T.visit(this);
+		return layoutBinary("ConstF.P.", d1, d2);
 	}
 
 	@Override
-	public Object visitFuncFormalParameter(FuncFormalParameter ast, Object obj) {
-		return layoutTernary("FuncF.P.", ast.I, ast.FPS, ast.T);
+	public DrawingTree visitFuncFormalParameter(FuncFormalParameter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.FPS.visit(this);
+		var d3 = ast.T.visit(this);
+		return layoutTernary("FuncF.P.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitProcFormalParameter(ProcFormalParameter ast, Object obj) {
-		return layoutBinary("ProcF.P.", ast.I, ast.FPS);
+	public DrawingTree visitProcFormalParameter(ProcFormalParameter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.FPS.visit(this);
+		return layoutBinary("ProcF.P.", d1, d2);
 	}
 
 	@Override
-	public Object visitVarFormalParameter(VarFormalParameter ast, Object obj) {
-		return layoutBinary("VarF.P.", ast.I, ast.T);
+	public DrawingTree visitVarFormalParameter(VarFormalParameter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.T.visit(this);
+		return layoutBinary("VarF.P.", d1, d2);
 	}
 
 	@Override
-	public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
+	public DrawingTree visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Void obj) {
 		return layoutNullary("EmptyF.P.S.");
 	}
 
 	@Override
-	public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object obj) {
-		return layoutBinary("Mult.F.P.S.", ast.FP, ast.FPS);
+	public DrawingTree visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Void obj) {
+		var d1 = ast.FP.visit(this);
+		var d2 = ast.FPS.visit(this);
+		return layoutBinary("Mult.F.P.S.", d1, d2);
 	}
 
 	@Override
-	public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
-		return layoutUnary("Sing.F.P.S.", ast.FP);
+	public DrawingTree visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Void obj) {
+		var d1 = ast.FP.visit(this);
+		return layoutUnary("Sing.F.P.S.", d1);
 	}
 
 	// Actual Parameters
 	@Override
-	public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
-		return layoutUnary("ConstA.P.", ast.E);
+	public DrawingTree visitConstActualParameter(ConstActualParameter ast, Void obj) {
+		var d1 = ast.E.visit(this);
+		return layoutUnary("ConstA.P.", d1);
 	}
 
 	@Override
-	public Object visitFuncActualParameter(FuncActualParameter ast, Object obj) {
-		return layoutUnary("FuncA.P.", ast.I);
+	public DrawingTree visitFuncActualParameter(FuncActualParameter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		return layoutUnary("FuncA.P.", d1);
 	}
 
 	@Override
-	public Object visitProcActualParameter(ProcActualParameter ast, Object obj) {
-		return layoutUnary("ProcA.P.", ast.I);
+	public DrawingTree visitProcActualParameter(ProcActualParameter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		return layoutUnary("ProcA.P.", d1);
 	}
 
 	@Override
-	public Object visitVarActualParameter(VarActualParameter ast, Object obj) {
-		return layoutUnary("VarA.P.", ast.V);
+	public DrawingTree visitVarActualParameter(VarActualParameter ast, Void obj) {
+		var d1 = ast.V.visit(this);
+		return layoutUnary("VarA.P.", d1);
 	}
 
 	@Override
-	public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
+	public DrawingTree visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Void obj) {
 		return layoutNullary("EmptyA.P.S.");
 	}
 
 	@Override
-	public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object obj) {
-		return layoutBinary("Mult.A.P.S.", ast.AP, ast.APS);
+	public DrawingTree visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Void obj) {
+		var d1 = ast.AP.visit(this);
+		var d2 = ast.APS.visit(this);
+		return layoutBinary("Mult.A.P.S.", d1, d2);
 	}
 
 	@Override
-	public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
-		return layoutUnary("Sing.A.P.S.", ast.AP);
+	public DrawingTree visitSingleActualParameterSequence(SingleActualParameterSequence ast, Void obj) {
+		var d1 = ast.AP.visit(this);
+		return layoutUnary("Sing.A.P.S.", d1);
 	}
 
 	// Type Denoters
 	@Override
-	public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
+	public DrawingTree visitAnyTypeDenoter(AnyTypeDenoter ast, Void obj) {
 		return layoutNullary("any");
 	}
 
 	@Override
-	public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
-		return layoutBinary("ArrayTypeD.", ast.IL, ast.T);
+	public DrawingTree visitArrayTypeDenoter(ArrayTypeDenoter ast, Void obj) {
+		var d1 = ast.IL.visit(this);
+		var d2 = ast.T.visit(this);
+		return layoutBinary("ArrayTypeD.", d1, d2);
 	}
 
 	@Override
-	public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
+	public DrawingTree visitBoolTypeDenoter(BoolTypeDenoter ast, Void obj) {
 		return layoutNullary("bool");
 	}
 
 	@Override
-	public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
+	public DrawingTree visitCharTypeDenoter(CharTypeDenoter ast, Void obj) {
 		return layoutNullary("char");
 	}
 
 	@Override
-	public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
+	public DrawingTree visitErrorTypeDenoter(ErrorTypeDenoter ast, Void obj) {
 		return layoutNullary("error");
 	}
 
 	@Override
-	public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
-		return layoutUnary("Sim.TypeD.", ast.I);
+	public DrawingTree visitSimpleTypeDenoter(SimpleTypeDenoter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		return layoutUnary("Sim.TypeD.", d1);
 	}
 
 	@Override
-	public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
+	public DrawingTree visitIntTypeDenoter(IntTypeDenoter ast, Void obj) {
 		return layoutNullary("int");
 	}
 
 	@Override
-	public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
-		return layoutUnary("Rec.TypeD.", ast.FT);
+	public DrawingTree visitRecordTypeDenoter(RecordTypeDenoter ast, Void obj) {
+		var d1 = ast.FT.visit(this);
+		return layoutUnary("Rec.TypeD.", d1);
 	}
 
 	@Override
-	public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
-		return layoutTernary("Mult.F.TypeD.", ast.I, ast.T, ast.FT);
+	public DrawingTree visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.T.visit(this);
+		var d3 = ast.FT.visit(this);
+		return layoutTernary("Mult.F.TypeD.", d1, d2, d3);
 	}
 
 	@Override
-	public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
-		return layoutBinary("Sing.F.TypeD.", ast.I, ast.T);
+	public DrawingTree visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.T.visit(this);
+		return layoutBinary("Sing.F.TypeD.", d1, d2);
 	}
 
 	// Literals, Identifiers and Operators
 	@Override
-	public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
+	public DrawingTree visitCharacterLiteral(CharacterLiteral ast, Void obj) {
 		return layoutNullary(ast.spelling);
 	}
 
 	@Override
-	public Object visitIdentifier(Identifier ast, Object obj) {
+	public DrawingTree visitIdentifier(Identifier ast, Void obj) {
 		return layoutNullary(ast.spelling);
 	}
 
 	@Override
-	public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
+	public DrawingTree visitIntegerLiteral(IntegerLiteral ast, Void obj) {
 		return layoutNullary(ast.spelling);
 	}
 
 	@Override
-	public Object visitOperator(Operator ast, Object obj) {
+	public DrawingTree visitOperator(Operator ast, Void obj) {
 		return layoutNullary(ast.spelling);
 	}
 
 	// Value-or-variable names
 	@Override
-	public Object visitDotVname(DotVname ast, Object obj) {
-		return layoutBinary("DotVname", ast.I, ast.V);
+	public DrawingTree visitDotVname(DotVname ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		var d2 = ast.V.visit(this);
+		return layoutBinary("DotVname", d1, d2);
 	}
 
 	@Override
-	public Object visitSimpleVname(SimpleVname ast, Object obj) {
-		return layoutUnary("Sim.Vname", ast.I);
+	public DrawingTree visitSimpleVname(SimpleVname ast, Void obj) {
+		var d1 = ast.I.visit(this);
+		return layoutUnary("Sim.Vname", d1);
 	}
 
 	@Override
-	public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
-		return layoutBinary("Sub.Vname", ast.V, ast.E);
+	public DrawingTree visitSubscriptVname(SubscriptVname ast, Void obj) {
+		var d1 = ast.V.visit(this);
+		var d2 = ast.E.visit(this);
+		return layoutBinary("Sub.Vname", d1, d2);
 	}
 
 	// Programs
 	@Override
-	public Object visitProgram(Program ast, Object obj) {
-		return layoutUnary("Program", ast.C);
+	public DrawingTree visitProgram(Program ast, Void obj) {
+		var d1 = ast.C.visit(this);
+		return layoutUnary("Program", d1);
 	}
 
 	private DrawingTree layoutCaption(String name) {
-		int w = fontMetrics.stringWidth(name) + 4;
-		int h = fontMetrics.getHeight() + 4;
+		var w = fontMetrics.stringWidth(name) + 4;
+		var h = fontMetrics.getHeight() + 4;
 		return new DrawingTree(name, w, h);
 	}
 
 	private DrawingTree layoutNullary(String name) {
-		DrawingTree dt = layoutCaption(name);
+		var dt = layoutCaption(name);
 		dt.contour.upper_tail = new Polyline(0, dt.height + 2 * BORDER, null);
 		dt.contour.upper_head = dt.contour.upper_tail;
 		dt.contour.lower_tail = new Polyline(-dt.width - 2 * BORDER, 0, null);
@@ -428,48 +541,38 @@ public class LayoutVisitor implements Visitor {
 		return dt;
 	}
 
-	private DrawingTree layoutUnary(String name, AST child1) {
-		DrawingTree dt = layoutCaption(name);
-		DrawingTree d1 = (DrawingTree) child1.visit(this, null);
+	private DrawingTree layoutUnary(String name, DrawingTree d1) {
+		var dt = layoutCaption(name);
 		dt.setChildren(new DrawingTree[] { d1 });
 		attachParent(dt, join(dt));
 		return dt;
 	}
 
-	private DrawingTree layoutBinary(String name, AST child1, AST child2) {
-		DrawingTree dt = layoutCaption(name);
-		DrawingTree d1 = (DrawingTree) child1.visit(this, null);
-		DrawingTree d2 = (DrawingTree) child2.visit(this, null);
+	private DrawingTree layoutBinary(String name, DrawingTree d1, DrawingTree d2) {
+		var dt = layoutCaption(name);
 		dt.setChildren(new DrawingTree[] { d1, d2 });
 		attachParent(dt, join(dt));
 		return dt;
 	}
 
-	private DrawingTree layoutTernary(String name, AST child1, AST child2, AST child3) {
-		DrawingTree dt = layoutCaption(name);
-		DrawingTree d1 = (DrawingTree) child1.visit(this, null);
-		DrawingTree d2 = (DrawingTree) child2.visit(this, null);
-		DrawingTree d3 = (DrawingTree) child3.visit(this, null);
+	private DrawingTree layoutTernary(String name, DrawingTree d1, DrawingTree d2, DrawingTree d3) {
+		var dt = layoutCaption(name);
 		dt.setChildren(new DrawingTree[] { d1, d2, d3 });
 		attachParent(dt, join(dt));
 		return dt;
 	}
 
-	private DrawingTree layoutQuaternary(String name, AST child1, AST child2, AST child3, AST child4) {
-		DrawingTree dt = layoutCaption(name);
-		DrawingTree d1 = (DrawingTree) child1.visit(this, null);
-		DrawingTree d2 = (DrawingTree) child2.visit(this, null);
-		DrawingTree d3 = (DrawingTree) child3.visit(this, null);
-		DrawingTree d4 = (DrawingTree) child4.visit(this, null);
+	private DrawingTree layoutQuaternary(String name, DrawingTree d1, DrawingTree d2, DrawingTree d3, DrawingTree d4) {
+		var dt = layoutCaption(name);
 		dt.setChildren(new DrawingTree[] { d1, d2, d3, d4 });
 		attachParent(dt, join(dt));
 		return dt;
 	}
 
 	private void attachParent(DrawingTree dt, int w) {
-		int y = PARENT_SEP;
-		int x2 = (w - dt.width) / 2 - BORDER;
-		int x1 = x2 + dt.width + 2 * BORDER - w;
+		var y = PARENT_SEP;
+		var x2 = (w - dt.width) / 2 - BORDER;
+		var x1 = x2 + dt.width + 2 * BORDER - w;
 
 		dt.children[0].offset.y = y + dt.height;
 		dt.children[0].offset.x = x1;
@@ -478,13 +581,13 @@ public class LayoutVisitor implements Visitor {
 	}
 
 	private int join(DrawingTree dt) {
-		int w, sum;
 
 		dt.contour = dt.children[0].contour;
-		sum = w = dt.children[0].width + 2 * BORDER;
+		var sum = dt.children[0].width + 2 * BORDER;
+		var w = sum;
 
-		for (int i = 1; i < dt.children.length; i++) {
-			int d = merge(dt.contour, dt.children[i].contour);
+		for (var i = 1; i < dt.children.length; i++) {
+			var d = merge(dt.contour, dt.children[i].contour);
 			dt.children[i].offset.x = d + w;
 			dt.children[i].offset.y = 0;
 			w = dt.children[i].width + 2 * BORDER;
@@ -494,15 +597,12 @@ public class LayoutVisitor implements Visitor {
 	}
 
 	private int merge(Polygon c1, Polygon c2) {
-		int x, y, total, d;
-		Polyline lower, upper, b;
-
-		x = y = total = 0;
-		upper = c1.lower_head;
-		lower = c2.upper_head;
+		int x = 0, y = 0, total = 0;
+		var upper = c1.lower_head;
+		var lower = c2.upper_head;
 
 		while (lower != null && upper != null) {
-			d = offset(x, y, lower.dx, lower.dy, upper.dx, upper.dy);
+			var d = offset(x, y, lower.dx, lower.dy, upper.dx, upper.dy);
 			x += d;
 			total += d;
 
@@ -518,11 +618,11 @@ public class LayoutVisitor implements Visitor {
 		}
 
 		if (lower != null) {
-			b = bridge(c1.upper_tail, 0, 0, lower, x, y);
+			var b = bridge(c1.upper_tail, 0, 0, lower, x, y);
 			c1.upper_tail = (b.link != null) ? c2.upper_tail : b;
 			c1.lower_tail = c2.lower_tail;
 		} else {
-			b = bridge(c2.lower_tail, x, y, upper, 0, 0);
+			var b = bridge(c2.lower_tail, x, y, upper, 0, 0);
 			if (b.link == null) {
 				c1.lower_tail = b;
 			}
@@ -534,53 +634,45 @@ public class LayoutVisitor implements Visitor {
 	}
 
 	private int offset(int p1, int p2, int a1, int a2, int b1, int b2) {
-		int d, s, t;
 
 		if (b2 <= p2 || p2 + a2 <= 0) {
 			return 0;
 		}
 
-		t = b2 * a1 - a2 * b1;
+		var t = b2 * a1 - a2 * b1;
 		if (t > 0) {
 			if (p2 < 0) {
-				s = p2 * a1;
-				d = s / a2 - p1;
+				var s = p2 * a1;
+				return Math.max(0, s / a2 - p1);
 			} else if (p2 > 0) {
-				s = p2 * b1;
-				d = s / b2 - p1;
+				var s = p2 * b1;
+				return Math.max(0, s / b2 - p1);
 			} else {
-				d = -p1;
+				return Math.max(0, -p1);
 			}
 		} else if (b2 < p2 + a2) {
-			s = (b2 - p2) * a1;
-			d = b1 - (p1 + s / a2);
+			var s = (b2 - p2) * a1;
+			return Math.max(0, b1 - (p1 + s / a2));
 		} else if (b2 > p2 + a2) {
-			s = (a2 + p2) * b1;
-			d = s / b2 - (p1 + a1);
+			var s = (a2 + p2) * b1;
+			return Math.max(0, s / b2 - (p1 + a1));
 		} else {
-			d = b1 - (p1 + a1);
-		}
-
-		if (d > 0) {
-			return d;
-		} else {
-			return 0;
+			return Math.max(0, b1 - (p1 + a1));
 		}
 	}
 
 	private Polyline bridge(Polyline line1, int x1, int y1, Polyline line2, int x2, int y2) {
-		int dy, dx, s;
-		Polyline r;
 
-		dy = y2 + line2.dy - y1;
+		int dx;
+		var dy = y2 + line2.dy - y1;
 		if (line2.dy == 0) {
 			dx = line2.dx;
 		} else {
-			s = dy * line2.dx;
+			var s = dy * line2.dx;
 			dx = s / line2.dy;
 		}
 
-		r = new Polyline(dx, dy, line2.link);
+		var r = new Polyline(dx, dy, line2.link);
 		line1.link = new Polyline(x2 + line2.dx - dx - x1, 0, r);
 
 		return r;

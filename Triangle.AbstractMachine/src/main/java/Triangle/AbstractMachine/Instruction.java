@@ -21,13 +21,6 @@ import java.io.IOException;
 
 public class Instruction {
 
-	public Instruction() {
-		op = 0;
-		r = 0;
-		n = 0;
-		d = 0;
-	}
-
 	// Java has no type synonyms, so the following representations are
 	// assumed:
 	//
@@ -37,26 +30,36 @@ public class Instruction {
 	// Operand = -32767..+32767; {16 bits signed}
 
 	// Represents TAM instructions.
-	public int op; // OpCode
-	public int r; // RegisterNumber
-	public int n; // Length
-	public int d; // Operand
+	final OpCode opCode;
+	final Register register;
+	final int length;
+	int operand; // Not final to allow for patching jump address
 
+	public Instruction(OpCode opcode, Register register, int length, int operand) {
+		this.opCode = opcode;
+		this.register = register;
+		this.length = length;
+		this.operand = operand;
+	}
+
+	public void setOperand(int operand) {
+		this.operand = operand;
+	}
+	
 	public void write(DataOutputStream output) throws IOException {
-		output.writeInt(op);
-		output.writeInt(r);
-		output.writeInt(n);
-		output.writeInt(d);
+		output.writeInt(opCode.ordinal());
+		output.writeInt(register.ordinal());
+		output.writeInt(length);
+		output.writeInt(operand);
 	}
 
 	public static Instruction read(DataInputStream input) throws IOException {
-		Instruction inst = new Instruction();
 		try {
-			inst.op = input.readInt();
-			inst.r = input.readInt();
-			inst.n = input.readInt();
-			inst.d = input.readInt();
-			return inst;
+			var opCode = OpCode.values()[input.readInt()];
+			var register = Register.values()[input.readInt()];
+			var length = input.readInt();
+			var operand = input.readInt();
+			return new Instruction(opCode, register, length, operand);
 		} catch (EOFException s) {
 			return null;
 		}

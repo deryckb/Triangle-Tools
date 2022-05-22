@@ -40,41 +40,46 @@ public class Interpreter {
 	static long accumulator;
 
 	static int content(int r) {
+		var register = Register.values()[r];
+		return content(register);
+	}
+
+	static int content(Register r) {
 		// Returns the current content of register r,
 		// even if r is one of the pseudo-registers L1..L6.
 
 		switch (r) {
-		case Machine.CBr:
+		case CB:
 			return CB;
-		case Machine.CTr:
+		case CT:
 			return CT;
-		case Machine.PBr:
+		case PB:
 			return Machine.PB;
-		case Machine.PTr:
+		case PT:
 			return Machine.PT;
-		case Machine.SBr:
+		case SB:
 			return SB;
-		case Machine.STr:
+		case ST:
 			return ST;
-		case Machine.HBr:
+		case HB:
 			return HB;
-		case Machine.HTr:
+		case HT:
 			return HT;
-		case Machine.LBr:
+		case LB:
 			return LB;
-		case Machine.L1r:
+		case L1:
 			return data[LB];
-		case Machine.L2r:
+		case L2:
 			return data[data[LB]];
-		case Machine.L3r:
+		case L3:
 			return data[data[data[LB]]];
-		case Machine.L4r:
+		case L4:
 			return data[data[data[data[LB]]]];
-		case Machine.L5r:
+		case L5:
 			return data[data[data[data[data[LB]]]]];
-		case Machine.L6r:
+		case L6:
 			return data[data[data[data[data[data[LB]]]]]];
-		case Machine.CPr:
+		case CP:
 			return CP;
 		default:
 			return 0;
@@ -85,7 +90,6 @@ public class Interpreter {
 
 	static void dump() {
 		// Writes a summary of the machine state.
-		int addr, staticLink, dynamicLink, localRegNum;
 
 		System.out.println("");
 		System.out.println("State of data store and registers:");
@@ -95,7 +99,7 @@ public class Interpreter {
 		else {
 			System.out.println("       HB-->");
 			System.out.println("            |--------|");
-			for (addr = HB - 1; addr >= HT; addr--) {
+			for (var addr = HB - 1; addr >= HT; addr--) {
 				System.out.print(addr + ":");
 				if (addr == HT)
 					System.out.print(" HT-->");
@@ -110,41 +114,43 @@ public class Interpreter {
 		if (ST == SB)
 			System.out.println("            |--------|          (stack is empty)");
 		else {
-			dynamicLink = LB;
-			staticLink = LB;
-			localRegNum = Machine.LBr;
+			var dynamicLink = LB;
+			var staticLink = LB;
+			var localRegNum = Register.LB;
 			System.out.println("      ST--> |////////|");
 			System.out.println("            |--------|");
-			for (addr = ST - 1; addr >= SB; addr--) {
+			for (var addr = ST - 1; addr >= SB; addr--) {
 				System.out.print(addr + ":");
 				if (addr == SB)
 					System.out.print(" SB-->");
 				else if (addr == staticLink) {
 					switch (localRegNum) {
-					case Machine.LBr:
+					case LB:
 						System.out.print(" LB-->");
 						break;
-					case Machine.L1r:
+					case L1:
 						System.out.print(" L1-->");
 						break;
-					case Machine.L2r:
+					case L2:
 						System.out.print(" L2-->");
 						break;
-					case Machine.L3r:
+					case L3:
 						System.out.print(" L3-->");
 						break;
-					case Machine.L4r:
+					case L4:
 						System.out.print(" L4-->");
 						break;
-					case Machine.L5r:
+					case L5:
 						System.out.print(" L5-->");
 						break;
-					case Machine.L6r:
+					case L6:
 						System.out.print(" L6-->");
+						break;
+					default:
 						break;
 					}
 					staticLink = data[addr];
-					localRegNum = localRegNum + 1;
+					localRegNum = Register.values()[localRegNum.ordinal() + 1];
 				} else
 					System.out.print("      ");
 				if ((addr == dynamicLink) && (dynamicLink != SB))
@@ -277,45 +283,46 @@ public class Interpreter {
 		int addr, size;
 		char ch;
 
-		switch (primitiveDisplacement) {
-		case Machine.idDisplacement:
+		var primitive = Primitive.values()[primitiveDisplacement];
+		switch (primitive) {
+		case ID:
 			break; // nothing to be done
-		case Machine.notDisplacement:
+		case NOT:
 			data[ST - 1] = toInt(!isTrue(data[ST - 1]));
 			break;
-		case Machine.andDisplacement:
+		case AND:
 			ST = ST - 1;
 			data[ST - 1] = toInt(isTrue(data[ST - 1]) & isTrue(data[ST]));
 			break;
-		case Machine.orDisplacement:
+		case OR:
 			ST = ST - 1;
 			data[ST - 1] = toInt(isTrue(data[ST - 1]) | isTrue(data[ST]));
 			break;
-		case Machine.succDisplacement:
+		case SUCC:
 			data[ST - 1] = overflowChecked(data[ST - 1] + 1);
 			break;
-		case Machine.predDisplacement:
+		case PRED:
 			data[ST - 1] = overflowChecked(data[ST - 1] - 1);
 			break;
-		case Machine.negDisplacement:
+		case NEG:
 			data[ST - 1] = -data[ST - 1];
 			break;
-		case Machine.addDisplacement:
+		case ADD:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
 			data[ST - 1] = overflowChecked(accumulator + data[ST]);
 			break;
-		case Machine.subDisplacement:
+		case SUB:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
 			data[ST - 1] = overflowChecked(accumulator - data[ST]);
 			break;
-		case Machine.multDisplacement:
+		case MULT:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
 			data[ST - 1] = overflowChecked(accumulator * data[ST]);
 			break;
-		case Machine.divDisplacement:
+		case DIV:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
 			if (data[ST] != 0)
@@ -323,7 +330,7 @@ public class Interpreter {
 			else
 				status = failedZeroDivide;
 			break;
-		case Machine.modDisplacement:
+		case MOD:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
 			if (data[ST] != 0)
@@ -331,41 +338,41 @@ public class Interpreter {
 			else
 				status = failedZeroDivide;
 			break;
-		case Machine.ltDisplacement:
+		case LT:
 			ST = ST - 1;
 			data[ST - 1] = toInt(data[ST - 1] < data[ST]);
 			break;
-		case Machine.leDisplacement:
+		case LE:
 			ST = ST - 1;
 			data[ST - 1] = toInt(data[ST - 1] <= data[ST]);
 			break;
-		case Machine.geDisplacement:
+		case GE:
 			ST = ST - 1;
 			data[ST - 1] = toInt(data[ST - 1] >= data[ST]);
 			break;
-		case Machine.gtDisplacement:
+		case GT:
 			ST = ST - 1;
 			data[ST - 1] = toInt(data[ST - 1] > data[ST]);
 			break;
-		case Machine.eqDisplacement:
+		case EQ:
 			size = data[ST - 1]; // size of each comparand
 			ST = ST - 2 * size;
 			data[ST - 1] = toInt(equal(size, ST - 1, ST - 1 + size));
 			break;
-		case Machine.neDisplacement:
+		case NE:
 			size = data[ST - 1]; // size of each comparand
 			ST = ST - 2 * size;
 			data[ST - 1] = toInt(!equal(size, ST - 1, ST - 1 + size));
 			break;
-		case Machine.eolDisplacement:
+		case EOL:
 			data[ST] = toInt(currentChar == '\n');
 			ST = ST + 1;
 			break;
-		case Machine.eofDisplacement:
+		case EOF:
 			data[ST] = toInt(currentChar == -1);
 			ST = ST + 1;
 			break;
-		case Machine.getDisplacement:
+		case GET:
 			ST = ST - 1;
 			addr = data[ST];
 			try {
@@ -375,12 +382,12 @@ public class Interpreter {
 			}
 			data[addr] = currentChar;
 			break;
-		case Machine.putDisplacement:
+		case PUT:
 			ST = ST - 1;
 			ch = (char) data[ST];
 			System.out.print(ch);
 			break;
-		case Machine.geteolDisplacement:
+		case GETEOL:
 			try {
 				while ((currentChar = System.in.read()) != '\n')
 					;
@@ -388,10 +395,10 @@ public class Interpreter {
 				status = failedIOError;
 			}
 			break;
-		case Machine.puteolDisplacement:
+		case PUTEOL:
 			System.out.println("");
 			break;
-		case Machine.getintDisplacement:
+		case GETINT:
 			ST = ST - 1;
 			addr = data[ST];
 			try {
@@ -401,18 +408,18 @@ public class Interpreter {
 			}
 			data[addr] = (int) accumulator;
 			break;
-		case Machine.putintDisplacement:
+		case PUTINT:
 			ST = ST - 1;
 			accumulator = data[ST];
 			System.out.print(accumulator);
 			break;
-		case Machine.newDisplacement:
+		case NEW:
 			size = data[ST - 1];
 			checkSpace(size);
 			HT = HT - size;
 			data[ST - 1] = HT;
 			break;
-		case Machine.disposeDisplacement:
+		case DISPOSE:
 			ST = ST - 1; // no action taken at present
 			break;
 		}
@@ -422,7 +429,6 @@ public class Interpreter {
 		// Runs the program in code store.
 
 		Instruction currentInstr;
-		int op, r, n, d, addr, index;
 
 		// Initialize registers ...
 		ST = SB;
@@ -434,65 +440,67 @@ public class Interpreter {
 			// Fetch instruction ...
 			currentInstr = Machine.code[CP];
 			// Decode instruction ...
-			op = currentInstr.op;
-			r = currentInstr.r;
-			n = currentInstr.n;
-			d = currentInstr.d;
+			var op = currentInstr.opCode;
+			var r = currentInstr.register;
+			var n = currentInstr.length;
+			var d = currentInstr.operand;
+			int addr;
+
 			// Execute instruction ...
 			switch (op) {
-			case Machine.LOADop:
+			case LOAD:
 				addr = d + content(r);
 				checkSpace(n);
-				for (index = 0; index < n; index++)
+				for (var index = 0; index < n; index++)
 					data[ST + index] = data[addr + index];
 				ST = ST + n;
 				CP = CP + 1;
 				break;
-			case Machine.LOADAop:
+			case LOADA:
 				addr = d + content(r);
 				checkSpace(1);
 				data[ST] = addr;
 				ST = ST + 1;
 				CP = CP + 1;
 				break;
-			case Machine.LOADIop:
+			case LOADI:
 				ST = ST - 1;
 				addr = data[ST];
 				checkSpace(n);
-				for (index = 0; index < n; index++)
+				for (var index = 0; index < n; index++)
 					data[ST + index] = data[addr + index];
 				ST = ST + n;
 				CP = CP + 1;
 				break;
-			case Machine.LOADLop:
+			case LOADL:
 				checkSpace(1);
 				data[ST] = d;
 				ST = ST + 1;
 				CP = CP + 1;
 				break;
-			case Machine.STOREop:
+			case STORE:
 				addr = d + content(r);
 				ST = ST - n;
-				for (index = 0; index < n; index++)
+				for (var index = 0; index < n; index++)
 					data[addr + index] = data[ST + index];
 				CP = CP + 1;
 				break;
-			case Machine.STOREIop:
+			case STOREI:
 				ST = ST - 1;
 				addr = data[ST];
 				ST = ST - n;
-				for (index = 0; index < n; index++)
+				for (var index = 0; index < n; index++)
 					data[addr + index] = data[ST + index];
 				CP = CP + 1;
 				break;
-			case Machine.CALLop:
+			case CALL:
 				addr = d + content(r);
 				if (addr >= Machine.PB) {
 					callPrimitive(addr - Machine.PB);
 					CP = CP + 1;
 				} else {
 					checkSpace(3);
-					if ((0 <= n) && (n <= 15))
+					if (0 <= n && n <= 15)
 						data[ST] = content(n); // static link
 					else
 						status = failedInvalidInstruction;
@@ -503,7 +511,7 @@ public class Interpreter {
 					CP = addr;
 				}
 				break;
-			case Machine.CALLIop:
+			case CALLI:
 				ST = ST - 2;
 				addr = data[ST + 1];
 				if (addr >= Machine.PB) {
@@ -518,43 +526,43 @@ public class Interpreter {
 					CP = addr;
 				}
 				break;
-			case Machine.RETURNop:
+			case RETURN:
 				addr = LB - d;
 				CP = data[LB + 2];
 				LB = data[LB + 1];
 				ST = ST - n;
-				for (index = 0; index < n; index++)
+				for (var index = 0; index < n; index++)
 					data[addr + index] = data[ST + index];
 				ST = addr + n;
 				break;
-			case Machine.PUSHop:
+			case PUSH:
 				checkSpace(d);
 				ST = ST + d;
 				CP = CP + 1;
 				break;
-			case Machine.POPop:
+			case POP:
 				addr = ST - n - d;
 				ST = ST - n;
-				for (index = 0; index < n; index++)
+				for (var index = 0; index < n; index++)
 					data[addr + index] = data[ST + index];
 				ST = addr + n;
 				CP = CP + 1;
 				break;
-			case Machine.JUMPop:
+			case JUMP:
 				CP = d + content(r);
 				break;
-			case Machine.JUMPIop:
+			case JUMPI:
 				ST = ST - 1;
 				CP = data[ST];
 				break;
-			case Machine.JUMPIFop:
+			case JUMPIF:
 				ST = ST - 1;
 				if (data[ST] == n)
 					CP = d + content(r);
 				else
 					CP = CP + 1;
 				break;
-			case Machine.HALTop:
+			case HALT:
 				status = halted;
 				break;
 			}

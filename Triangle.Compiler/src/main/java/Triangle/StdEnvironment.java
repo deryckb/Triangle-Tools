@@ -14,13 +14,13 @@
 
 package Triangle;
 
-import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.ConstDeclaration;
-import Triangle.AbstractSyntaxTrees.FuncDeclaration;
-import Triangle.AbstractSyntaxTrees.ProcDeclaration;
-import Triangle.AbstractSyntaxTrees.TypeDeclaration;
-import Triangle.AbstractSyntaxTrees.TypeDenoter;
-import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.BinaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.ConstDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.FuncDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.ProcDeclaration;
+import Triangle.AbstractSyntaxTrees.Declarations.UnaryOperatorDeclaration;
+import Triangle.AbstractSyntaxTrees.Types.TypeDeclaration;
+import Triangle.AbstractSyntaxTrees.Types.TypeDenoter;
 
 public final class StdEnvironment {
 

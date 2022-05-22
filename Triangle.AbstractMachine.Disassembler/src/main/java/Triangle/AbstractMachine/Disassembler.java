@@ -50,60 +50,16 @@ public class Disassembler {
 	 * @param r            the number of the register.
 	 * @param rightbracket the character to print after the register.
 	 */
-	private static void writeR(char leftbracket, int r, char rightbracket) {
+	private static void writeR(char leftbracket, Register r, char rightbracket) {
 
 		System.out.print(leftbracket);
-		switch (r) {
-		case Machine.CBr:
-			System.out.print("CB");
-			break;
-		case Machine.CTr:
-			System.out.print("CT");
-			break;
-		case Machine.PBr:
-			System.out.print("PB");
-			break;
-		case Machine.PTr:
-			System.out.print("PT");
-			break;
-		case Machine.SBr:
-			System.out.print("SB");
-			break;
-		case Machine.STr:
-			System.out.print("ST");
-			break;
-		case Machine.HBr:
-			System.out.print("HB");
-			break;
-		case Machine.HTr:
-			System.out.print("HT");
-			break;
-		case Machine.LBr:
-			System.out.print("LB");
-			break;
-		case Machine.L1r:
-			System.out.print("L1");
-			break;
-		case Machine.L2r:
-			System.out.print("L2");
-			break;
-		case Machine.L3r:
-			System.out.print("L3");
-			break;
-		case Machine.L4r:
-			System.out.print("L4");
-			break;
-		case Machine.L5r:
-			System.out.print("L5");
-			break;
-		case Machine.L6r:
-			System.out.print("L6");
-			break;
-		case Machine.CPr:
-			System.out.print("CP");
-			break;
-		}
+		System.out.print(r.toString());
 		System.out.print(rightbracket);
+	}
+
+	private static void writeR(char leftBracket, int r, char rightBracket) {
+		var register = Register.values()[r];
+		writeR(leftBracket, register, rightBracket);
 	}
 
 	/**
@@ -142,89 +98,90 @@ public class Disassembler {
 	 * @param d the displacment of the primitive routine.
 	 */
 	private static void writePrimitive(int d) {
-		switch (d) {
-		case Machine.idDisplacement:
+		var primitive = Primitive.values()[d];
+		switch (primitive) {
+		case ID:
 			System.out.print("id      ");
 			break;
-		case Machine.notDisplacement:
+		case NOT:
 			System.out.print("not     ");
 			break;
-		case Machine.andDisplacement:
+		case AND:
 			System.out.print("and     ");
 			break;
-		case Machine.orDisplacement:
+		case OR:
 			System.out.print("or      ");
 			break;
-		case Machine.succDisplacement:
+		case SUCC:
 			System.out.print("succ    ");
 			break;
-		case Machine.predDisplacement:
+		case PRED:
 			System.out.print("pred    ");
 			break;
-		case Machine.negDisplacement:
+		case NEG:
 			System.out.print("neg     ");
 			break;
-		case Machine.addDisplacement:
+		case ADD:
 			System.out.print("add     ");
 			break;
-		case Machine.subDisplacement:
+		case SUB:
 			System.out.print("sub     ");
 			break;
-		case Machine.multDisplacement:
+		case MULT:
 			System.out.print("mult    ");
 			break;
-		case Machine.divDisplacement:
+		case DIV:
 			System.out.print("div     ");
 			break;
-		case Machine.modDisplacement:
+		case MOD:
 			System.out.print("mod     ");
 			break;
-		case Machine.ltDisplacement:
+		case LT:
 			System.out.print("lt      ");
 			break;
-		case Machine.leDisplacement:
+		case LE:
 			System.out.print("le      ");
 			break;
-		case Machine.geDisplacement:
+		case GE:
 			System.out.print("ge      ");
 			break;
-		case Machine.gtDisplacement:
+		case GT:
 			System.out.print("gt      ");
 			break;
-		case Machine.eqDisplacement:
+		case EQ:
 			System.out.print("eq      ");
 			break;
-		case Machine.neDisplacement:
+		case NE:
 			System.out.print("ne      ");
 			break;
-		case Machine.eolDisplacement:
+		case EOL:
 			System.out.print("eol     ");
 			break;
-		case Machine.eofDisplacement:
+		case EOF:
 			System.out.print("eof     ");
 			break;
-		case Machine.getDisplacement:
+		case GET:
 			System.out.print("get     ");
 			break;
-		case Machine.putDisplacement:
+		case PUT:
 			System.out.print("put     ");
 			break;
-		case Machine.geteolDisplacement:
+		case GETEOL:
 			System.out.print("geteol  ");
 			break;
-		case Machine.puteolDisplacement:
+		case PUTEOL:
 			System.out.print("puteol  ");
 			break;
-		case Machine.getintDisplacement:
+		case GETINT:
 			System.out.print("getint  ");
 			break;
-		case Machine.putintDisplacement:
+		case PUTINT:
 			System.out.print("putint  ");
 			break;
-		case Machine.newDisplacement:
+		case NEW:
 			System.out.print("new     ");
 			break;
-		case Machine.disposeDisplacement:
+		case DISPOSE:
 			System.out.print("dispose ");
 			break;
 		}
@@ -237,98 +194,98 @@ public class Disassembler {
 	 */
 	private static void writeInstruction(Instruction instr) {
 
-		switch (instr.op) {
-		case Machine.LOADop:
+		switch (instr.opCode) {
+		case LOAD:
 			System.out.print("LOAD  ");
-			writeN(instr.n);
-			writeD(instr.d);
-			writeR('[', instr.r, ']');
+			writeN(instr.length);
+			writeD(instr.operand);
+			writeR('[', instr.register, ']');
 			break;
 
-		case Machine.LOADAop:
+		case LOADA:
 			System.out.print("LOADA ");
 			blankN();
-			writeD(instr.d);
-			writeR('[', instr.r, ']');
+			writeD(instr.operand);
+			writeR('[', instr.register, ']');
 			break;
 
-		case Machine.LOADIop:
+		case LOADI:
 			System.out.print("LOADI ");
-			writeN(instr.n);
+			writeN(instr.length);
 			break;
 
-		case Machine.LOADLop:
+		case LOADL:
 			System.out.print("LOADL ");
 			blankN();
-			writeD(instr.d);
+			writeD(instr.operand);
 			break;
 
-		case Machine.STOREop:
+		case STORE:
 			System.out.print("STORE ");
-			writeN(instr.n);
-			writeD(instr.d);
-			writeR('[', instr.r, ']');
+			writeN(instr.length);
+			writeD(instr.operand);
+			writeR('[', instr.register, ']');
 			break;
 
-		case Machine.STOREIop:
+		case STOREI:
 			System.out.print("STOREI");
-			writeN(instr.n);
+			writeN(instr.length);
 			break;
 
-		case Machine.CALLop:
+		case CALL:
 			System.out.print("CALL  ");
-			if (instr.r == Machine.PBr) {
+			if (instr.register == Register.PB) {
 				blankN();
-				writePrimitive(instr.d);
+				writePrimitive(instr.operand);
 			} else {
-				writeR('(', instr.n, ')');
+				writeR('(', instr.length, ')');
 				System.out.print("  ");
-				writeD(instr.d);
-				writeR('[', instr.r, ']');
+				writeD(instr.operand);
+				writeR('[', instr.register, ']');
 			}
 			break;
 
-		case Machine.CALLIop:
+		case CALLI:
 			System.out.print("CALLI ");
 			break;
 
-		case Machine.RETURNop:
+		case RETURN:
 			System.out.print("RETURN");
-			writeN(instr.n);
-			writeD(instr.d);
+			writeN(instr.length);
+			writeD(instr.operand);
 			break;
 
-		case Machine.PUSHop:
+		case PUSH:
 			System.out.print("PUSH  ");
 			blankN();
-			writeD(instr.d);
+			writeD(instr.operand);
 			break;
 
-		case Machine.POPop:
+		case POP:
 			System.out.print("POP   ");
-			writeN(instr.n);
-			writeD(instr.d);
+			writeN(instr.length);
+			writeD(instr.operand);
 			break;
 
-		case Machine.JUMPop:
+		case JUMP:
 			System.out.print("JUMP  ");
 			blankN();
-			writeD(instr.d);
-			writeR('[', instr.r, ']');
+			writeD(instr.operand);
+			writeR('[', instr.register, ']');
 			break;
 
-		case Machine.JUMPIop:
+		case JUMPI:
 			System.out.print("JUMPI ");
 			break;
 
-		case Machine.JUMPIFop:
+		case JUMPIF:
 			System.out.print("JUMPIF");
-			writeN(instr.n);
-			writeD(instr.d);
-			writeR('[', instr.r, ']');
+			writeN(instr.length);
+			writeD(instr.operand);
+			writeR('[', instr.register, ']');
 			break;
 
-		case Machine.HALTop:
+		case HALT:
 			System.out.print("HALT  ");
 		}
 	}
