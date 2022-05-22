@@ -88,7 +88,6 @@ import triangle.abstractSyntaxTrees.visitors.CommandVisitor;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.abstractSyntaxTrees.visitors.ExpressionVisitor;
 import triangle.abstractSyntaxTrees.visitors.FormalParameterSequenceVisitor;
-import triangle.abstractSyntaxTrees.visitors.FormalParameterVisitor;
 import triangle.abstractSyntaxTrees.visitors.IdentifierVisitor;
 import triangle.abstractSyntaxTrees.visitors.LiteralVisitor;
 import triangle.abstractSyntaxTrees.visitors.OperatorVisitor;
@@ -114,10 +113,9 @@ import triangle.codeGenerator.entities.UnknownAddress;
 import triangle.codeGenerator.entities.UnknownRoutine;
 import triangle.codeGenerator.entities.UnknownValue;
 
-public final class Encoder
-		implements ActualParameterVisitor<Frame, Integer>, ActualParameterSequenceVisitor<Frame, Integer>,
-		ArrayAggregateVisitor<Frame, Integer>, CommandVisitor<Frame, Void>, DeclarationVisitor<Frame, Integer>,
-		ExpressionVisitor<Frame, Integer>, FormalParameterVisitor<Frame, Integer>,
+public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
+		ActualParameterSequenceVisitor<Frame, Integer>, ArrayAggregateVisitor<Frame, Integer>,
+		CommandVisitor<Frame, Void>, DeclarationVisitor<Frame, Integer>, ExpressionVisitor<Frame, Integer>,
 		FormalParameterSequenceVisitor<Frame, Integer>, IdentifierVisitor<Frame, Void>, LiteralVisitor<Void, Void>,
 		OperatorVisitor<Frame, Void>, ProgramVisitor<Frame, Void>, RecordAggregateVisitor<Frame, Integer>,
 		TypeDenoterVisitor<Frame, Integer>, VnameVisitor<Frame, RuntimeEntity> {

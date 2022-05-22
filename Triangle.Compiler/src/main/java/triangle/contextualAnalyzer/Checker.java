@@ -88,7 +88,6 @@ import triangle.abstractSyntaxTrees.visitors.CommandVisitor;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.abstractSyntaxTrees.visitors.ExpressionVisitor;
 import triangle.abstractSyntaxTrees.visitors.FormalParameterSequenceVisitor;
-import triangle.abstractSyntaxTrees.visitors.FormalParameterVisitor;
 import triangle.abstractSyntaxTrees.visitors.IdentifierVisitor;
 import triangle.abstractSyntaxTrees.visitors.LiteralVisitor;
 import triangle.abstractSyntaxTrees.visitors.OperatorVisitor;
@@ -104,10 +103,10 @@ import triangle.syntacticAnalyzer.SourcePosition;
 public final class Checker implements ActualParameterVisitor<FormalParameter, Void>,
 		ActualParameterSequenceVisitor<FormalParameterSequence, Void>, ArrayAggregateVisitor<Void, TypeDenoter>,
 		CommandVisitor<Void, Void>, DeclarationVisitor<Void, Void>, ExpressionVisitor<Void, TypeDenoter>,
-		FormalParameterVisitor<Void, Void>, FormalParameterSequenceVisitor<Void, Void>,
-		IdentifierVisitor<Void, Declaration>, LiteralVisitor<Void, TypeDenoter>, OperatorVisitor<Void, Declaration>,
-		ProgramVisitor<Void, Void>, RecordAggregateVisitor<Void, FieldTypeDenoter>,
-		TypeDenoterVisitor<Void, TypeDenoter>, VnameVisitor<Void, TypeDenoter> {
+		FormalParameterSequenceVisitor<Void, Void>, IdentifierVisitor<Void, Declaration>,
+		LiteralVisitor<Void, TypeDenoter>, OperatorVisitor<Void, Declaration>, ProgramVisitor<Void, Void>,
+		RecordAggregateVisitor<Void, FieldTypeDenoter>, TypeDenoterVisitor<Void, TypeDenoter>,
+		VnameVisitor<Void, TypeDenoter> {
 
 	// Commands
 

@@ -82,7 +82,6 @@ import triangle.abstractSyntaxTrees.visitors.CommandVisitor;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.abstractSyntaxTrees.visitors.ExpressionVisitor;
 import triangle.abstractSyntaxTrees.visitors.FormalParameterSequenceVisitor;
-import triangle.abstractSyntaxTrees.visitors.FormalParameterVisitor;
 import triangle.abstractSyntaxTrees.visitors.IdentifierVisitor;
 import triangle.abstractSyntaxTrees.visitors.LiteralVisitor;
 import triangle.abstractSyntaxTrees.visitors.OperatorVisitor;
@@ -97,10 +96,10 @@ import triangle.abstractSyntaxTrees.vnames.SubscriptVname;
 public class LayoutVisitor implements ActualParameterVisitor<Void, DrawingTree>,
 		ActualParameterSequenceVisitor<Void, DrawingTree>, ArrayAggregateVisitor<Void, DrawingTree>,
 		CommandVisitor<Void, DrawingTree>, DeclarationVisitor<Void, DrawingTree>, ExpressionVisitor<Void, DrawingTree>,
-		FormalParameterVisitor<Void, DrawingTree>, FormalParameterSequenceVisitor<Void, DrawingTree>,
-		IdentifierVisitor<Void, DrawingTree>, LiteralVisitor<Void, DrawingTree>, OperatorVisitor<Void, DrawingTree>,
-		ProgramVisitor<Void, DrawingTree>, RecordAggregateVisitor<Void, DrawingTree>,
-		TypeDenoterVisitor<Void, DrawingTree>, VnameVisitor<Void, DrawingTree> {
+		FormalParameterSequenceVisitor<Void, DrawingTree>, IdentifierVisitor<Void, DrawingTree>,
+		LiteralVisitor<Void, DrawingTree>, OperatorVisitor<Void, DrawingTree>, ProgramVisitor<Void, DrawingTree>,
+		RecordAggregateVisitor<Void, DrawingTree>, TypeDenoterVisitor<Void, DrawingTree>,
+		VnameVisitor<Void, DrawingTree> {
 
 	private final int BORDER = 5;
 	private final int PARENT_SEP = 30;
