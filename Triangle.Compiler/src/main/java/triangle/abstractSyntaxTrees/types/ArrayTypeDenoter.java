@@ -41,6 +41,11 @@ public class ArrayTypeDenoter extends TypeDenoter {
 			return false;
 		}
 	}
+	
+	@Override
+	public int getSize() {
+		return IL.getValue() * T.getSize();
+	}
 
 	public final IntegerLiteral IL;
 	public TypeDenoter T;

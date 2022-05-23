@@ -29,6 +29,11 @@ public class SingleFieldTypeDenoter extends FieldTypeDenoter {
 	public <TArg, TResult> TResult visit(TypeDenoterVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitSingleFieldTypeDenoter(this, arg);
 	}
+	
+	@Override
+	public int getSize() {
+		return T.getSize();
+	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -107,6 +107,7 @@ import triangle.codeGenerator.entities.KnownAddress;
 import triangle.codeGenerator.entities.KnownRoutine;
 import triangle.codeGenerator.entities.KnownValue;
 import triangle.codeGenerator.entities.PrimitiveRoutine;
+import triangle.codeGenerator.entities.RoutineEntity;
 import triangle.codeGenerator.entities.RuntimeEntity;
 import triangle.codeGenerator.entities.TypeRepresentation;
 import triangle.codeGenerator.entities.UnknownAddress;
@@ -209,7 +210,7 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 	@Override
 	public Integer visitCharacterExpression(CharacterExpression ast, Frame frame) {
 		var valSize = ast.type.visit(this);
-		emitter.emit(OpCode.LOADL, ast.CL.spelling.charAt(1));
+		emitter.emit(OpCode.LOADL, ast.CL.getValue());
 		return valSize;
 	}
 
@@ -234,7 +235,7 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 	@Override
 	public Integer visitIntegerExpression(IntegerExpression ast, Frame frame) {
 		var valSize = ast.type.visit(this);
-		emitter.emit(OpCode.LOADL, Integer.parseInt(ast.IL.spelling));
+		emitter.emit(OpCode.LOADL, ast.IL.getValue());
 		return valSize;
 	}
 
@@ -280,15 +281,11 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 	@Override
 	public Integer visitConstDeclaration(ConstDeclaration ast, Frame frame) {
 		var extraSize = 0;
-		if (ast.E instanceof CharacterExpression) {
-			var CL = ((CharacterExpression) ast.E).CL;
-			ast.entity = new KnownValue(Machine.characterSize, CL.getValue());
-		} else if (ast.E instanceof IntegerExpression) {
-			var IL = ((IntegerExpression) ast.E).IL;
-			ast.entity = new KnownValue(Machine.integerSize, IL.getValue());
+		if (ast.E.isLiteral()) {
+			ast.entity = new KnownValue(ast.E.type.getSize(), ast.E.getValue());
 		} else {
 			var valSize = ast.E.visit(this, frame);
-			ast.entity = new UnknownValue(valSize, frame.getLevel(), frame.getSize());
+			ast.entity = new UnknownValue(valSize, frame);
 			extraSize = valSize;
 		}
 		writeTableDetails(ast);
@@ -359,7 +356,7 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 	public Integer visitVarDeclaration(VarDeclaration ast, Frame frame) {
 		var extraSize = ast.T.visit(this);
 		emitter.emit(OpCode.PUSH, extraSize);
-		ast.entity = new KnownAddress(Machine.addressSize, frame.getLevel(), frame.getSize());
+		ast.entity = new KnownAddress(Machine.addressSize, frame);
 		writeTableDetails(ast);
 		return extraSize;
 	}
@@ -451,41 +448,15 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 
 	@Override
 	public Integer visitFuncActualParameter(FuncActualParameter ast, Frame frame) {
-		if (ast.I.decl.entity instanceof KnownRoutine) {
-			var address = ((KnownRoutine) ast.I.decl.entity).getAddress();
-			// static link, code address
-			emitter.emit(OpCode.LOADA, 0, frame.getDisplayRegister(address), 0);
-			emitter.emit(OpCode.LOADA, 0, Register.CB, address.getDisplacement());
-		} else if (ast.I.decl.entity instanceof UnknownRoutine) {
-			var address = ((UnknownRoutine) ast.I.decl.entity).getAddress();
-			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
-					address.getDisplacement());
-		} else if (ast.I.decl.entity instanceof PrimitiveRoutine) {
-			var primitive = ((PrimitiveRoutine) ast.I.decl.entity).getPrimitive();
-			// static link, code address
-			emitter.emit(OpCode.LOADA, 0, Register.SB, 0);
-			emitter.emit(OpCode.LOADA, Register.PB, primitive);
-		}
+		var routineEntity = (RoutineEntity) ast.I.decl.entity;
+		routineEntity.encodeFetch(emitter, frame);
 		return Machine.closureSize;
 	}
 
 	@Override
 	public Integer visitProcActualParameter(ProcActualParameter ast, Frame frame) {
-		if (ast.I.decl.entity instanceof KnownRoutine) {
-			var address = ((KnownRoutine) ast.I.decl.entity).getAddress();
-			// static link, code address
-			emitter.emit(OpCode.LOADA, 0, frame.getDisplayRegister(address), 0);
-			emitter.emit(OpCode.LOADA, 0, Register.CB, address.getDisplacement());
-		} else if (ast.I.decl.entity instanceof UnknownRoutine) {
-			var address = ((UnknownRoutine) ast.I.decl.entity).getAddress();
-			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
-					address.getDisplacement());
-		} else if (ast.I.decl.entity instanceof PrimitiveRoutine) {
-			var primitive = ((PrimitiveRoutine) ast.I.decl.entity).getPrimitive();
-			// static link, code address
-			emitter.emit(OpCode.LOADA, 0, Register.SB, 0);
-			emitter.emit(OpCode.LOADA, Register.PB, primitive);
-		}
+		var routineEntity = (RoutineEntity) ast.I.decl.entity;
+		routineEntity.encodeFetch(emitter, frame);
 		return Machine.closureSize;
 	}
 
@@ -524,7 +495,7 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 		int typeSize;
 		if (ast.entity == null) {
 			var elemSize = ast.T.visit(this);
-			typeSize = Integer.parseInt(ast.IL.spelling) * elemSize;
+			typeSize = ast.IL.getValue() * elemSize;
 			ast.entity = new TypeRepresentation(typeSize);
 			writeTableDetails(ast);
 		} else {
@@ -623,23 +594,8 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 
 	@Override
 	public Void visitIdentifier(Identifier ast, Frame frame) {
-		if (ast.decl.entity instanceof KnownRoutine) {
-			var address = ((KnownRoutine) ast.decl.entity).getAddress();
-			emitter.emit(OpCode.CALL, frame.getDisplayRegister(address), Register.CB, address.getDisplacement());
-		} else if (ast.decl.entity instanceof UnknownRoutine) {
-			var address = ((UnknownRoutine) ast.decl.entity).getAddress();
-			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
-					address.getDisplacement());
-			emitter.emit(OpCode.CALLI, 0);
-		} else if (ast.decl.entity instanceof PrimitiveRoutine) {
-			var primitive = ((PrimitiveRoutine) ast.decl.entity).getPrimitive();
-			if (primitive != Primitive.ID)
-				emitter.emit(OpCode.CALL, Register.PB, primitive);
-		} else if (ast.decl.entity instanceof EqualityRoutine) { // "=" or "\="
-			var primitive = ((EqualityRoutine) ast.decl.entity).getPrimitive();
-			emitter.emit(OpCode.LOADL, 0, frame.getSize() / 2);
-			emitter.emit(OpCode.CALL, Register.PB, primitive);
-		}
+		var routineEntity = (RoutineEntity) ast.decl.entity;
+		routineEntity.encodeCall(emitter, frame);
 		return null;
 	}
 
@@ -650,23 +606,8 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 
 	@Override
 	public Void visitOperator(Operator ast, Frame frame) {
-		if (ast.decl.entity instanceof KnownRoutine) {
-			var address = ((KnownRoutine) ast.decl.entity).getAddress();
-			emitter.emit(OpCode.CALL, frame.getDisplayRegister(address), Register.CB, address.getDisplacement());
-		} else if (ast.decl.entity instanceof UnknownRoutine) {
-			var address = ((UnknownRoutine) ast.decl.entity).getAddress();
-			emitter.emit(OpCode.LOAD, Machine.closureSize, frame.getDisplayRegister(address),
-					address.getDisplacement());
-			emitter.emit(OpCode.CALLI, 0);
-		} else if (ast.decl.entity instanceof PrimitiveRoutine) {
-			var primitive = ((PrimitiveRoutine) ast.decl.entity).getPrimitive();
-			if (primitive != Primitive.ID)
-				emitter.emit(OpCode.CALL, Register.PB, primitive);
-		} else if (ast.decl.entity instanceof EqualityRoutine) { // "=" or "\="
-			var primitive = ((EqualityRoutine) ast.decl.entity).getPrimitive();
-			emitter.emit(OpCode.LOADL, 0, frame.getSize() / 2);
-			emitter.emit(OpCode.CALL, Register.PB, primitive);
-		}
+		var routineEntity = (RoutineEntity) ast.decl.entity;
+		routineEntity.encodeCall(emitter, frame);
 		return null;
 	}
 
@@ -693,9 +634,8 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 		ast.offset = ast.V.offset;
 		ast.indexed = ast.V.indexed;
 		var elemSize = ast.type.visit(this);
-		if (ast.E instanceof IntegerExpression) {
-			var IL = ((IntegerExpression) ast.E).IL;
-			ast.offset = ast.offset + Integer.parseInt(IL.spelling) * elemSize;
+		if (ast.E.isLiteral()) {
+			ast.offset = ast.offset + ast.E.getValue() * elemSize;
 		} else {
 			// v-name is indexed by a proper expression, not a literal
 			if (ast.indexed) {
@@ -743,14 +683,11 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 	}
 
 	// Decides run-time representation of a standard constant.
-	private final void elaborateStdConst(Declaration constDeclaration, int value) {
+	private final void elaborateStdConst(ConstDeclaration constDeclaration, int value) {
 
-		if (constDeclaration instanceof ConstDeclaration) {
-			var decl = (ConstDeclaration) constDeclaration;
-			var typeSize = decl.E.type.visit(this);
-			decl.entity = new KnownValue(typeSize, value);
-			writeTableDetails(constDeclaration);
-		}
+		var typeSize = constDeclaration.E.type.visit(this);
+		constDeclaration.entity = new KnownValue(typeSize, value);
+		writeTableDetails(constDeclaration);
 	}
 
 	// Decides run-time representation of a standard routine.

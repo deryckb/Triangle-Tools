@@ -28,6 +28,14 @@ public abstract class Expression extends AbstractSyntaxTree {
 
 	public TypeDenoter type;
 
+	public boolean isLiteral() {
+		return false;
+	}
+
+	public int getValue() {
+		throw new UnsupportedOperationException();
+	}
+
 	public abstract <TArg, TResult> TResult visit(ExpressionVisitor<TArg, TResult> visitor, TArg arg);
 
 	public <TArg, TResult> TResult visit(ExpressionVisitor<TArg, TResult> visitor) {

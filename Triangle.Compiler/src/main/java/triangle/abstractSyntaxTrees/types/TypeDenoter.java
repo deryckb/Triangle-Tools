@@ -32,4 +32,6 @@ public abstract class TypeDenoter extends AbstractSyntaxTree {
 	public <TArg, TResult> TResult visit(TypeDenoterVisitor<TArg, TResult> visitor) {
 		return visit(visitor, null);
 	}
+	
+	public abstract int getSize();
 }

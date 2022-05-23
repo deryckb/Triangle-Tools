@@ -27,6 +27,11 @@ public class RecordTypeDenoter extends TypeDenoter {
 	public <TArg, TResult> TResult visit(TypeDenoterVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitRecordTypeDenoter(this, arg);
 	}
+	
+	@Override
+	public int getSize() {
+		return FT.getSize();
+	}
 
 	@Override
 	public boolean equals(Object obj) {

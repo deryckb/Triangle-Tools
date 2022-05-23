@@ -14,6 +14,7 @@
 
 package triangle.abstractSyntaxTrees.types;
 
+import triangle.abstractMachine.Machine;
 import triangle.abstractSyntaxTrees.visitors.TypeDenoterVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
@@ -25,6 +26,11 @@ public class CharTypeDenoter extends TypeDenoter {
 
 	public <TArg, TResult> TResult visit(TypeDenoterVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitCharTypeDenoter(this, arg);
+	}
+	
+	@Override
+	public int getSize() {
+		return Machine.characterSize;
 	}
 
 	@Override

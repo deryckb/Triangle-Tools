@@ -31,4 +31,9 @@ public class AnyTypeDenoter extends TypeDenoter {
 	public boolean equals(Object obj) {
 		return false;
 	}
+	
+	@Override
+	public int getSize() {
+		return 0;
+	}
 }

@@ -30,4 +30,14 @@ public class IntegerExpression extends Expression {
 	}
 
 	public final IntegerLiteral IL;
+
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+
+	@Override
+	public int getValue() {
+		return IL.getValue();
+	}
 }

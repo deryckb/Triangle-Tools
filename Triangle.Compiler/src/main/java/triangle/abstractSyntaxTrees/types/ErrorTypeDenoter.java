@@ -28,6 +28,11 @@ public class ErrorTypeDenoter extends TypeDenoter {
 	}
 
 	@Override
+	public int getSize() {
+		return 0;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		return true;
 	}

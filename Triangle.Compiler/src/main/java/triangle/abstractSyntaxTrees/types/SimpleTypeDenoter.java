@@ -28,6 +28,11 @@ public class SimpleTypeDenoter extends TypeDenoter {
 	public <TArg, TResult> TResult visit(TypeDenoterVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitSimpleTypeDenoter(this, arg);
 	}
+	
+	@Override
+	public int getSize() {
+		return 0;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

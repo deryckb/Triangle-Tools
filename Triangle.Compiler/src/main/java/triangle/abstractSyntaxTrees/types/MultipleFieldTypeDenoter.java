@@ -31,6 +31,11 @@ public class MultipleFieldTypeDenoter extends FieldTypeDenoter {
 	public <TArg, TResult> TResult visit(TypeDenoterVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitMultipleFieldTypeDenoter(this, arg);
 	}
+	
+	@Override
+	public int getSize() {
+		return T.getSize() + FT.getSize();
+	}
 
 	@Override
 	public boolean equals(Object obj) {

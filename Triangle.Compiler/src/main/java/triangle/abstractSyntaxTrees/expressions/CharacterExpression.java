@@ -30,4 +30,14 @@ public class CharacterExpression extends Expression {
 	}
 
 	public final CharacterLiteral CL;
+	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+	
+	@Override
+	public int getValue() {
+		return CL.getValue();
+	}
 }
