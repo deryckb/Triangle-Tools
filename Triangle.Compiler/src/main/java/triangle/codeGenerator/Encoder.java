@@ -701,11 +701,6 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 		writeTableDetails(routineDeclaration);
 	}
 
-	private final void elaborateStdRoutine(Declaration routineDeclaration, int routineOffset) {
-		routineDeclaration.entity = new KnownRoutine(Machine.closureSize, 0, routineOffset);
-		writeTableDetails(routineDeclaration);
-	}
-
 	private final void elaborateStdEnvironment() {
 		tableDetailsReqd = false;
 		elaborateStdConst(StdEnvironment.falseDecl, Machine.falseRep);
