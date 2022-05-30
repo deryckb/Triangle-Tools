@@ -16,10 +16,11 @@ package triangle.abstractSyntaxTrees.declarations;
 
 import triangle.abstractSyntaxTrees.expressions.Expression;
 import triangle.abstractSyntaxTrees.terminals.Identifier;
+import triangle.abstractSyntaxTrees.types.TypeDenoter;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class ConstDeclaration extends Declaration {
+public class ConstDeclaration extends Declaration implements ConstantDeclaration {
 
 	public ConstDeclaration(Identifier iAST, Expression eAST, SourcePosition position) {
 		super(position);
@@ -27,6 +28,11 @@ public class ConstDeclaration extends Declaration {
 		E = eAST;
 	}
 
+	@Override
+	public TypeDenoter getType() {
+		return E.type;
+	}
+	
 	public <TArg, TResult> TResult visit(DeclarationVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitConstDeclaration(this, arg);
 	}

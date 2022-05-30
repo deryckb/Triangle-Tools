@@ -21,7 +21,7 @@ import triangle.abstractSyntaxTrees.types.TypeDenoter;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class FuncDeclaration extends Declaration {
+public class FuncDeclaration extends Declaration implements FunctionDeclaration {
 
 	public FuncDeclaration(Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST, Expression eAST,
 			SourcePosition position) {
@@ -36,6 +36,16 @@ public class FuncDeclaration extends Declaration {
 		return v.visitFuncDeclaration(this, arg);
 	}
 
+	@Override
+	public FormalParameterSequence getFormals() {
+		return FPS;
+	}
+	
+	@Override
+	public TypeDenoter getType() {
+		return T;
+	}
+	
 	public final Identifier I;
 	public final FormalParameterSequence FPS;
 	public TypeDenoter T;

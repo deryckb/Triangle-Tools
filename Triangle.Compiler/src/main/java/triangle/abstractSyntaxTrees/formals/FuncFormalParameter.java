@@ -14,12 +14,13 @@
 
 package triangle.abstractSyntaxTrees.formals;
 
+import triangle.abstractSyntaxTrees.declarations.FunctionDeclaration;
 import triangle.abstractSyntaxTrees.terminals.Identifier;
 import triangle.abstractSyntaxTrees.types.TypeDenoter;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class FuncFormalParameter extends FormalParameter {
+public class FuncFormalParameter extends FormalParameter implements FunctionDeclaration {
 
 	public FuncFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST,
 			SourcePosition position) {
@@ -33,6 +34,16 @@ public class FuncFormalParameter extends FormalParameter {
 		return v.visitFuncFormalParameter(this, arg);
 	}
 
+	@Override
+	public FormalParameterSequence getFormals() {
+		return FPS;
+	}
+	
+	@Override
+	public TypeDenoter getType() {
+		return T;
+	}
+	
 	@Override
 	public boolean equals(Object fpAST) {
 		if (fpAST instanceof FuncFormalParameter) {

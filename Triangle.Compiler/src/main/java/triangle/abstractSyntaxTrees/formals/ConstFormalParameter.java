@@ -14,17 +14,23 @@
 
 package triangle.abstractSyntaxTrees.formals;
 
+import triangle.abstractSyntaxTrees.declarations.ConstantDeclaration;
 import triangle.abstractSyntaxTrees.terminals.Identifier;
 import triangle.abstractSyntaxTrees.types.TypeDenoter;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class ConstFormalParameter extends FormalParameter {
+public class ConstFormalParameter extends FormalParameter implements ConstantDeclaration {
 
 	public ConstFormalParameter(Identifier iAST, TypeDenoter tAST, SourcePosition position) {
 		super(position);
 		I = iAST;
 		T = tAST;
+	}
+
+	@Override
+	public TypeDenoter getType() {
+		return T;
 	}
 
 	public <TArg, TResult> TResult visit(DeclarationVisitor<TArg, TResult> v, TArg arg) {
@@ -33,8 +39,7 @@ public class ConstFormalParameter extends FormalParameter {
 
 	@Override
 	public boolean equals(Object fpAST) {
-		if (fpAST instanceof ConstFormalParameter) {
-			var cfpAST = (ConstFormalParameter) fpAST;
+		if (fpAST instanceof ConstFormalParameter cfpAST) {
 			return T.equals(cfpAST.T);
 		} else {
 			return false;

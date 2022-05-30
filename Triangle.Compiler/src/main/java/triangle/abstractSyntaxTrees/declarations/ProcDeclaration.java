@@ -20,7 +20,7 @@ import triangle.abstractSyntaxTrees.terminals.Identifier;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class ProcDeclaration extends Declaration {
+public class ProcDeclaration extends Declaration implements ProcedureDeclaration {
 
 	public ProcDeclaration(Identifier iAST, FormalParameterSequence fpsAST, Command cAST, SourcePosition position) {
 		super(position);
@@ -31,6 +31,11 @@ public class ProcDeclaration extends Declaration {
 
 	public <TArg, TResult> TResult visit(DeclarationVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitProcDeclaration(this, arg);
+	}
+
+	@Override
+	public FormalParameterSequence getFormals() {
+		return FPS;
 	}
 
 	public final Identifier I;

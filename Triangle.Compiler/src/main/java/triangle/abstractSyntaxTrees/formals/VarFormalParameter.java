@@ -14,17 +14,23 @@
 
 package triangle.abstractSyntaxTrees.formals;
 
+import triangle.abstractSyntaxTrees.declarations.VariableDeclaration;
 import triangle.abstractSyntaxTrees.terminals.Identifier;
 import triangle.abstractSyntaxTrees.types.TypeDenoter;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class VarFormalParameter extends FormalParameter {
+public class VarFormalParameter extends FormalParameter implements VariableDeclaration {
 
 	public VarFormalParameter(Identifier iAST, TypeDenoter tAST, SourcePosition position) {
 		super(position);
 		I = iAST;
 		T = tAST;
+	}
+
+	@Override
+	public TypeDenoter getType() {
+		return T;
 	}
 
 	public <TArg, TResult> TResult visit(DeclarationVisitor<TArg, TResult> v, TArg arg) {
@@ -33,8 +39,7 @@ public class VarFormalParameter extends FormalParameter {
 
 	@Override
 	public boolean equals(Object fpAST) {
-		if (fpAST instanceof VarFormalParameter) {
-			VarFormalParameter vfpAST = (VarFormalParameter) fpAST;
+		if (fpAST instanceof VarFormalParameter vfpAST) {
 			return T.equals(vfpAST.T);
 		} else {
 			return false;

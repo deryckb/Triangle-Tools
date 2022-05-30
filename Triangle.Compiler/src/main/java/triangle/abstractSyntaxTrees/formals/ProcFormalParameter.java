@@ -14,11 +14,12 @@
 
 package triangle.abstractSyntaxTrees.formals;
 
+import triangle.abstractSyntaxTrees.declarations.ProcedureDeclaration;
 import triangle.abstractSyntaxTrees.terminals.Identifier;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class ProcFormalParameter extends FormalParameter {
+public class ProcFormalParameter extends FormalParameter implements ProcedureDeclaration {
 
 	public ProcFormalParameter(Identifier iAST, FormalParameterSequence fpsAST, SourcePosition position) {
 		super(position);
@@ -28,6 +29,11 @@ public class ProcFormalParameter extends FormalParameter {
 
 	public <TArg, TResult> TResult visit(DeclarationVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitProcFormalParameter(this, arg);
+	}
+
+	@Override
+	public FormalParameterSequence getFormals() {
+		return FPS;
 	}
 
 	@Override

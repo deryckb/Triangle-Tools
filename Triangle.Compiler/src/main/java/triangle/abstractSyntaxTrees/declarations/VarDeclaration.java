@@ -19,7 +19,7 @@ import triangle.abstractSyntaxTrees.types.TypeDenoter;
 import triangle.abstractSyntaxTrees.visitors.DeclarationVisitor;
 import triangle.syntacticAnalyzer.SourcePosition;
 
-public class VarDeclaration extends Declaration {
+public class VarDeclaration extends Declaration implements VariableDeclaration {
 
 	public VarDeclaration(Identifier iAST, TypeDenoter tAST, SourcePosition position) {
 		super(position);
@@ -27,6 +27,11 @@ public class VarDeclaration extends Declaration {
 		T = tAST;
 	}
 
+	@Override
+	public TypeDenoter getType() {
+		return T;
+	}
+	
 	public <TArg, TResult> TResult visit(DeclarationVisitor<TArg, TResult> v, TArg arg) {
 		return v.visitVarDeclaration(this, arg);
 	}

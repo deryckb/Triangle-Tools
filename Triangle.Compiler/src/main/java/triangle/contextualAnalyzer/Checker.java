@@ -16,6 +16,7 @@ package triangle.contextualAnalyzer;
 
 import triangle.ErrorReporter;
 import triangle.StdEnvironment;
+import triangle.abstractSyntaxTrees.AbstractSyntaxTree;
 import triangle.abstractSyntaxTrees.Program;
 import triangle.abstractSyntaxTrees.actuals.ConstActualParameter;
 import triangle.abstractSyntaxTrees.actuals.EmptyActualParameterSequence;
@@ -37,12 +38,16 @@ import triangle.abstractSyntaxTrees.commands.SequentialCommand;
 import triangle.abstractSyntaxTrees.commands.WhileCommand;
 import triangle.abstractSyntaxTrees.declarations.BinaryOperatorDeclaration;
 import triangle.abstractSyntaxTrees.declarations.ConstDeclaration;
+import triangle.abstractSyntaxTrees.declarations.ConstantDeclaration;
 import triangle.abstractSyntaxTrees.declarations.Declaration;
 import triangle.abstractSyntaxTrees.declarations.FuncDeclaration;
+import triangle.abstractSyntaxTrees.declarations.FunctionDeclaration;
 import triangle.abstractSyntaxTrees.declarations.ProcDeclaration;
+import triangle.abstractSyntaxTrees.declarations.ProcedureDeclaration;
 import triangle.abstractSyntaxTrees.declarations.SequentialDeclaration;
 import triangle.abstractSyntaxTrees.declarations.UnaryOperatorDeclaration;
 import triangle.abstractSyntaxTrees.declarations.VarDeclaration;
+import triangle.abstractSyntaxTrees.declarations.VariableDeclaration;
 import triangle.abstractSyntaxTrees.expressions.ArrayExpression;
 import triangle.abstractSyntaxTrees.expressions.BinaryExpression;
 import triangle.abstractSyntaxTrees.expressions.CallExpression;
@@ -117,29 +122,20 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		var vType = ast.V.visit(this);
 		var eType = ast.E.visit(this);
 
-		if (!ast.V.variable) {
-			reporter.reportError("LHS of assignment is not a variable", "", ast.V.getPosition());
-		}
-
-		if (!eType.equals(vType)) {
-			reporter.reportError("assignment incompatibilty", "", ast.getPosition());
-		}
+		checkAndReportError(ast.V.variable, "LHS of assignment is not a variable", ast.V);
+		checkAndReportError(eType.equals(vType), "assignment incompatibilty", ast);
 
 		return null;
 	}
 
 	@Override
 	public Void visitCallCommand(CallCommand ast, Void arg) {
-
 		var binding = ast.I.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.I);
-		} else if (binding instanceof ProcDeclaration) {
-			ast.APS.visit(this, ((ProcDeclaration) binding).FPS);
-		} else if (binding instanceof ProcFormalParameter) {
-			ast.APS.visit(this, ((ProcFormalParameter) binding).FPS);
+
+		if (binding instanceof ProcedureDeclaration procedure) {
+			ast.APS.visit(this, procedure.getFormals());
 		} else {
-			reporter.reportError("\"%\" is not a procedure identifier", ast.I.spelling, ast.I.getPosition());
+			reportUndeclaredOrError(binding, ast.I, "\"%\" is not a procedure identifier");
 		}
 
 		return null;
@@ -153,9 +149,8 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public Void visitIfCommand(IfCommand ast, Void arg) {
 		var eType = ast.E.visit(this);
-		if (!eType.equals(StdEnvironment.booleanType)) {
-			reporter.reportError("Boolean expression expected here", "", ast.E.getPosition());
-		}
+
+		checkAndReportError(eType.equals(StdEnvironment.booleanType), "Boolean expression expected here", ast.E);
 
 		ast.C1.visit(this);
 		ast.C2.visit(this);
@@ -182,10 +177,10 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public Void visitWhileCommand(WhileCommand ast, Void arg) {
 		var eType = ast.E.visit(this);
-		if (!eType.equals(StdEnvironment.booleanType)) {
-			reporter.reportError("Boolean expression expected here", "", ast.E.getPosition());
-		}
+
+		checkAndReportError(eType.equals(StdEnvironment.booleanType), "Boolean expression expected here", ast.E);
 		ast.C.visit(this);
+
 		return null;
 	}
 
@@ -204,84 +199,62 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 
 	@Override
 	public TypeDenoter visitBinaryExpression(BinaryExpression ast, Void arg) {
-
 		var e1Type = ast.E1.visit(this);
 		var e2Type = ast.E2.visit(this);
 		var binding = ast.O.visit(this);
 
-		if (binding == null) {
-			reportUndeclared(ast.O);
-		} else {
-			if (!(binding instanceof BinaryOperatorDeclaration))
-				reporter.reportError("\"%\" is not a binary operator", ast.O.spelling, ast.O.getPosition());
-			var bbinding = (BinaryOperatorDeclaration) binding;
-			if (bbinding.ARG1 == StdEnvironment.anyType) {
+		if (binding instanceof BinaryOperatorDeclaration bbinding) {
+			if (bbinding.ARG1.equals(StdEnvironment.anyType)) {
 				// this operator must be "=" or "\="
-				if (!e1Type.equals(e2Type)) {
-					reporter.reportError("incompatible argument types for \"%\"", ast.O.spelling, ast.getPosition());
-				}
-			} else if (!e1Type.equals(bbinding.ARG1)) {
-				reporter.reportError("wrong argument type for \"%\"", ast.O.spelling, ast.E1.getPosition());
-			} else if (!e2Type.equals(bbinding.ARG2)) {
-				reporter.reportError("wrong argument type for \"%\"", ast.O.spelling, ast.E2.getPosition());
+				checkAndReportError(e1Type.equals(e2Type), "incompatible argument types for \"%\"", ast.O, ast);
+			} else {
+				checkAndReportError(e1Type.equals(bbinding.ARG1), "wrong argument type for \"%\"", ast.O, ast.E1);
+				checkAndReportError(e2Type.equals(bbinding.ARG2), "wrong argument type for \"%\"", ast.O, ast.E2);
 			}
-
-			ast.type = bbinding.RES;
+			return ast.type = bbinding.RES;
 		}
 
-		return ast.type;
+		reportUndeclaredOrError(binding, ast.O, "\"%\" is not a binary operator");
+		return ast.type = StdEnvironment.errorType;
 	}
 
 	@Override
 	public TypeDenoter visitCallExpression(CallExpression ast, Void arg) {
 		var binding = ast.I.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.I);
-			ast.type = StdEnvironment.errorType;
-		} else if (binding instanceof FuncDeclaration) {
-			ast.APS.visit(this, ((FuncDeclaration) binding).FPS);
-			ast.type = ((FuncDeclaration) binding).T;
-		} else if (binding instanceof FuncFormalParameter) {
-			ast.APS.visit(this, ((FuncFormalParameter) binding).FPS);
-			ast.type = ((FuncFormalParameter) binding).T;
-		} else {
-			reporter.reportError("\"%\" is not a function identifier", ast.I.spelling, ast.I.getPosition());
+
+		if (binding instanceof FunctionDeclaration function) {
+			ast.APS.visit(this, function.getFormals());
+			return ast.type = function.getType();
 		}
 
-		return ast.type;
+		reportUndeclaredOrError(binding, ast.I, "\"%\" is not a function identifier");
+		return ast.type = StdEnvironment.errorType;
 	}
 
 	@Override
 	public TypeDenoter visitCharacterExpression(CharacterExpression ast, Void arg) {
-		ast.type = StdEnvironment.charType;
-		return ast.type;
+		return ast.type = StdEnvironment.charType;
 	}
 
 	@Override
 	public TypeDenoter visitEmptyExpression(EmptyExpression ast, Void arg) {
-		ast.type = null;
-		return ast.type;
+		return ast.type = null;
 	}
 
 	@Override
 	public TypeDenoter visitIfExpression(IfExpression ast, Void arg) {
 		var e1Type = ast.E1.visit(this);
-		if (!e1Type.equals(StdEnvironment.booleanType)) {
-			reporter.reportError("Boolean expression expected here", "", ast.E1.getPosition());
-		}
+		checkAndReportError(e1Type.equals(StdEnvironment.booleanType), "Boolean expression expected here", ast.E1);
+
 		var e2Type = ast.E2.visit(this);
 		var e3Type = ast.E3.visit(this);
-		if (!e2Type.equals(e3Type)) {
-			reporter.reportError("incompatible limbs in if-expression", "", ast.getPosition());
-		}
-		ast.type = e2Type;
-		return ast.type;
+		checkAndReportError(e2Type.equals(e3Type), "incompatible limbs in if-expression", ast);
+		return ast.type = e2Type;
 	}
 
 	@Override
 	public TypeDenoter visitIntegerExpression(IntegerExpression ast, Void arg) {
-		ast.type = StdEnvironment.integerType;
-		return ast.type;
+		return ast.type = StdEnvironment.integerType;
 	}
 
 	@Override
@@ -296,34 +269,26 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public TypeDenoter visitRecordExpression(RecordExpression ast, Void arg) {
 		var rType = ast.RA.visit(this);
-		ast.type = new RecordTypeDenoter(rType, ast.getPosition());
-		return ast.type;
+		return ast.type = new RecordTypeDenoter(rType, ast.getPosition());
 	}
 
 	@Override
 	public TypeDenoter visitUnaryExpression(UnaryExpression ast, Void arg) {
-
 		var eType = ast.E.visit(this);
 		var binding = ast.O.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.O);
-			ast.type = StdEnvironment.errorType;
-		} else if (!(binding instanceof UnaryOperatorDeclaration)) {
-			reporter.reportError("\"%\" is not a unary operator", ast.O.spelling, ast.O.getPosition());
-		} else {
-			var ubinding = (UnaryOperatorDeclaration) binding;
-			if (!eType.equals(ubinding.ARG)) {
-				reporter.reportError("wrong argument type for \"%\"", ast.O.spelling, ast.O.getPosition());
-			}
-			ast.type = ubinding.RES;
+
+		if (binding instanceof UnaryOperatorDeclaration ubinding) {
+			checkAndReportError(eType.equals(ubinding.ARG), "wrong argument type for \"%\"", ast.O);
+			return ast.type = ubinding.RES;
 		}
-		return ast.type;
+
+		reportUndeclaredOrError(binding, ast.O, "\"%\" is not a unary operator");
+		return ast.type = StdEnvironment.errorType;
 	}
 
 	@Override
 	public TypeDenoter visitVnameExpression(VnameExpression ast, Void arg) {
-		ast.type = ast.V.visit(this);
-		return ast.type;
+		return ast.type = ast.V.visit(this);
 	}
 
 	// Declarations
@@ -338,39 +303,37 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitConstDeclaration(ConstDeclaration ast, Void arg) {
 		ast.E.visit(this);
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("identifier \"%\" already declared", ast.I.spelling, ast.getPosition());
-		}
+		checkAndReportError(!ast.duplicated, "identifier \"%\" already declared", ast.I, ast);
 		return null;
 	}
 
 	@Override
 	public Void visitFuncDeclaration(FuncDeclaration ast, Void arg) {
 		ast.T = ast.T.visit(this);
-		idTable.enter(ast.I.spelling, ast); // permits recursion
-		if (ast.duplicated) {
-			reporter.reportError("identifier \"%\" already declared", ast.I.spelling, ast.getPosition());
-		}
+		// permits recursion
+		idTable.enter(ast.I.spelling, ast);
+		checkAndReportError(!ast.duplicated, "identifier \"%\" already declared", ast.I, ast);
+
 		idTable.openScope();
 		ast.FPS.visit(this);
 		var eType = ast.E.visit(this);
 		idTable.closeScope();
-		if (!ast.T.equals(eType)) {
-			reporter.reportError("body of function \"%\" has wrong type", ast.I.spelling, ast.E.getPosition());
-		}
+
+		checkAndReportError(ast.T.equals(eType), "body of function \"%\" has wrong type", ast.I, ast.E);
 		return null;
 	}
 
 	@Override
 	public Void visitProcDeclaration(ProcDeclaration ast, Void arg) {
-		idTable.enter(ast.I.spelling, ast); // permits recursion
-		if (ast.duplicated) {
-			reporter.reportError("identifier \"%\" already declared", ast.I.spelling, ast.getPosition());
-		}
+		// permits recursion
+		idTable.enter(ast.I.spelling, ast);
+		checkAndReportError(!ast.duplicated, "identifier \"%\" already declared", ast.I, ast);
+
 		idTable.openScope();
 		ast.FPS.visit(this);
 		ast.C.visit(this);
 		idTable.closeScope();
+
 		return null;
 	}
 
@@ -385,9 +348,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitTypeDeclaration(TypeDeclaration ast, Void arg) {
 		ast.T = ast.T.visit(this);
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("identifier \"%\" already declared", ast.I.spelling, ast.getPosition());
-		}
+		checkAndReportError(!ast.duplicated, "identifier \"%\" already declared", ast.I, ast);
 		return null;
 	}
 
@@ -400,10 +361,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitVarDeclaration(VarDeclaration ast, Void arg) {
 		ast.T = ast.T.visit(this);
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("identifier \"%\" already declared", ast.I.spelling, ast.getPosition());
-		}
-
+		checkAndReportError(!ast.duplicated, "identifier \"%\" already declared", ast.I, ast);
 		return null;
 	}
 
@@ -417,9 +375,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		var eType = ast.E.visit(this);
 		var elemType = ast.AA.visit(this);
 		ast.elemCount = ast.AA.elemCount + 1;
-		if (!eType.equals(elemType)) {
-			reporter.reportError("incompatible array-aggregate element", "", ast.E.getPosition());
-		}
+		checkAndReportError(eType.equals(elemType), "incompatible array-aggregate element", ast.E);
 		return elemType;
 	}
 
@@ -440,18 +396,14 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		var eType = ast.E.visit(this);
 		var rType = ast.RA.visit(this);
 		var fType = checkFieldIdentifier(rType, ast.I);
-		if (fType != StdEnvironment.errorType) {
-			reporter.reportError("duplicate field \"%\" in record", ast.I.spelling, ast.I.getPosition());
-		}
-		ast.type = new MultipleFieldTypeDenoter(ast.I, eType, rType, ast.getPosition());
-		return ast.type;
+		checkAndReportError(fType.equals(StdEnvironment.errorType), "duplicate field \"%\" in record", ast.I);
+		return ast.type = new MultipleFieldTypeDenoter(ast.I, eType, rType, ast.getPosition());
 	}
 
 	@Override
 	public FieldTypeDenoter visitSingleRecordAggregate(SingleRecordAggregate ast, Void arg) {
 		var eType = ast.E.visit(this);
-		ast.type = new SingleFieldTypeDenoter(ast.I, eType, ast.getPosition());
-		return ast.type;
+		return ast.type = new SingleFieldTypeDenoter(ast.I, eType, ast.getPosition());
 	}
 
 	// Formal Parameters
@@ -462,9 +414,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitConstFormalParameter(ConstFormalParameter ast, Void arg) {
 		ast.T = ast.T.visit(this);
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("duplicated formal parameter \"%\"", ast.I.spelling, ast.getPosition());
-		}
+		checkAndReportError(!ast.duplicated, "duplicated formal parameter \"%\"", ast.I, ast);
 		return null;
 	}
 
@@ -475,9 +425,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		idTable.closeScope();
 		ast.T = ast.T.visit(this);
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("duplicated formal parameter \"%\"", ast.I.spelling, ast.getPosition());
-		}
+		checkAndReportError(!ast.duplicated, "duplicated formal parameter \"%\"", ast.I, ast);
 		return null;
 	}
 
@@ -487,9 +435,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		ast.FPS.visit(this);
 		idTable.closeScope();
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("duplicated formal parameter \"%\"", ast.I.spelling, ast.getPosition());
-		}
+		checkAndReportError(!ast.duplicated, "duplicated formal parameter \"%\"", ast.I, ast);
 		return null;
 	}
 
@@ -497,9 +443,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitVarFormalParameter(VarFormalParameter ast, Void arg) {
 		ast.T = ast.T.visit(this);
 		idTable.enter(ast.I.spelling, ast);
-		if (ast.duplicated) {
-			reporter.reportError("duplicated formal parameter \"%\"", ast.I.spelling, ast.getPosition());
-		}
+		checkAndReportError(!ast.duplicated, "duplicated formal parameter \"%\"", ast.I, ast);
 		return null;
 	}
 
@@ -528,10 +472,10 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public Void visitConstActualParameter(ConstActualParameter ast, FormalParameter arg) {
 		var eType = ast.E.visit(this);
-		if (!(arg instanceof ConstFormalParameter)) {
-			reporter.reportError("const actual parameter not expected here", "", ast.getPosition());
-		} else if (!eType.equals(((ConstFormalParameter) arg).T)) {
-			reporter.reportError("wrong type for const actual parameter", "", ast.E.getPosition());
+		if (arg instanceof ConstFormalParameter param) {
+			checkAndReportError(eType.equals(param.T), "wrong type for const actual parameter", ast.E);
+		} else {
+			reportError("const actual parameter not expected here", ast);
 		}
 		return null;
 	}
@@ -539,27 +483,20 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public Void visitFuncActualParameter(FuncActualParameter ast, FormalParameter arg) {
 		var binding = ast.I.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.I);
-		} else if (!(binding instanceof FuncDeclaration || binding instanceof FuncFormalParameter)) {
-			reporter.reportError("\"%\" is not a function identifier", ast.I.spelling, ast.I.getPosition());
-		} else if (!(arg instanceof FuncFormalParameter)) {
-			reporter.reportError("func actual parameter not expected here", "", ast.getPosition());
-		} else {
-			FormalParameterSequence FPS = null;
-			TypeDenoter T = null;
-			if (binding instanceof FuncDeclaration) {
-				FPS = ((FuncDeclaration) binding).FPS;
-				T = ((FuncDeclaration) binding).T;
+		if (binding instanceof FunctionDeclaration function) {
+			var formals = function.getFormals();
+			var functionType = function.getType();
+			if (arg instanceof FuncFormalParameter param) {
+				if (!formals.equals(param.getFormals())) {
+					reportError("wrong signature for function \"%\"", ast.I);
+				} else if (!functionType.equals(param.T)) {
+					reportError("wrong type for function \"%\"", ast.I);
+				}
 			} else {
-				FPS = ((FuncFormalParameter) binding).FPS;
-				T = ((FuncFormalParameter) binding).T;
+				reportError("func actual parameter not expected here", ast);
 			}
-			if (!FPS.equals(((FuncFormalParameter) arg).FPS)) {
-				reporter.reportError("wrong signature for function \"%\"", ast.I.spelling, ast.I.getPosition());
-			} else if (!T.equals(((FuncFormalParameter) arg).T)) {
-				reporter.reportError("wrong type for function \"%\"", ast.I.spelling, ast.I.getPosition());
-			}
+		} else {
+			reportUndeclaredOrError(binding, ast.I, "\"%\" is not a function identifier");
 		}
 		return null;
 	}
@@ -567,22 +504,15 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public Void visitProcActualParameter(ProcActualParameter ast, FormalParameter arg) {
 		var binding = ast.I.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.I);
-		} else if (!(binding instanceof ProcDeclaration || binding instanceof ProcFormalParameter)) {
-			reporter.reportError("\"%\" is not a procedure identifier", ast.I.spelling, ast.I.getPosition());
-		} else if (!(arg instanceof ProcFormalParameter)) {
-			reporter.reportError("proc actual parameter not expected here", "", ast.getPosition());
-		} else {
-			FormalParameterSequence FPS = null;
-			if (binding instanceof ProcDeclaration) {
-				FPS = ((ProcDeclaration) binding).FPS;
+		if (binding instanceof ProcedureDeclaration procedure) {
+			var formals = procedure.getFormals();
+			if (arg instanceof ProcFormalParameter param) {
+				checkAndReportError(formals.equals(param.getFormals()), "wrong signature for procedure \"%\"", ast.I);
 			} else {
-				FPS = ((ProcFormalParameter) binding).FPS;
+				reportError("proc actual parameter not expected here", ast);
 			}
-			if (!FPS.equals(((ProcFormalParameter) arg).FPS)) {
-				reporter.reportError("wrong signature for procedure \"%\"", ast.I.spelling, ast.I.getPosition());
-			}
+		} else {
+			reportUndeclaredOrError(binding, ast.I, "\"%\" is not a procedure identifier");
 		}
 		return null;
 	}
@@ -591,40 +521,38 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitVarActualParameter(VarActualParameter ast, FormalParameter arg) {
 		var vType = ast.V.visit(this);
 		if (!ast.V.variable) {
-			reporter.reportError("actual parameter is not a variable", "", ast.V.getPosition());
-		} else if (!(arg instanceof VarFormalParameter)) {
-			reporter.reportError("var actual parameter not expected here", "", ast.V.getPosition());
-		} else if (!vType.equals(((VarFormalParameter) arg).T)) {
-			reporter.reportError("wrong type for var actual parameter", "", ast.V.getPosition());
+			reportError("actual parameter is not a variable", ast.V);
+		} else if (arg instanceof VarFormalParameter parameter) {
+			checkAndReportError(vType.equals(parameter.T), "wrong type for var actual parameter", ast.V);
+		} else {
+			reportError("var actual parameter not expected here", ast.V);
 		}
 		return null;
 	}
 
 	@Override
 	public Void visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, FormalParameterSequence arg) {
-		if (!(arg instanceof EmptyFormalParameterSequence)) {
-			reporter.reportError("too few actual parameters", "", ast.getPosition());
-		}
+		checkAndReportError(arg instanceof EmptyFormalParameterSequence, "too few actual parameters", ast);
 		return null;
 	}
 
 	@Override
 	public Void visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, FormalParameterSequence arg) {
-		if (!(arg instanceof MultipleFormalParameterSequence)) {
-			reporter.reportError("too many actual parameters", "", ast.getPosition());
+		if (arg instanceof MultipleFormalParameterSequence formals) {
+			ast.AP.visit(this, formals.FP);
+			ast.APS.visit(this, formals.FPS);
 		} else {
-			ast.AP.visit(this, ((MultipleFormalParameterSequence) arg).FP);
-			ast.APS.visit(this, ((MultipleFormalParameterSequence) arg).FPS);
+			reportError("too many actual parameters", ast);
 		}
 		return null;
 	}
 
 	@Override
 	public Void visitSingleActualParameterSequence(SingleActualParameterSequence ast, FormalParameterSequence arg) {
-		if (!(arg instanceof SingleFormalParameterSequence)) {
-			reporter.reportError("incorrect number of actual parameters", "", ast.getPosition());
+		if (arg instanceof SingleFormalParameterSequence formal) {
+			ast.AP.visit(this, formal.FP);
 		} else {
-			ast.AP.visit(this, ((SingleFormalParameterSequence) arg).FP);
+			reportError("incorrect number of actual parameters", ast);
 		}
 		return null;
 	}
@@ -642,9 +570,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public TypeDenoter visitArrayTypeDenoter(ArrayTypeDenoter ast, Void arg) {
 		ast.T = ast.T.visit(this);
-		if ((Integer.valueOf(ast.IL.spelling)) == 0) {
-			reporter.reportError("arrays must not be empty", "", ast.IL.getPosition());
-		}
+		checkAndReportError(ast.IL.getValue() != 0, "arrays must not be empty", ast.IL);
 		return ast;
 	}
 
@@ -666,14 +592,12 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	@Override
 	public TypeDenoter visitSimpleTypeDenoter(SimpleTypeDenoter ast, Void arg) {
 		var binding = ast.I.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.I);
-			return StdEnvironment.errorType;
-		} else if (!(binding instanceof TypeDeclaration)) {
-			reporter.reportError("\"%\" is not a type identifier", ast.I.spelling, ast.I.getPosition());
-			return StdEnvironment.errorType;
+		if (binding instanceof TypeDeclaration decl) {
+			return decl.T;
 		}
-		return ((TypeDeclaration) binding).T;
+
+		reportUndeclaredOrError(binding, ast.I, "\"%\" is not a type identifier");
+		return StdEnvironment.errorType;
 	}
 
 	@Override
@@ -754,14 +678,12 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public TypeDenoter visitDotVname(DotVname ast, Void arg) {
 		ast.type = null;
 		var vType = ast.V.visit(this);
-		ast.variable = ast.V.variable;
-		if (!(vType instanceof RecordTypeDenoter)) {
-			reporter.reportError("record expected here", "", ast.V.getPosition());
+		if (vType instanceof RecordTypeDenoter record) {
+			ast.type = checkFieldIdentifier(record.FT, ast.I);
+			checkAndReportError(!ast.type.equals(StdEnvironment.errorType), "no field \"%\" in this record type",
+					ast.I);
 		} else {
-			ast.type = checkFieldIdentifier(((RecordTypeDenoter) vType).FT, ast.I);
-			if (ast.type == StdEnvironment.errorType) {
-				reporter.reportError("no field \"%\" in this record type", ast.I.spelling, ast.I.getPosition());
-			}
+			reportError("record expected here", ast.V);
 		}
 		return ast.type;
 	}
@@ -770,42 +692,34 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public TypeDenoter visitSimpleVname(SimpleVname ast, Void arg) {
 		ast.variable = false;
 		ast.type = StdEnvironment.errorType;
+
 		var binding = ast.I.visit(this);
-		if (binding == null) {
-			reportUndeclared(ast.I);
-		} else if (binding instanceof ConstDeclaration) {
-			ast.type = ((ConstDeclaration) binding).E.type;
-			ast.variable = false;
-		} else if (binding instanceof VarDeclaration) {
-			ast.type = ((VarDeclaration) binding).T;
-			ast.variable = true;
-		} else if (binding instanceof ConstFormalParameter) {
-			ast.type = ((ConstFormalParameter) binding).T;
-			ast.variable = false;
-		} else if (binding instanceof VarFormalParameter) {
-			ast.type = ((VarFormalParameter) binding).T;
-			ast.variable = true;
-		} else {
-			reporter.reportError("\"%\" is not a const or var identifier", ast.I.spelling, ast.I.getPosition());
+		if (binding instanceof ConstantDeclaration constant) {
+			return ast.type = constant.getType();
+		} else if (binding instanceof VariableDeclaration variable) {
+			return ast.type = variable.getType();
 		}
-		return ast.type;
+
+		reportUndeclaredOrError(binding, ast.I, "\"%\" is not a const or var identifier");
+		return ast.type = StdEnvironment.errorType;
 	}
 
 	@Override
 	public TypeDenoter visitSubscriptVname(SubscriptVname ast, Void arg) {
 		var vType = ast.V.visit(this);
 		ast.variable = ast.V.variable;
+
 		var eType = ast.E.visit(this);
 		if (vType != StdEnvironment.errorType) {
-			if (!(vType instanceof ArrayTypeDenoter)) {
-				reporter.reportError("array expected here", "", ast.V.getPosition());
+			if (vType instanceof ArrayTypeDenoter arrayType) {
+				checkAndReportError(eType.equals(StdEnvironment.integerType), "Integer expression expected here",
+						ast.E);
+				ast.type = arrayType.T;
 			} else {
-				if (!eType.equals(StdEnvironment.integerType)) {
-					reporter.reportError("Integer expression expected here", "", ast.E.getPosition());
-				}
-				ast.type = ((ArrayTypeDenoter) vType).T;
+				reportError("array expected here", ast.V);
 			}
 		}
+
 		return ast.type;
 	}
 
@@ -842,24 +756,54 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	private static SourcePosition dummyPos = new SourcePosition();
 	private ErrorReporter reporter;
 
-	// Reports that the identifier or operator used at a leaf of the AST
-	// has not been declared.
+	private void reportUndeclaredOrError(Declaration binding, Terminal leaf, String message) {
+		if (binding == null) {
+			reportError("\"%\" is not declared", leaf);
+		} else {
+			reportError(message, leaf);
+		}
+	}
 
-	private void reportUndeclared(Terminal leaf) {
-		reporter.reportError("\"%\" is not declared", leaf.spelling, leaf.getPosition());
+	private void reportError(String message, Terminal ast) {
+		reportError(message, ast, ast);
+	}
+
+	private void reportError(String message, Terminal spellingNode, AbstractSyntaxTree positionNode) {
+		reporter.reportError(message, spellingNode.spelling, positionNode.getPosition());
+	}
+
+	private void reportError(String message, AbstractSyntaxTree positionNode) {
+		reporter.reportError(message, "", positionNode.getPosition());
+	}
+
+	private void checkAndReportError(boolean condition, String message, String token, SourcePosition position) {
+		if (!condition) {
+			reporter.reportError(message, token, position);
+		}
+	}
+
+	private void checkAndReportError(boolean condition, String message, Terminal ast) {
+		checkAndReportError(condition, message, ast, ast);
+	}
+
+	private void checkAndReportError(boolean condition, String message, Terminal spellingNode,
+			AbstractSyntaxTree positionNode) {
+		checkAndReportError(condition, message, spellingNode.spelling, positionNode.getPosition());
+	}
+
+	private void checkAndReportError(boolean condition, String message, AbstractSyntaxTree positionNode) {
+		checkAndReportError(condition, message, "", positionNode.getPosition());
 	}
 
 	private static TypeDenoter checkFieldIdentifier(FieldTypeDenoter ast, Identifier I) {
-		if (ast instanceof MultipleFieldTypeDenoter) {
-			var ft = (MultipleFieldTypeDenoter) ast;
+		if (ast instanceof MultipleFieldTypeDenoter ft) {
 			if (ft.I.spelling.compareTo(I.spelling) == 0) {
 				I.decl = ast;
 				return ft.T;
 			} else {
 				return checkFieldIdentifier(ft.FT, I);
 			}
-		} else if (ast instanceof SingleFieldTypeDenoter) {
-			var ft = (SingleFieldTypeDenoter) ast;
+		} else if (ast instanceof SingleFieldTypeDenoter ft) {
 			if (ft.I.spelling.compareTo(I.spelling) == 0) {
 				I.decl = ast;
 				return ft.T;
