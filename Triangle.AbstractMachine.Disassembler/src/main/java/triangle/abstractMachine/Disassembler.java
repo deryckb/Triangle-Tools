@@ -77,10 +77,11 @@ public class Disassembler {
 	 */
 	private static void writeN(int n) {
 		System.out.print("(" + n + ") ");
-		if (n < 10)
+		if (n < 10) {
 			System.out.print("  ");
-		else if (n < 100)
+		} else if (n < 100) {
 			System.out.print(" ");
+		}
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class Disassembler {
 	/**
 	 * Writes the name of primitive routine with relative address d.
 	 *
-	 * @param d the displacment of the primitive routine.
+	 * @param d the displacement of the primitive routine.
 	 */
 	private static void writePrimitive(int d) {
 		var primitive = Primitive.values()[d];
@@ -310,26 +311,20 @@ public class Disassembler {
 	 */
 	static void loadObjectProgram(String objectName) {
 
-		FileInputStream objectFile = null;
-		DataInputStream objectStream = null;
+		var finished = false;
 
-		int addr;
-		boolean finished = false;
-
-		try {
-			objectFile = new FileInputStream(objectName);
-			objectStream = new DataInputStream(objectFile);
-
-			addr = Machine.CB;
+		try (var objectFile = new FileInputStream(objectName)) {
+			var objectStream = new DataInputStream(objectFile);
+			var addr = Machine.CB;
 			while (!finished) {
 				Machine.code[addr] = Instruction.read(objectStream);
-				if (Machine.code[addr] == null)
+				if (Machine.code[addr] == null) {
 					finished = true;
-				else
+				} else {
 					addr = addr + 1;
+				}
 			}
 			CT = addr;
-			objectFile.close();
 		} catch (FileNotFoundException s) {
 			CT = Machine.CB;
 			System.err.println("Error opening object file: " + s);
@@ -344,10 +339,11 @@ public class Disassembler {
 	public static void main(String[] args) {
 		System.out.println("********** TAM Disassembler (Sun Version 2.1) **********");
 
-		if (args.length == 1)
+		if (args.length == 1) {
 			objectName = args[0];
-		else
+		} else {
 			objectName = "obj.tam";
+		}
 
 		loadObjectProgram(objectName);
 		disassembleProgram();

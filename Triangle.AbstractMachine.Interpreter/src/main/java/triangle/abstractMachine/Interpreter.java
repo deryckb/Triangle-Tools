@@ -94,26 +94,27 @@ public class Interpreter {
 		System.out.println("");
 		System.out.println("State of data store and registers:");
 		System.out.println("");
-		if (HT == HB)
+		if (HT == HB) {
 			System.out.println("            |--------|          (heap is empty)");
-		else {
+		} else {
 			System.out.println("       HB-->");
 			System.out.println("            |--------|");
 			for (var addr = HB - 1; addr >= HT; addr--) {
 				System.out.print(addr + ":");
-				if (addr == HT)
+				if (addr == HT) {
 					System.out.print(" HT-->");
-				else
+				} else {
 					System.out.print("      ");
+				}
 				System.out.println("|" + data[addr] + "|");
 			}
 			System.out.println("            |--------|");
 		}
 		System.out.println("            |////////|");
 		System.out.println("            |////////|");
-		if (ST == SB)
+		if (ST == SB) {
 			System.out.println("            |--------|          (stack is empty)");
-		else {
+		} else {
 			var dynamicLink = LB;
 			var staticLink = LB;
 			var localRegNum = Register.LB;
@@ -121,9 +122,9 @@ public class Interpreter {
 			System.out.println("            |--------|");
 			for (var addr = ST - 1; addr >= SB; addr--) {
 				System.out.print(addr + ":");
-				if (addr == SB)
+				if (addr == SB) {
 					System.out.print(" SB-->");
-				else if (addr == staticLink) {
+				} else if (addr == staticLink) {
 					switch (localRegNum) {
 					case LB:
 						System.out.print(" LB-->");
@@ -151,16 +152,18 @@ public class Interpreter {
 					}
 					staticLink = data[addr];
 					localRegNum = Register.values()[localRegNum.ordinal() + 1];
-				} else
+				} else {
 					System.out.print("      ");
-				if ((addr == dynamicLink) && (dynamicLink != SB))
+				}
+				if (addr == dynamicLink && dynamicLink != SB) {
 					System.out.print("|SL=" + data[addr] + "|");
-				else if ((addr == dynamicLink + 1) && (dynamicLink != SB))
+				} else if (addr == dynamicLink + 1 && dynamicLink != SB) {
 					System.out.print("|DL=" + data[addr] + "|");
-				else if ((addr == dynamicLink + 2) && (dynamicLink != SB))
+				} else if (addr == dynamicLink + 2 && dynamicLink != SB) {
 					System.out.print("|RA=" + data[addr] + "|");
-				else
+				} else {
 					System.out.print("|" + data[addr] + "|");
+				}
 				System.out.println("");
 				if (addr == dynamicLink) {
 					System.out.println("            |--------|");
@@ -200,8 +203,9 @@ public class Interpreter {
 			System.out.println("Program has failed due to an IO error.");
 			break;
 		}
-		if (status != halted)
+		if (status != halted) {
 			dump();
+		}
 	}
 
 	// INTERPRETATION
@@ -210,8 +214,9 @@ public class Interpreter {
 		// Signals failure if there is not enough space to expand the stack or
 		// heap by spaceNeeded.
 
-		if (HT - ST < spaceNeeded)
+		if (HT - ST < spaceNeeded) {
 			status = failedDataStoreFull;
+		}
 	}
 
 	static boolean isTrue(int datum) {
@@ -228,11 +233,14 @@ public class Interpreter {
 
 		eq = true;
 		index = 0;
-		while (eq && (index < size))
-			if (data[addr1 + index] == data[addr2 + index])
+		while (eq && (index < size)) {
+			if (data[addr1 + index] == data[addr2 + index]) {
 				index = index + 1;
-			else
+			} else {
 				eq = false;
+			}
+		}
+
 		return eq;
 	}
 
@@ -240,9 +248,9 @@ public class Interpreter {
 		// Signals failure if the datum is too large to fit into a single word,
 		// otherwise returns the datum as a single word.
 
-		if ((-Machine.maxintRep <= datum) && (datum <= Machine.maxintRep))
+		if ((-Machine.maxintRep <= datum) && (datum <= Machine.maxintRep)) {
 			return (int) datum;
-		else {
+		} else {
 			status = failedOverflow;
 			return 0;
 		}
@@ -262,17 +270,19 @@ public class Interpreter {
 			currentChar = System.in.read();
 		} while (Character.isWhitespace((char) currentChar));
 
-		if ((currentChar == '-') || (currentChar == '+'))
+		if ((currentChar == '-') || (currentChar == '+')) {
 			do {
 				sign = (currentChar == '-') ? -1 : 1;
 				currentChar = System.in.read();
 			} while ((currentChar == '-') || currentChar == '+');
+		}
 
-		if (Character.isDigit((char) currentChar))
+		if (Character.isDigit((char) currentChar)) {
 			do {
 				temp = temp * 10 + (currentChar - '0');
 				currentChar = System.in.read();
 			} while (Character.isDigit((char) currentChar));
+		}
 
 		return sign * temp;
 	}
@@ -325,18 +335,20 @@ public class Interpreter {
 		case DIV:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
-			if (data[ST] != 0)
+			if (data[ST] != 0) {
 				data[ST - 1] = (int) (accumulator / data[ST]);
-			else
+			} else {
 				status = failedZeroDivide;
+			}
 			break;
 		case MOD:
 			ST = ST - 1;
 			accumulator = data[ST - 1];
-			if (data[ST] != 0)
+			if (data[ST] != 0) {
 				data[ST - 1] = (int) (accumulator % data[ST]);
-			else
+			} else {
 				status = failedZeroDivide;
+			}
 			break;
 		case LT:
 			ST = ST - 1;
@@ -451,8 +463,9 @@ public class Interpreter {
 			case LOAD:
 				addr = d + content(r);
 				checkSpace(n);
-				for (var index = 0; index < n; index++)
+				for (var index = 0; index < n; index++) {
 					data[ST + index] = data[addr + index];
+				}
 				ST = ST + n;
 				CP = CP + 1;
 				break;
@@ -467,8 +480,9 @@ public class Interpreter {
 				ST = ST - 1;
 				addr = data[ST];
 				checkSpace(n);
-				for (var index = 0; index < n; index++)
+				for (var index = 0; index < n; index++) {
 					data[ST + index] = data[addr + index];
+				}
 				ST = ST + n;
 				CP = CP + 1;
 				break;
@@ -481,16 +495,18 @@ public class Interpreter {
 			case STORE:
 				addr = d + content(r);
 				ST = ST - n;
-				for (var index = 0; index < n; index++)
+				for (var index = 0; index < n; index++) {
 					data[addr + index] = data[ST + index];
+				}
 				CP = CP + 1;
 				break;
 			case STOREI:
 				ST = ST - 1;
 				addr = data[ST];
 				ST = ST - n;
-				for (var index = 0; index < n; index++)
+				for (var index = 0; index < n; index++) {
 					data[addr + index] = data[ST + index];
+				}
 				CP = CP + 1;
 				break;
 			case CALL:
@@ -500,10 +516,11 @@ public class Interpreter {
 					CP = CP + 1;
 				} else {
 					checkSpace(3);
-					if (0 <= n && n <= 15)
+					if (0 <= n && n <= 15) {
 						data[ST] = content(n); // static link
-					else
+					} else {
 						status = failedInvalidInstruction;
+					}
 					data[ST + 1] = LB; // dynamic link
 					data[ST + 2] = CP + 1; // return address
 					LB = ST;
@@ -531,8 +548,9 @@ public class Interpreter {
 				CP = data[LB + 2];
 				LB = data[LB + 1];
 				ST = ST - n;
-				for (var index = 0; index < n; index++)
+				for (var index = 0; index < n; index++) {
 					data[addr + index] = data[ST + index];
+				}
 				ST = addr + n;
 				break;
 			case PUSH:
@@ -543,8 +561,9 @@ public class Interpreter {
 			case POP:
 				addr = ST - n - d;
 				ST = ST - n;
-				for (var index = 0; index < n; index++)
+				for (var index = 0; index < n; index++) {
 					data[addr + index] = data[ST + index];
+				}
 				ST = addr + n;
 				CP = CP + 1;
 				break;
@@ -557,17 +576,19 @@ public class Interpreter {
 				break;
 			case JUMPIF:
 				ST = ST - 1;
-				if (data[ST] == n)
+				if (data[ST] == n) {
 					CP = d + content(r);
-				else
+				} else {
 					CP = CP + 1;
+				}
 				break;
 			case HALT:
 				status = halted;
 				break;
 			}
-			if ((CP < CB) || (CP >= CT))
+			if (CP < CB || CP >= CT) {
 				status = failedInvalidCodeAddress;
+			}
 		} while (status == running);
 	}
 
@@ -576,26 +597,21 @@ public class Interpreter {
 	static void loadObjectProgram(String objectName) {
 		// Loads the TAM object program into code store from the named file.
 
-		FileInputStream objectFile = null;
-		DataInputStream objectStream = null;
-
-		int addr;
 		boolean finished = false;
 
-		try {
-			objectFile = new FileInputStream(objectName);
-			objectStream = new DataInputStream(objectFile);
+		try (var objectFile = new FileInputStream(objectName)) {
+			var objectStream = new DataInputStream(objectFile);
 
-			addr = Machine.CB;
+			var addr = Machine.CB;
 			while (!finished) {
 				Machine.code[addr] = Instruction.read(objectStream);
-				if (Machine.code[addr] == null)
+				if (Machine.code[addr] == null) {
 					finished = true;
-				else
+				} else {
 					addr = addr + 1;
+				}
 			}
 			CT = addr;
-			objectFile.close();
 		} catch (FileNotFoundException s) {
 			CT = CB;
 			System.err.println("Error opening object file: " + s);
@@ -610,10 +626,11 @@ public class Interpreter {
 	public static void main(String[] args) {
 		System.out.println("********** TAM Interpreter (Java Version 2.1) **********");
 
-		if (args.length == 1)
+		if (args.length == 1) {
 			objectName = args[0];
-		else
+		} else {
 			objectName = "obj.tam";
+		}
 
 		loadObjectProgram(objectName);
 		if (CT != CB) {
