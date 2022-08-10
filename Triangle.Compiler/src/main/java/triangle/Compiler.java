@@ -51,7 +51,7 @@ public class Compiler {
 	 * @param sourceName   the name of the file containing the source program.
 	 * @param objectName   the name of the file containing the object program.
 	 * @param showingAST   true iff the AST is to be displayed after contextual
-	 *                     analysis (not currently implemented).
+	 *                     analysis
 	 * @param showingTable true iff the object description details are to be
 	 *                     displayed during code generation (not currently
 	 *                     implemented).
@@ -74,8 +74,8 @@ public class Compiler {
 		reporter = new ErrorReporter();
 		parser = new Parser(scanner, reporter);
 		checker = new Checker(reporter);
-		encoder = new Encoder(emitter, reporter);
 		emitter = new Emitter(reporter);
+		encoder = new Encoder(emitter, reporter);
 		drawer = new Drawer();
 
 		// scanner.enableDebugging();
@@ -113,14 +113,17 @@ public class Compiler {
 	 */
 	public static void main(String[] args) {
 
-		if (args.length != 1) {
-			System.out.println("Usage: tc filename");
+		if (args.length < 1) {
+			System.out.println("Usage: tc filename [tree]");
 			System.exit(1);
 		}
 
 		String sourceName = args[0];
-		var compiledOK = compileProgram(sourceName, objectName, false, false);
+		boolean tree = (args.length > 1 && args[1].equalsIgnoreCase("tree"));
+		var compiledOK = compileProgram(sourceName, objectName, tree, false);
 
-		System.exit(compiledOK ? 0 : 1);
+		if (!tree) {
+			System.exit(compiledOK ? 0 : 1);
+		}
 	}
 }
