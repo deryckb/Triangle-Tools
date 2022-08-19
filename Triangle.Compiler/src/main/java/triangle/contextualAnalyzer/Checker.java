@@ -204,7 +204,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		var binding = ast.O.visit(this);
 
 		if (binding instanceof BinaryOperatorDeclaration bbinding) {
-			if (bbinding.ARG1.equals(StdEnvironment.anyType)) {
+			if (bbinding.ARG1 == StdEnvironment.anyType) {
 				// this operator must be "=" or "\="
 				checkAndReportError(e1Type.equals(e2Type), "incompatible argument types for \"%\"", ast.O, ast);
 			} else {
