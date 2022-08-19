@@ -678,6 +678,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public TypeDenoter visitDotVname(DotVname ast, Void arg) {
 		ast.type = null;
 		var vType = ast.V.visit(this);
+		ast.variable = ast.V.variable;
 		if (vType instanceof RecordTypeDenoter record) {
 			ast.type = checkFieldIdentifier(record.FT, ast.I);
 			checkAndReportError(!ast.type.equals(StdEnvironment.errorType), "no field \"%\" in this record type",
@@ -695,8 +696,10 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 
 		var binding = ast.I.visit(this);
 		if (binding instanceof ConstantDeclaration constant) {
+			ast.variable = false;
 			return ast.type = constant.getType();
 		} else if (binding instanceof VariableDeclaration variable) {
+			ast.variable = true;
 			return ast.type = variable.getType();
 		}
 
