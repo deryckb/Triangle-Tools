@@ -681,7 +681,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		ast.variable = ast.V.variable;
 		if (vType instanceof RecordTypeDenoter record) {
 			ast.type = checkFieldIdentifier(record.FT, ast.I);
-			checkAndReportError(!ast.type.equals(StdEnvironment.errorType), "no field \"%\" in this record type",
+			checkAndReportError(ast.type != StdEnvironment.errorType, "no field \"%\" in this record type",
 					ast.I);
 		} else {
 			reportError("record expected here", ast.V);
