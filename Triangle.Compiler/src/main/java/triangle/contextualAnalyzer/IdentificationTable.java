@@ -53,7 +53,7 @@ public final class IdentificationTable {
 	// same identifier at the current level.
 
 	public void enter(String id, Declaration attr) {
-		attr.duplicated = retrieve(id) != null;
+		attr.duplicated = retrieve(id, true) != null;
 		this.latest = new IdEntry(id, attr, this.level, this.latest);
 	}
 
@@ -64,9 +64,15 @@ public final class IdentificationTable {
 	// otherwise returns the attribute field of the entry found.
 
 	public Declaration retrieve(String id) {
+		return retrieve(id, false);
+	}
+
+	// thisLevelOnly limits the search to only the current level
+	
+	public Declaration retrieve(String id, boolean thisLevelOnly) {
 		var entry = this.latest;
 		while (true) {
-			if (entry == null) {
+			if (entry == null || (thisLevelOnly && entry.level < this.level)) {
 				break;
 			} else if (entry.id.equals(id)) {
 				return entry.attr;
