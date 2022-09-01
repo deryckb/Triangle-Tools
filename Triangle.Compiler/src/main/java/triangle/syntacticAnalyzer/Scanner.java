@@ -63,6 +63,8 @@ public final class Scanner {
 
 	private void scanSeparator() {
 		switch (currentChar) {
+		
+		// comment
 		case '!': {
 			takeIt();
 			while ((currentChar != SourceFile.EOL) && (currentChar != SourceFile.EOT))
@@ -72,6 +74,7 @@ public final class Scanner {
 		}
 			break;
 
+		// whitespace
 		case ' ':
 		case '\n':
 		case '\r':
@@ -247,6 +250,7 @@ public final class Scanner {
 		int kind;
 
 		currentlyScanningToken = false;
+		// skip any whitespace or comments
 		while (currentChar == '!' || currentChar == ' ' || currentChar == '\n' || currentChar == '\r'
 				|| currentChar == '\t')
 			scanSeparator();

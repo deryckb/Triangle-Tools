@@ -545,7 +545,7 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 	public Integer visitRecordTypeDenoter(RecordTypeDenoter ast, Frame frame) {
 		int typeSize;
 		if (ast.entity == null) {
-			typeSize = ast.FT.visit(this, null);
+			typeSize = ast.FT.visit(this, frame);
 			ast.entity = new TypeRepresentation(typeSize);
 			writeTableDetails(ast);
 		} else {
@@ -556,6 +556,10 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 
 	@Override
 	public Integer visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Frame frame) {
+		if (frame == null) { // in this case, we're just using the frame to wrap up the size
+			frame = Frame.Initial;
+		}
+		
 		var offset = frame.getSize();
 		int fieldSize;
 		if (ast.entity == null) {

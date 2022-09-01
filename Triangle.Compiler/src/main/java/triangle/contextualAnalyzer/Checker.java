@@ -204,7 +204,7 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 		var binding = ast.O.visit(this);
 
 		if (binding instanceof BinaryOperatorDeclaration bbinding) {
-			if (bbinding.ARG1.equals(StdEnvironment.anyType)) {
+			if (bbinding.ARG1 == StdEnvironment.anyType) {
 				// this operator must be "=" or "\="
 				checkAndReportError(e1Type.equals(e2Type), "incompatible argument types for \"%\"", ast.O, ast);
 			} else {
@@ -678,9 +678,10 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public TypeDenoter visitDotVname(DotVname ast, Void arg) {
 		ast.type = null;
 		var vType = ast.V.visit(this);
+		ast.variable = ast.V.variable;
 		if (vType instanceof RecordTypeDenoter record) {
 			ast.type = checkFieldIdentifier(record.FT, ast.I);
-			checkAndReportError(!ast.type.equals(StdEnvironment.errorType), "no field \"%\" in this record type",
+			checkAndReportError(ast.type != StdEnvironment.errorType, "no field \"%\" in this record type",
 					ast.I);
 		} else {
 			reportError("record expected here", ast.V);
@@ -695,8 +696,10 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 
 		var binding = ast.I.visit(this);
 		if (binding instanceof ConstantDeclaration constant) {
+			ast.variable = false;
 			return ast.type = constant.getType();
 		} else if (binding instanceof VariableDeclaration variable) {
+			ast.variable = true;
 			return ast.type = variable.getType();
 		}
 
